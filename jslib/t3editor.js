@@ -80,7 +80,6 @@ var t3editor = function()	{
         }
       }
     }
-
     simplifyNode(root);
     return result;
   }
@@ -373,8 +372,12 @@ var t3editor = function()	{
 
     content = '';
     
+    this.completeWords = AutoCompleteWords.split("|").sort();
+    
+    this.options = {autoComplete : true,acWords : 5};
 	this.textarea = $(theTextarea);
     this.index = index;
+    
     
     content = this.textarea.value;
     
@@ -402,6 +405,11 @@ var t3editor = function()	{
     	}));
     this.linenum_wrap.appendChild(this.linenum);
     this.outerdiv.appendChild(this.linenum_wrap);
+    
+    this.autoCompleteBox = $(createDOM("DIV",{"class":"t3e_autoCompleteBox"}));
+    this.autoCompleteBox.hide();
+    this.outerdiv.appendChild(this.autoCompleteBox);
+    
         
     this.iframe_wrap = $(createDOM("DIV", {
     	"class": 	"t3e_iframe_wrap"
@@ -430,11 +438,11 @@ var t3editor = function()	{
     	}));
     this.fitem_options_overlay.innerHTML = '<ul>'+
 				'<li style="color:grey"><input type="checkbox" disabled="disabled" /> Syntax highlighting</li>'+
-				'<li style="color:grey"><input type="checkbox" disabled="disabled" /> AutoCompletion</li>'+
+				'<li><input type="checkbox" onclick="t3e_instances['+this.index+'].fitem_options_overlay.hide();t3e_instances['+this.index+'].toggleAutoComplete();" id="t3e_autocomplete" checked="checked" /><label for="t3e_autocomplete">AutoCompletion</label></li>'+
 				'<li><span onclick="t3e_instances['+this.index+'].fitem_options_overlay.hide();t3e_instances['+this.index+'].footeritem_demo_click();">Test snippets</span></li>'+
 				'<li><input type="checkbox" onclick="t3e_instances['+this.index+'].fitem_options_overlay.hide();t3e_instances['+this.index+'].toggleFullscreen();" id="t3e_fullscreen" /> <label for="t3e_fullscreen">Fullscreen</label></li>'+
 				'<li style="color:grey"><input type="checkbox" disabled="disabled" /> other fancy stuff</li>'+
-				'</ul>';;
+				'</ul>';
     this.fitem_options_overlay.hide();
     this.fitem_options = this.createFooterItem('Options', true, this.fitem_options_overlay);
     this.footer_wrap.appendChild(this.fitem_options);
@@ -494,8 +502,8 @@ var t3editor = function()	{
       connect(this.doc, "onkeydown", method(this, "keyDown"));
       connect(this.doc, "onkeyup", method(this, "keyUp"));
       connect(this.doc, "onscroll", method(this, "scroll"));
-      connect(this.win, "onscroll", method(this, "scroll"));
-    
+      connect(this.doc, "onclick", method(this, "click"));
+      connect(this.win, "onscroll", method(this, "scroll"));    
       
       var form = $(this.textarea.form)
 	  this.saveButtons = form.getInputs('submit', 'submit');
@@ -513,6 +521,8 @@ var t3editor = function()	{
 	toggleView: function(enable) {
 		if (enable) {
 			this.textarea.value = this.getCode();
+            this.ac = 0;
+            this.autoCompleteBox.hide();
 			this.outerdiv.hide();
 			this.textarea.show();
 			this.saveButtons.each(function(button) {
@@ -525,13 +535,13 @@ var t3editor = function()	{
 			this.saveButtons.each(function(button) {
       			Event.observe(button,'click',this.saveAjaxEvent);
       		}.bind(this));
+            
 		}
 	},
 
     createFooterItem: function(title, mouseover, clickAction) {
-    	item = $(createDOM("DIV", {
-    		"class": 	"t3e_footer_item"
-    	}));
+        
+    	var item = $(createDOM("DIV",{"class":"t3e_footer_item"}));
     	item.innerHTML = title;
     	
     	if (mouseover) {
@@ -540,7 +550,7 @@ var t3editor = function()	{
 		}
 		
 		if (typeof clickAction == 'object') {
-			Event.observe(item, "click",  function(e){ clickAction.toggle(); } );
+			Event.observe(item, "click",  function(e){clickAction.toggle(); } );
 			/*
 			pos = Position.positionedOffset(item);
     		pos_l = (pos[0] + item.getDimensions().width - clickMenu.getDimensions().width - 13);
@@ -588,6 +598,12 @@ var t3editor = function()	{
 	 */
 	footeritem_demo_click: function() {
 		// insertNewlineAtCursor(this.win);
+        if (isMSIE){
+            this.win.focus();
+            var cursor = new Cursor(this.container);
+            cursor.start = this.cursorObj;
+            cursor.focus();
+        }
 		insertTextAtCursor(this.win, "page = PAGE");insertNewlineAtCursor(this.win);
 		insertTextAtCursor(this.win, "page {");		insertNewlineAtCursor(this.win);
 		insertTextAtCursor(this.win, "  10 = TEXT");insertNewlineAtCursor(this.win);
@@ -615,7 +631,152 @@ var t3editor = function()	{
 
 		this.resize(w,h);
 	},
+    
+    toggleAutoComplete : function() {
+        
+        this.options.autoComplete = (this.options.autoComplete)?false:true;
+        
+    },
+    
+    autoComplete : function() {
+        this.clicked = false;
+        this.getLastWord();
+        var cursor = new Cursor(this.container);
+        this.ac_up = 0;
+        this.ac_down = this.options.acWords-1;
+        this.cursorObj = cursor.start;
+        this.currWord = -1;
+        if (this.lastWord!='&nbsp;' && this.lastWord){
+            this.words = this.getCompleteWordsByTrigger(this.lastWord.toLowerCase());
+            if (this.words.length > 0){
+                var html = '<ul>';
+                for (i=0;i<this.words.length;i++){
+                    html+= '<li id="ac_word_'+i+'" onclick="t3e_instances['+this.index+'].clicked=true;t3e_instances['+this.index+'].insertCurrWordAtCursor();" onmouseover="t3e_instances['+this.index+'].highlightCurrWord('+i+');">'+this.words[i]+'</li>';
+                }
+                html+='</ul>';
+                this.autoCompleteBox.innerHTML = html;
+                this.autoCompleteBox.show();
+                if (this.words.length > this.options.acWords){
+                    this.autoCompleteBox.style.overflowY = 'scroll';
+                    if (isGecko){
+                        this.autoCompleteBox.style.height = (this.options.acWords*($("ac_word_0").offsetHeight))+'px';
+                    }else{
+                        this.autoCompleteBox.style.height = (this.options.acWords*($("ac_word_0").offsetHeight))+4+'px';
+                        this.autoCompleteBox.style.width = this.autoCompleteBox.offsetWidth+20+'px';
+                    }
+                }else{
+                    this.autoCompleteBox.style.overflowY = 'auto';
+                    this.autoCompleteBox.style.height = 'auto';
+                    this.autoCompleteBox.style.widht = 'auto';
+                }
+    
+                this.autoCompleteBox.style.left = Position.cumulativeOffset(this.iframe)[0]-Position.cumulativeOffset(this.outerdiv)[0]+Position.cumulativeOffset(cursor.start)[0]+cursor.start.offsetWidth;
+                this.autoCompleteBox.style.top = Position.cumulativeOffset(this.iframe)[1]-Position.cumulativeOffset(this.outerdiv)[1]+Position.cumulativeOffset(cursor.start)[1]+cursor.start.offsetHeight-this.container.scrollTop;
+                this.ac = 1;    
+                this.highlightCurrWord(0);
+            } 
+        }
+    },
+    
+    getLastWord : function (){
+        var cursor = new Cursor(this.container);
+        this.lastTrigger = this.lastWord;
+        this.lastWord = (cursor.start.innerHTML)?cursor.start.innerHTML:'';
+    },
+    
+    highlightCurrWord : function (id) {
+        if (this.currWord!=-1){
+            $('ac_word_'+this.currWord).className = '';
+        }
+        $('ac_word_'+id).className = 'active';
+        this.currWord = id;
+    },
+    
+    insertCurrWordAtCursor: function (){
+        var trigger = this.lastWord;
+        var insertText = this.words[this.currWord];
+        if (isMSIE && this.clicked){
+            if (trigger.length > 0){
+                this.cursorObj.innerHTML = insertText;
+                this.win.focus();
+                var cursor = new Cursor(this.container);
+                cursor.start = this.cursorObj;
+                cursor.focus();
+                this.highlightAtCursor(cursor);
+            }
+        }else{
+            var cursor = new Cursor(this.container);
+            if (trigger.length > 0){
+                cursor.start.innerHTML = '';
+            }
+            insertTextAtCursor (this.win,insertText);
+            if (this.clicked){
+                this.win.focus();    
+            }
+            cursor.focus();
+            this.highlightAtCursor(cursor);
+        }
 
+        this.ac = 0;
+        this.autoCompleteBox.hide();
+    },
+    
+    getCompleteWordsByTrigger : function (trigger){
+        result = [];
+        for(i=0;i<this.completeWords.length;i++){
+            word = this.completeWords[i].toLowerCase();
+            if (word.indexOf(trigger) === 0){
+                result.push(this.completeWords[i]);
+            }
+        }
+        return result;
+    },
+    
+    autoCompleteBoxMoveUpCursor : function () {
+        if (this.currWord == 0){
+            var id = this.words.length-1;
+        }else{
+            var id = this.currWord-1;
+        }
+        
+        this.highlightCurrWord (id);
+        
+        if (this.currWord < this.ac_up || this.currWord == (this.words.length-1)){
+            this.ac_up = this.currWord;
+            this.ac_down = this.currWord+(this.options.acWords-1);
+            if (this.ac_up === this.words.length-1){
+                this.ac_down = this.words.length-1;
+                this.ac_up = this.ac_down-(this.options.acWords-1);
+            }
+            this.autoCompleteBox.scrollTop = this.ac_up*12;
+        }
+    },
+    
+    autoCompleteBoxMoveDownCursor : function () {
+        if (this.currWord == this.words.length-1){
+            var id = 0;
+        }else{
+            var id = this.currWord+1;
+        }
+        this.highlightCurrWord (id);
+        
+        if (this.currWord > this.ac_down || this.currWord==0){
+            this.ac_down = this.currWord;
+            this.ac_up = this.currWord-(this.options.acWords-1);
+            if (this.ac_down == 0){
+                this.ac_up = 0;
+                this.ac_down = this.options.acWords-1;
+            }
+            this.autoCompleteBox.scrollTop = this.ac_up*12;
+        }
+    },
+    
+    refreshCursorObj: function () {
+        
+        var cursor = new Cursor(this.container);
+        this.cursorObj = cursor.start;
+    
+    },
 
 	/**
 	 * update the line numbers (called from inside the iframe)
@@ -664,9 +825,14 @@ var t3editor = function()	{
 		    scrOfX = this.doc.documentElement.scrollLeft;
 		}
         this.linenum_wrap.scrollTop = scrOfY;
+        if (this.ac === 1){this.autoCompleteBox.hide();}
     },
-
-
+    
+    click: function()  {
+        if (this.ac === 1){this.ac = 0;this.autoCompleteBox.hide();}
+        this.refreshCursorObj();
+    },
+        
     importCode: function(code) {
           
       replaceChildNodes(this.container);
@@ -708,16 +874,27 @@ var t3editor = function()	{
  in oposite to the Linux version. Windows has to be checked for this behavior!!!
  */
       if (name == "KEY_ENTER") {
-			event.stop();
-			if (!isMac)	insertNewlineAtCursor(this.win);
-        	// console.debug(this.container.innerHTML);
-        	// this.indentAtCursor();
-    		this.updateLinenum();
+            if (this.ac === 1){
+                event.stop();
+               this.insertCurrWordAtCursor();
+            }else{
+                if (isMSIE || isSafari) {
+                    event.stop();
+                    insertNewlineAtCursor(this.win);
+                    this.updateLinenum();
+                }
+                
+            }
    	  }
 	  /* else if (name == "KEY_TAB" || ((name == "KEY_SPACEBAR" || name == "KEY_I") && event.modifier().ctrl)) {
         this.indentAtCursor();
         event.stop();
       } */ 
+      /* AutoComplete activate by CTRL+SPACE */
+      else if (name == "KEY_SPACEBAR" && event.modifier().ctrl && this.options.autoComplete){
+        this.autoComplete();
+        event.stop();
+      }
       else if (name == "KEY_S" && event.modifier().ctrl) {
       		this.saveAjax();
       		event.stop();
@@ -726,7 +903,14 @@ var t3editor = function()	{
       		this.toggleFullscreen();
       		event.stop();
       		return;
+      }else if (name=="KEY_ARROW_UP" && this.ac == 1){
+        event.stop();
+        window.setTimeout('t3e_instances['+this.index+'].autoCompleteBoxMoveUpCursor()',100);
+      }else if (name=="KEY_ARROW_DOWN" && this.ac == 1){
+        event.stop();
+        window.setTimeout('t3e_instances['+this.index+'].autoCompleteBoxMoveDownCursor();',100);
       }
+      
 	  this.checkTextModified();
     },
 
@@ -734,8 +918,22 @@ var t3editor = function()	{
       var name = event.key().string;
       /* if (t3eOptions.indentOnClosingBrace && name == "KEY_RIGHT_SQUARE_BRACKET")
          this.indentAtCursor();
-      else */ if (!t3eOptions.safeKeys.hasOwnProperty(name))
-        this.markCursorDirty();
+      else */ 
+        if (!t3eOptions.safeKeys.hasOwnProperty(name)) {this.markCursorDirty();}
+        if (this.ac===1){
+            this.getLastWord();
+            if (this.lastTrigger!=this.lastWord){
+                this.autoCompleteBox.hide();
+                this.ac = 0;
+                this.autoComplete();     
+            }
+        }
+        if (name == "KEY_ENTER"){
+            this.updateLinenum();
+        }
+        
+        this.refreshCursorObj();
+        
     },
     
     checkTextModified: function() {
@@ -745,7 +943,6 @@ var t3editor = function()	{
       	}
       }
     },
-
 
 	saveAjax: function(event) {
 		if (event) {
@@ -914,6 +1111,7 @@ var t3editor = function()	{
       part.reduced = true;
     }
     function tokenPart(token){
+      
       var part = withDocument(document, partial(SPAN, {"class": "part " + token.style}, token.value));
       part.currentText = token.value;
       return part;
@@ -921,6 +1119,7 @@ var t3editor = function()	{
 
     var parsed = from ? from.parserFromHere(tokenize(multiStringStream(traverseDOM(from.nextSibling))))
       : parse(tokenize(multiStringStream(traverseDOM(container.firstChild))));
+      
 
     var parts = {
       current: null,
@@ -931,7 +1130,6 @@ var t3editor = function()	{
         else if (this.forward)
           this.current = this.current.nextSibling;
         this.forward = false;
-        // console.debug(this.current);
         return this.current;
       },
       next: function(){
@@ -959,7 +1157,7 @@ var t3editor = function()	{
     var lineDirty = false;
 
     forEach(parsed, function(token){
-     // console.debug(['t',token]);
+      
       var part = parts.nextNonEmpty();
      // console.debug(['p',part]);
       if (token.type == "newline"){
@@ -993,6 +1191,7 @@ var t3editor = function()	{
         else {
           lineDirty = true;
           var newPart = tokenPart(token);
+          
           container.insertBefore(newPart, part);
           var tokensize = token.value.length;
           var offset = 0;

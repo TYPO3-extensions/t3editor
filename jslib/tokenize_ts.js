@@ -66,7 +66,6 @@ function multiStringStream(source){
     lastPos = realPos;
     return temp;
   }
-
   return result;
 }
 
@@ -86,7 +85,7 @@ var keywords = function(){
   	"COA_INT":1,
 	"COBJ_ARRAY":1,
 	"CARRAY":1,
-	"CONTEN":1,
+	"CONTENT":1,
 	"TEXT":1,
 	"HTML":1,
 	"FILE":1,
@@ -163,7 +162,7 @@ function isWhiteSpace(ch){
 
 function tokenize(source){
   function result(type, style, base){
-    nextWhile(isWhiteSpace);
+    //nextWhile(isWhiteSpace);
     var value = {type: type, style: style, value: (base ? base + source.get() : source.get())};
     if (base) value.name = base;
     return value;
@@ -209,8 +208,8 @@ function tokenize(source){
   function readWord(){
     nextWhile(isWordChar);
     var word = source.get();
-    var known = keywords.hasOwnProperty(word) && keywords.propertyIsEnumerable(word) && result("keyword", "reserved", word);
     
+    var known = keywords.hasOwnProperty(word) && keywords.propertyIsEnumerable(word) && result("keyword", "reserved", word);
     // if (!known) known = keyprops.hasOwnProperty(word) && keyprops.propertyIsEnumerable(word) && result("keyword", "props", word);
     
     return known ? result(known.type, known.style, word) : result("unknown", "other", word);
@@ -276,11 +275,12 @@ function tokenize(source){
 	      else if (this.regexp)
 	        token = readRegexp();
 	      else
-	        token = nextWhile(isOperatorChar) || result("operator", "operator");
+	            token = nextWhile(isOperatorChar) || result("operator", "operator");
 	    } else if (ch == "#")
 	        token = nextUntilUnescaped(null) || result("comment", "comment");
-	    else if (isOperatorChar(ch))
-	      token = nextWhile(isOperatorChar) || result("operator", "operator");
+	    else if (isOperatorChar(ch)){
+	        token = nextWhile(isOperatorChar) || result("operator", "operator");
+          }
 	    else
 	      token = readWord();
 	
@@ -288,6 +288,5 @@ function tokenize(source){
       this.regexp = token.type == "operator" || token.type == "keyword c" || token.type.match(/[\[{}\(,;:]/);
     return token;
   }
-
   return {next: next, regexp: true, inComment: false};
 }

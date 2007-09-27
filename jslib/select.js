@@ -46,9 +46,11 @@ if (ie_selection) {
   var Cursor = function(container) {
     this.container = container;
     this.doc = container.ownerDocument;
+    
     var selection = this.doc.selection;
     this.valid = !!selection;
     if (this.valid) {
+      //this.container.focus();
       var range = selection.createRange();
       range.collapse(false);
       var around = range.parentElement();
@@ -62,6 +64,8 @@ if (ie_selection) {
       }
     }
   };
+  
+  
 
   Cursor.prototype.focus = function () {
     var range = this.doc.body.createTextRange();

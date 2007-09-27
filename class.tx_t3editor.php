@@ -81,7 +81,8 @@ class tx_t3editor {
 			$code.= '<script src="'.$path_t3e.'/jslib/Mochi.js" type="text/javascript"></script>'.
      			'<script src="'.$path_t3e.'/jslib/util.js" type="text/javascript"></script>'.
      			'<script src="'.$path_t3e.'/jslib/select.js" type="text/javascript"></script>'.
-     			'<script src="'.$path_t3e.'/jslib/tokenize_ts.js" type="text/javascript"></script>';
+     			'<script src="'.$path_t3e.'/jslib/tokenize_ts.js" type="text/javascript"></script>'.
+     			'<script src="'.$path_t3e.'/jslib/autocomplete.js" type="text/javascript"></script>';
 
 				// include prototype-js-lib 
 			$code.= '<script src="'.
