@@ -81,14 +81,25 @@ class tx_t3editor {
 			$code.= '<script src="'.$path_t3e.'/jslib/Mochi.js" type="text/javascript"></script>'.
      			'<script src="'.$path_t3e.'/jslib/util.js" type="text/javascript"></script>'.
      			'<script src="'.$path_t3e.'/jslib/select.js" type="text/javascript"></script>'.
-     			'<script src="'.$path_t3e.'/jslib/tokenize_ts.js" type="text/javascript"></script>'.
-     			'<script src="'.$path_t3e.'/jslib/autocomplete.js" type="text/javascript"></script>';
+				'<script src="'.$path_t3e.'/jslib/stringstream.js" type="text/javascript"></script>'.
+				'<script src="'.$path_t3e.'/jslib/parsetyposcript.js" type="text/javascript"></script>'.
+     			'<script src="'.$path_t3e.'/jslib/tokenizetyposcript.js" type="text/javascript"></script>';
 
 				// include prototype-js-lib 
 			$code.= '<script src="'.
 				$GLOBALS['BACK_PATH'].
 				'contrib/prototype/prototype.js'.
 				'" type="text/javascript" id="prototype-script"></script>';
+			
+				// include scriptaculous-lib 
+			$code.= '<script src="'.
+				$GLOBALS['BACK_PATH'].
+				'contrib/scriptaculous/scriptaculous.js'.
+				'" type="text/javascript" id="scriptaculous-script"></script>';
+			// $code.= '<script src="'.
+			//	$GLOBALS['BACK_PATH'].
+			//	'contrib/scriptaculous/resizable.js'.
+			//	'" type="text/javascript" id="scriptaculous-script"></script>';
 			
 				// include editor-css
         	$code.= '<link href="'.

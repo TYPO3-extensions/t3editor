@@ -22,14 +22,24 @@ span.other {
 	color: black;
 }
 
-span.keyword {
+span.reserved {
   color: #770088;
 }
 
-span.reserved {
-	color: #00f;
+span.keyword {
+	color: #0000cc;
 	font-weight: bold;
 }
+
+span.keyword2 {
+	color: #0000cc;
+}
+
+span.keyword3 {
+	color: #0000ff;
+}
+
+
 span.prop {
 	color: #00f;
 }
