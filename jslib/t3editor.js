@@ -624,7 +624,6 @@ var t3editor = function(){
       		event.stop();
       		return;
       }
-	  this.checkTextModified();
     },
 
     // Re-indent when a key in options.reindentAfterKeys is released,
@@ -857,6 +856,10 @@ var t3editor = function(){
       select.selectMarked(sel);
 	  if (start)
         this.scheduleHighlight();
+	
+	  // check if text is modified
+	  this.checkTextModified();
+	
     }
   }
 
