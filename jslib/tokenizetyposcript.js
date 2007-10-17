@@ -1349,7 +1349,8 @@ var tokenizeTypoScript = function(){
           token = readRegexp();
         else
           token = nextWhile(isOperatorChar) || result("operator", "operator");
-      }
+      } else if (ch == "#")
+        token = nextUntilUnescaped(null) || result("comment", "comment");
       else if (isOperatorChar(ch))
         token = nextWhile(isOperatorChar) || result("operator", "operator");
       else
