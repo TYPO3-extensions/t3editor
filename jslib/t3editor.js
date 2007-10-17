@@ -227,6 +227,7 @@ var t3editor = function(){
 
 
   function t3editor(theTextarea, index, options) {
+   
    // Use passed options, if any, to override defaults.
     this.options = options || {}
     setdefault(this.options, t3eOptions);
@@ -234,6 +235,8 @@ var t3editor = function(){
 	// memorize the textarea
 	this.textarea = $(theTextarea);
     
+	this.documentname = this.textarea.readAttribute('alt');
+	
 	// count index (helpful if more than one editor is on the page)
 	this.index = index;
 
@@ -248,12 +251,32 @@ var t3editor = function(){
 
 	// an overlay that covers the whole editor
 	this.modalOverlay = $(createDOM("DIV", {
-    	"class": 	"t3e_modalOverlay"
+    	"class": 	"t3e_modalOverlay",
+		"id":		"t3e_modalOverlay_wait"
     	}));
     this.modalOverlay.hide();
     this.modalOverlay.setStyle(this.outerdiv.getDimensions());
     this.modalOverlay.setStyle({opacity: 0.5});
     this.outerdiv.appendChild(this.modalOverlay);
+	
+	this.helpOverlay = $(createDOM("DIV", {
+    	"class": 	"t3e_modalOverlay",
+    	"id":		"t3e_modalOverlay_help"
+    	}));
+    this.helpOverlay.innerHTML = "<h2>t3editor</h2>"+
+									"<p>put some helpful text here</p><br/><br/>"+
+									"<p>Hotkeys:</p>"+
+									"<p>"+
+									"<strong>CTRL-S</strong> send code to server<br/>"+
+									"<strong>CTRL-F11</strong> toggle fullscreen mode<br/>"+
+									"<strong>CTRL-SPACE</strong> auto-complete (based on letters at current cursor-position)<br/>"+
+									"<strong>CTRL-Z</strong> undo<br/>"+
+									"<strong>CTRL-Y</strong> redo<br/>"+
+									"</p><br/>"+
+									"<p><a href='javascript:void(0)' onclick='t3e_instances["+this.index+"].toggleHelp();'>click here to close this help window</a></p>"+
+									"";
+    this.helpOverlay.hide();
+	this.outerdiv.appendChild(this.helpOverlay);
     
 	// wrapping the ilnenumbers
     this.linenum_wrap = $(createDOM("DIV", {
@@ -291,9 +314,11 @@ var t3editor = function(){
 	// this.fitem_resize = this.createFooterItem('#', false);
     // this.footer_wrap.appendChild(this.fitem_resize);
 	
-	// footer item: Text for Demonstration
-    // this.fitem_demo = this.createFooterItem('Demonstration');
-    // this.footer_wrap.appendChild(this.fitem_demo);
+	// footer item: show help Window
+	  // TODO make this more flexible! And get rid of inline css and unsed options!	
+    this.fitem_help = this.createFooterItem('Help', true, 'toggleHelp');
+    this.footer_wrap.appendChild(this.fitem_help);
+	
 
 	// footer item: options menu
 	this.fitem_options_overlay = $(createDOM("DIV", {
@@ -303,24 +328,24 @@ var t3editor = function(){
 	
 	  // TODO make this more flexible! And get rid of inline css and unsed options!
     this.fitem_options_overlay.innerHTML = '<ul>'+
-				'<li style="color:grey"><input type="checkbox" disabled="disabled" /> Syntax highlighting</li>'+
+				// '<li style="color:grey"><input type="checkbox" disabled="disabled" /> Syntax highlighting</li>'+ 
 				'<li style="color:grey"><input type="checkbox" disabled="disabled" /> AutoCompletion</li>'+
 				'<li><span onclick="t3e_instances['+this.index+'].fitem_options_overlay.hide();t3e_instances['+this.index+'].footeritem_demo_click();">Test snippets</span></li>'+
 				'<li><input type="checkbox" onclick="t3e_instances['+this.index+'].fitem_options_overlay.hide();t3e_instances['+this.index+'].toggleFullscreen();" id="t3e_fullscreen" /> <label for="t3e_fullscreen">Fullscreen</label></li>'+
-				'<li style="color:grey"><input type="checkbox" disabled="disabled" /> other fancy stuff</li>'+
-				'</ul>';;
+				// '<li style="color:grey"><input type="checkbox" disabled="disabled" /> other fancy stuff</li>'+
+				'</ul>';
     this.fitem_options_overlay.hide();
     this.fitem_options = this.createFooterItem('Options', true, this.fitem_options_overlay);
     this.footer_wrap.appendChild(this.fitem_options);
     this.footer_wrap.appendChild(this.fitem_options_overlay);
     
 	
-	// footer item: status field (total line numbers, save indicator)
+	// footer item: status field (total line numbers)
     this.fitem_status = this.createFooterItem('', false);
     this.footer_wrap.appendChild(this.fitem_status);
     
-    // footer item: "name" of the document (taken from textarea alt-attribut)
-    this.fitem_name = this.createFooterItem(this.textarea.readAttribute('alt'), false);
+    // footer item: "name" of the document (taken from textarea alt-attribut), and save indicator
+    this.fitem_name = this.createFooterItem(this.documentname, false);
     this.footer_wrap.appendChild(this.fitem_name);
 	
 	
@@ -361,6 +386,7 @@ var t3editor = function(){
       connect(this.iframe, "onload", bind(function(){disconnectAll(this.iframe, "onload"); this.init(content);}, this));
     }
   }
+
 
 
   t3editor.prototype = {
@@ -442,20 +468,15 @@ var t3editor = function(){
     	item.innerHTML = title;
     	
     	if (mouseover) {
+			item.addClassName('t3e_clickable');
     		Event.observe(item, "mouseover", function(e){Event.element(e).addClassName('t3e_footeritem_active');} );
     		Event.observe(item, "mouseout",  function(e){Event.element(e).removeClassName('t3e_footeritem_active');} );
 		}
 		
-		if (typeof clickAction == 'object') {
+		if (typeof clickAction == 'object') { // display an overlay
 			Event.observe(item, "click",  function(e){ clickAction.toggle(); } );
-			/*
-			pos = Position.positionedOffset(item);
-    		pos_l = (pos[0] + item.getDimensions().width - clickMenu.getDimensions().width - 13);
-    		clickMenu.setStyle({left:pos_l+'px'});
-    		*/
-		}
 		
-		if (typeof clickAction == 'string' && clickAction != '') {
+		} else if (typeof clickAction == 'string' && clickAction != '') {	// execute a method
 			connect(item, "onclick", method(this, clickAction+''));
 		}
 		
@@ -520,6 +541,11 @@ var t3editor = function(){
 
 		this.resize(w,h);
 	},
+	
+	toggleHelp: function()	{
+		this.modalOverlay.toggle();
+		this.helpOverlay.toggle();
+	},
 
 
 	// update the line numbers
@@ -542,9 +568,8 @@ var t3editor = function(){
 	                    }
 	            }
 	            
-				this.fitem_status.update(
-					(this.textModified?'* ':'')+
-					bodyContentLineCount + ' Lines');
+				this.fitem_status.update(bodyContentLineCount + ' lines');
+				this.fitem_name.update(this.documentname +(this.textModified?' <span alt="document has been modified">*</span>':''));
 			}
     },
 
@@ -605,10 +630,7 @@ var t3editor = function(){
     // the current line.
     keyDown: function(event) {
       var name = event.key().string;
-/*
- TODO: the mac firefox behaves very strange here. The Mac version inserts a BR on itself
- in oposite to the Linux version. Windows has to be checked for this behavior!!!
- */
+
       if (name == "KEY_ENTER") {
 			event.stop();
 			if (!isMac)	select.insertNewlineAtCursor(this.win);
@@ -633,10 +655,12 @@ var t3editor = function(){
       var name = event.key().string;
       if (this.options.reindentAfterKeys.hasOwnProperty(name))
         this.indentAtCursor();
-      else if (!this.options.safeKeys.hasOwnProperty(name))
+      else if (!this.options.safeKeys.hasOwnProperty(name)) {
         this.markCursorDirty();
+        this.checkTextModified();
+	  }
       
-      if (name == "KEY_ENTER"){
+      if (name == "KEY_ENTER" || name == "KEY_BACKSPACE" || name == "KEY_DELETE" ){
           this.updateLinenum();
       }
        
@@ -651,10 +675,9 @@ var t3editor = function(){
 
 	// check if code in editor has been modified since last saving
     checkTextModified: function() {
-      if (!this.textModified) {
-      	if (this.getCode() != this.textarea.value) {
-      		this.textModified = true;
-      	}
+	  if (!this.textModified) {
+      	this.textModified = true;
+		this.updateLinenum();
       }
     },
 
@@ -687,7 +710,6 @@ var t3editor = function(){
 
 	// callback if ajax saving was successful
 	saveAjaxOnSuccess: function(ajaxrequest) {
-		// console.debug(ajaxrequest);
 		if (ajaxrequest.status == 200
 			&& ajaxrequest.responseText == "OK") {
 			this.textModified = false;
@@ -856,10 +878,6 @@ var t3editor = function(){
       select.selectMarked(sel);
 	  if (start)
         this.scheduleHighlight();
-	
-	  // check if text is modified
-	  this.checkTextModified();
-	
     }
   }
 
@@ -876,8 +894,7 @@ var t3editor = function(){
   function highlight(from, lines){
     var container = this.container;
     var document = this.doc;
-
-	this.updateLinenum();
+//	this.updateLinenum();
 
     if (!container.firstChild)
       return;
@@ -1047,8 +1064,21 @@ var t3editor = function(){
 
 
 function t3editor_toggleEditor(checkbox,index) {
-	var t3e = t3e_instances[index - 1];
-	t3e.toggleView(checkbox.checked);
+	if (index == undefined) {
+		$$('textarea.t3editor').each(
+			function(textarea,i) {
+				t3editor_toggleEditor(checkbox,i)
+			}
+		);	
+	} else {
+		if (t3e_instances[index] != undefined) {
+			var t3e = t3e_instances[index];
+			t3e.toggleView(checkbox.checked);
+		} else if (checkbox.checked) {
+			var t3e = new t3editor($$('textarea.t3editor')[index], index);
+			t3e_instances[index] = t3e;
+		}
+	}	
 }
 
 // ------------------------------------------------------------------------
@@ -1060,8 +1090,10 @@ function t3editor_toggleEditor(checkbox,index) {
 Event.observe(window,'load',function() {
 	$$('textarea.t3editor').each(
 		function(textarea,i) {
-			var t3e = new t3editor(textarea,i);
-			t3e_instances[i] = t3e;
+			if ($('t3editor_disableEditor_'+i+'_checkbox') && $('t3editor_disableEditor_'+i+'_checkbox').checked) {
+				var t3e = new t3editor(textarea,i);
+				t3e_instances[i] = t3e;
+			}
 		}
 	);
 });

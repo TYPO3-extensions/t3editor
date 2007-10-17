@@ -1,3 +1,4 @@
+
 .editbox {
   border-width: 0;
   margin: .0em;
@@ -13,6 +14,7 @@
 }
 
 
+/* Syntax highlighting */
 
 span.part {
 	color: #666;
@@ -29,6 +31,7 @@ span.reserved {
 span.keyword {
 	color: #0000cc;
 	font-weight: bold;
+	font-size: 0.95em;
 }
 
 span.keyword2 {
@@ -81,39 +84,17 @@ span.string {
   color: #AA2222;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* unparsed code */
 pre.code, .editbox {
   color: #666;
 }
 
 
-
-
-
-
-
-
+/* around the editor */
 .t3e_outerdiv {
 	border: 1px solid gray;
 	position: relative;
-    background-color: #eeeeee;
+    background-color: #EFEFF4;
 	background-image: url('../icons/loader_eeeeee.gif');
 	background-position: 49% 50%;
 	background-repeat: no-repeat;
@@ -121,16 +102,18 @@ pre.code, .editbox {
 .t3e_modalOverlay {
 	position: absolute;
 	top: 0; left: 0;
-    background-color: #eeeeee;
+    background-color: #EFEFF4;
 	background-image: url('../icons/loader_eeeeee.gif');
 	background-position: 49% 50%;
 	background-repeat: no-repeat;
 	z-index:200;
+	width: 100%;
+	height: 100%;
 }
 .t3e_autoCompleteBox {
 	position: absolute;
 	top: 0; left: 0;
-    background-color: #EEEEEE;
+    background-color: #EFEFF4;
 	z-index:190;	
 	border:2px solid silver;
 	padding:0px;
@@ -151,7 +134,7 @@ pre.code, .editbox {
 	padding-left:2px;
 	padding-right:2px;
 	font-weight:bold;
-	background-color: #AAAAFF;
+	background-color: #cfcfcf;
 }
 .t3e_fullscreen {
 	position: absolute;
@@ -168,7 +151,7 @@ pre.code, .editbox {
     font-family: monospace;
 	padding: 0 3px 0 0;
 	margin: 0;
-    background-color: #eeeeee;
+    background-color: #EFEFF4;
 	color: #000;
 	width: 3em;
 	float: left;
@@ -204,10 +187,17 @@ pre.code, .editbox {
 	border-left: 1px solid gray;
 	padding: 4px 14px 0 14px;
 }
+
+
+.t3e_clickable {
+  cursor:pointer;cursor:hand;
+}
+
+
 .t3e_footer_overlay {
 	position: absolute; bottom: 20px; right: 17px; 
 	opacity: 0.85;
-	background-color: #eeeeee;
+	background-color: #EFEFF4;
 	width: 180px; 
 	height: 70%;
 	padding: 5px 0px 10px 0px;
@@ -235,6 +225,17 @@ pre.code, .editbox {
 .t3e_footer_overlay ul li:hover {
 	background-color: #cfcfcf;
 }
+
+#t3e_modalOverlay_help {
+	background-image: none;
+	width: 90%;
+	height: 80%;
+	top: 10%;
+	left: 5%;
+	padding: 10px;
+	border: 1px solid gray;
+}
+
 .t3e_footeritem_active {
 	background-color: #cfcfcf;
 }

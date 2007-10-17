@@ -38,19 +38,14 @@ class tx_t3editor {
 	var $filepath_editorlib = 'jslib/t3editor.js';
 	var $filepath_editorcss = 'css/t3editor.css';
 	
-	
 	var $editorCounter = 0;
+	var $isEnabled = true;	// set to false to totally switch off t3e 
 	
-	var $isEnabled = true;
 	
 	function tx_t3editor() {
-		//  $this->checkEnabled();
-	}
-	
-	function checkEnabled() {
-		if (!$GLOBALS['BE_USER']->uc['disableT3Editor']) {
-			$this->isEnabled = false;
-		}
+			// check BEUser settings
+		$state = t3lib_div::_GP('t3editor_disableEditor')=='true' ? true : $GLOBALS['BE_USER']->uc['disableT3Editor'];
+		$this->setBEUCdisableT3Editor($state);
 	}
 	
 	
@@ -141,14 +136,14 @@ class tx_t3editor {
 				$content.
 				'</textarea></div>';
 			
-			$code.= '<br/><br/><input type="checkbox" onchange="t3editor_toggleEditor(this,'.$this->editorCounter.');" onclick="t3editor_toggleEditor(this,'.$this->editorCounter.');" '.
-				' id="t3editor_toggleEditor_'.$this->editorCounter.'_checkbox" />'.
-				'<label for="t3editor_toggleEditor_'.$this->editorCounter.'_checkbox">'.
+			$checked = $GLOBALS['BE_USER']->uc['disableT3Editor'] ? 'checked="checked"' : '';
+			$code.= '<br/><br/><input type="checkbox" onchange="t3editor_toggleEditor(this);" '.
+				' name="t3editor_disableEditor" value="true" id="t3editor_disableEditor_'.$this->editorCounter.'_checkbox" '.$checked.' />'.
+				'<label for="t3editor_disableEditor_'.$this->editorCounter.'_checkbox">'.
 				'deactivate t3editor</label><br/><br/>';
-				
 			
 		} else {
-				// Fallback
+				// fallback
 			$code.= '<textarea '.
 				'name="'.$name.'" '.
 				(!empty($class)?'class="'.$class.'" ':'').
