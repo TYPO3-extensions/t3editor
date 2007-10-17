@@ -92,7 +92,9 @@ setdefault(t3eOptions,
         stylesheet: PATH_t3e+"css/t3editor.css",
         parser: parseTypoScript,
 	    linesPerPass: 10,
-	    passDelay: 500});
+	    passDelay: 500,
+        autoComplete: true,
+        acWords:5});
 // These default options can be overridden by passing a set of options
 // to a specific CodeMirror constructor.
 
@@ -122,7 +124,8 @@ var t3editor = function(){
         forEach(node.childNodes, simplifyNode);
         if (!leaving && newlineElements.hasOwnProperty(node.nodeName)) {
           leaving = true;
-          result.push(withDocument(doc, BR));
+          el = withDocument(doc, SPAN);
+		  result.push(withDocument(doc, BR));
         }
       }
     }
@@ -232,6 +235,13 @@ var t3editor = function(){
     this.options = options || {}
     setdefault(this.options, t3eOptions);
 	
+    //History Array
+    this.history = [];
+    //Max History Size
+    this.historySize = 100;
+    //Init history position
+    this.currHistoryPosition = -1;
+
 	// memorize the textarea
 	this.textarea = $(theTextarea);
     
@@ -289,6 +299,11 @@ var t3editor = function(){
     this.linenum_wrap.appendChild(this.linenum);
     this.outerdiv.appendChild(this.linenum_wrap);
     
+    //autocomplete box
+    this.autoCompleteBox = $(createDOM("DIV",{"class":"t3e_autoCompleteBox"}));
+    this.autoCompleteBox.hide();
+    this.outerdiv.appendChild(this.autoCompleteBox);
+    
 	// wrapping the iframe
     this.iframe_wrap = $(createDOM("DIV", {
     	"class": 	"t3e_iframe_wrap"
@@ -329,7 +344,7 @@ var t3editor = function(){
 	  // TODO make this more flexible! And get rid of inline css and unsed options!
     this.fitem_options_overlay.innerHTML = '<ul>'+
 				// '<li style="color:grey"><input type="checkbox" disabled="disabled" /> Syntax highlighting</li>'+ 
-				'<li style="color:grey"><input type="checkbox" disabled="disabled" /> AutoCompletion</li>'+
+				'<li><input type="checkbox" onclick="t3e_instances['+this.index+'].fitem_options_overlay.hide();t3e_instances['+this.index+'].toggleAutoComplete();" id="t3e_autocomplete" checked="checked" /><label for="t3e_autocomplete">AutoCompletion</label></li>'+
 				'<li><span onclick="t3e_instances['+this.index+'].fitem_options_overlay.hide();t3e_instances['+this.index+'].footeritem_demo_click();">Test snippets</span></li>'+
 				'<li><input type="checkbox" onclick="t3e_instances['+this.index+'].fitem_options_overlay.hide();t3e_instances['+this.index+'].toggleFullscreen();" id="t3e_fullscreen" /> <label for="t3e_fullscreen">Fullscreen</label></li>'+
 				// '<li style="color:grey"><input type="checkbox" disabled="disabled" /> other fancy stuff</li>'+
@@ -405,6 +420,9 @@ var t3editor = function(){
 	  // fetch scroll events for updateing line numbers
 	  connect(this.doc, "onscroll", method(this, "scroll"));
       connect(this.win, "onscroll", method(this, "scroll"));
+      
+      //fetch mouse click event
+      connect(this.doc, "onclick", method(this, "click"));
     
       // get the form object (needed for Ajax saving)
       var form = $(this.textarea.form)
@@ -419,16 +437,24 @@ var t3editor = function(){
 	  // resize the editor
       this.resize(this.width, this.height);
 	  
-      if (code)
-        this.importCode(code);
+      //Import code to editor. If code is empty the method importCode put a BR or SPAN into the codewindow - dependence on browser
+      this.importCode(code);
 	  
 	  // set focus
 	  this.win.focus();
+    
     },
 	
 	// for demonstation only!
 	footeritem_demo_click: function() {
 		// insertNewlineAtCursor(this.win);
+        
+        // focus editor and cursor
+        this.win.focus();
+        var cursor = new select.Cursor(this.container);
+        cursor.start = this.cursorObj;
+        cursor.focus();
+
 		select.insertTextAtCursor(this.win, "page = PAGE");select.insertNewlineAtCursor(this.win);
 		select.insertTextAtCursor(this.win, "page {");	   select.insertNewlineAtCursor(this.win);
 		select.insertTextAtCursor(this.win, "  10 = TEXT");select.insertNewlineAtCursor(this.win);
@@ -547,30 +573,314 @@ var t3editor = function(){
 		this.helpOverlay.toggle();
 	},
 
+    
+    //toggle AutoCompletation beetwen on and off
+    toggleAutoComplete : function() {
+        this.options.autoComplete = (this.options.autoComplete)?false:true;
+    },
+    
+    //autocomplete box
+    autoComplete : function() {
+        this.clicked = false;
+        //get lastword into this.lastWord
+        this.getLastWord();
+        // init vars for up/down moving in word list
+        this.ac_up = 0;
+        this.ac_down = this.options.acWords-1;
+        
+        //refresh cursorObj
+        var cursor = new select.Cursor(this.container);
+        this.cursorObj = cursor.start;
+        //init currWord, used in word list. Contain selected word
+        this.currWord = -1;
+        
+        // If lastword is not empty and not space - continue
+        if (this.lastWord!='&nbsp;' && this.lastWord){
+            // get list of words
+            this.words = this.getCompleteWordsByTrigger(this.lastWord.toLowerCase());
+            // if words are found - show box
+            if (this.words.length > 0){
+                // make UL list of completation words
+                var html = '<ul>';
+                for (i=0;i<this.words.length;i++){
+                    html+= '<li style="height:16px;vertical-align:middle;" id="ac_word_'+i+'" onclick="t3e_instances['+this.index+'].clicked=true;t3e_instances['+this.index+'].insertCurrWordAtCursor();" onmouseover="t3e_instances['+this.index+'].highlightCurrWord('+i+');"><span class="word_'+this.words[i].type+'">'+this.words[i].word+'</span></li>';
+                }
+                html+='</ul>';
+                //put HTML and show box
+                this.autoCompleteBox.innerHTML = html;
+                this.autoCompleteBox.show();
+                this.autoCompleteBox.scrollTop = 0;
+                //  init styles
+                if (this.words.length > this.options.acWords){
+                    this.autoCompleteBox.style.overflowY = 'scroll';
+                    if (isGecko){
+                        this.autoCompleteBox.style.height = (this.options.acWords*($("ac_word_0").offsetHeight))+'px';
+                    }else{
+                        this.autoCompleteBox.style.height = (this.options.acWords*($("ac_word_0").offsetHeight))+4+'px';
+                        this.autoCompleteBox.style.width = this.autoCompleteBox.offsetWidth+20+'px';
+                    }
+                    
+                }else{
+                    this.autoCompleteBox.style.overflowY = 'auto';
+                    this.autoCompleteBox.style.height = 'auto';
+                    this.autoCompleteBox.style.width = 'auto'; // '0px';
+                }
+                
+                // positioned box to word
+                this.autoCompleteBox.style.left = Position.cumulativeOffset(this.iframe)[0]-Position.cumulativeOffset(this.outerdiv)[0]+Position.cumulativeOffset(cursor.start)[0]+cursor.start.offsetWidth;
+                this.autoCompleteBox.style.top = Position.cumulativeOffset(this.iframe)[1]-Position.cumulativeOffset(this.outerdiv)[1]+Position.cumulativeOffset(cursor.start)[1]+cursor.start.offsetHeight-this.container.scrollTop;
+                // set flag to 1 - needed for continue typing word. 
+                this.ac = 1;    
+                //highlight first word in list
+                this.highlightCurrWord(0);
+            } 
+        }
+    },
+    // Get word where cursor focused
+    getLastWord : function (){
+        var cursor = new select.Cursor(this.container);
+        if (cursor.start){
+            this.lastTrigger = this.lastWord;
+            this.lastWord = (cursor.start.innerHTML)?cursor.start.innerHTML:'';
+        }
+    },
+    
+    // highlighitng word in autocomplete box by id
+    highlightCurrWord : function (id) {
+        if (this.currWord!=-1){
+            $('ac_word_'+this.currWord).className = '';
+        }
+        $('ac_word_'+id).className = 'active';
+        this.currWord = id;
+    },
+    
+    //insert selected word into text from autocompletebox
+    insertCurrWordAtCursor: function (){
+        var trigger = this.lastWord;
+        var insertText = this.words[this.currWord].word;
+        //if MSIE and select word my mouse click
+        var cursor = new select.Cursor(this.container);
+        if (isMSIE && this.clicked){
+            if (trigger.length > 0){
+                this.cursorObj.innerHTML = insertText;
+                this.win.focus();
+                cursor.start = this.cursorObj;
+                cursor.focus();
+                this.highlightAtCursor(cursor);
+            }
+        }
+        // if Safari browser
+        else if (isSafari){
+             if (trigger.length > 0){
+                this.cursorObj.innerHTML = insertText;
+                if (this.clicked){
+                   this.win.focus();
+                }
+                cursor.start = this.cursorObj;
+                cursor.focus();
+                this.highlightAtCursor(cursor);            
+            }
+        }
+        //for all others times
+        else{
+            if (trigger.length > 0){
+                cursor.start.innerHTML = '';
+            }
+            select.insertTextAtCursor (this.win,insertText);
+            if (this.clicked){
+                this.win.focus();    
+            }
+            cursor.focus();
+            this.highlightAtCursor(cursor);
+        }
+        // set ac flag to 0 - autocomplete is finish
+        this.ac = 0;
+        //hide box
+        this.autoCompleteBox.hide();
+    },
+    //return words for autocomplete by trigger (part of word)
+    getCompleteWordsByTrigger : function (trigger){
+        result = [];
+        
+        for(word in typoscriptWords){
+            lword = word.toLowerCase();
+            if (lword.indexOf(trigger) === 0){
+                var wordObj = new Object();
+                wordObj.word = word;
+                wordObj.type = typoscriptWords[word];
+                result.push(wordObj);
+            }
+        }        
+        return result;
+    },
+    
+    //move cursor in autcomplete box up
+    autoCompleteBoxMoveUpCursor : function () {
+        // if previous position was first - then move cursor to last word if not than position --
+        if (this.currWord == 0){
+            var id = this.words.length-1;
+        }else{
+            var id = this.currWord-1;
+        }
+        // hightlight new cursor position
+        this.highlightCurrWord (id);
+        //update id of first and last showing words and scroll box
+        if (this.currWord < this.ac_up || this.currWord == (this.words.length-1)){
+            this.ac_up = this.currWord;
+            this.ac_down = this.currWord+(this.options.acWords-1);
+            if (this.ac_up === this.words.length-1){
+                this.ac_down = this.words.length-1;
+                this.ac_up = this.ac_down-(this.options.acWords-1);
+            }
+            this.autoCompleteBox.scrollTop = this.ac_up*16;
+        }
+    },
+    //move cursor in autocomplete box down
+    autoCompleteBoxMoveDownCursor : function () {
+        // if previous position was last word in list - then move cursor to first word if not than  position ++
+        if (this.currWord == this.words.length-1){
+            var id = 0;
+        }else{
+            var id = this.currWord+1;
+        }
+        // hightlight new cursor position
+        this.highlightCurrWord (id);
+         //update id of first and last showing words and scroll box
+        if (this.currWord > this.ac_down || this.currWord==0){
+            this.ac_down = this.currWord;
+            this.ac_up = this.currWord-(this.options.acWords-1);
+            if (this.ac_down == 0){
+                this.ac_up = 0;
+                this.ac_down = this.options.acWords-1;
+            }
+            this.autoCompleteBox.scrollTop = this.ac_up*16;
+        }
+    },
+    // put code to history
+    pushToHistory:function () {
+        var obj = {};
+        //create SPAN mark of cursor
+        var cursorEl  = this.win.document.createElement("SPAN");
+        cursorEl.id = "cursor";       
+        this.refreshCursorObj();
+        // added mark to code
+        if (this.initable){
+            if (!this.cursorObj){
+                if (this.container.firstChild){
+                   this.win.document.body.insertBefore(cursorEl,this.container.firstChild);
+                }
+            }else{
+                this.win.document.body.insertBefore(cursorEl,this.cursorObj);
+            }
+        }else{
+            this.win.document.body.appendChild(cursorEl);
+        }
+        //save code and text to history object
+        obj.code = this.container.innerHTML;
+        obj.text = this.getCode();
+        // check if was undo/redo than refresh history array
+        if (this.currHistoryPosition+1 < this.history.length){
+            this.history = this.history.slice (0,this.currHistoryPosition+1);
+            this.currHistoryPosition = this.history.length-1;
+        }
+        //push history oject to history array
+        this.history.push(obj);
+        this.currHistoryPosition++;
+        //check limit of history size
+        if (this.currHistoryPosition > this.historySize){
+            this.history = this.history.slice ((this.history.length-this.historySize-1));
+            this.currHistoryPosition = this.history.length-1;
+        }
+    },
+    
+    //undo function
+    undo: function () {
+        //check if position in history not first
+        if (this.currHistoryPosition > 0){
+            this.currHistoryPosition--;
+            var obj = this.history[this.currHistoryPosition];
+            if (!obj){return ;}
+            //insert code from history
+            this.container.innerHTML = obj.code;
+            //focus cursor to next el of marked span
+            var cursor = new select.Cursor(this.container);
+            var cursorEl = this.win.document.getElementById('cursor');
+            if (cursorEl){
+                cursor.start = cursorEl.nextSibling;
+                cursor.focus();
+            }
+        }
+        
+    },
+    
+    //redo function
+    redo: function () {
+        //check if position in history not last
+        if (this.currHistoryPosition < this.history.length){
+            this.currHistoryPosition++;
+            var obj = this.history[this.currHistoryPosition];
+            if (!obj){return ;}
+            //insert code from history
+            this.container.innerHTML = obj.code;
+            //focus cursor to next el of marked span
+            var cursor = new select.Cursor(this.container);
+            var cursorEl = this.win.document.getElementById('cursor');
+            if (cursorEl){
+                cursor.start = cursorEl.nextSibling;
+                cursor.focus();
+            }
+        }
+        
+    },
+    // check changes in history
+    checkHistoryChanges:function () {
+        
+        var code = this.container.innerHTML;
+        if (this.undoable == 1){
+            this.undoable = 0;
+            return ;
+        }
+        if (this.redoable == 1){
+            this.redoable = 0;
+            return ;
+        }
+        if (!this.history[this.currHistoryPosition]){
+            this.pushToHistory();
+            return ;
+        }
+        if (this.getCode(code) != this.history[this.currHistoryPosition].text){
+            this.pushToHistory();
+        }
+        
+    },
 
 	// update the line numbers
     updateLinenum: function()      {
-    		var theMatch = this.container.innerHTML.match(/<br/gi);
-            if (theMatch) {
-	            var bodyContentLineCount = theMatch.length;
-	            disLineCount = this.linenum.childNodes.length;
-	            while (disLineCount != bodyContentLineCount)    {
-	                    if (disLineCount > bodyContentLineCount)        {
-	                            this.linenum.removeChild(this.linenum.lastChild);
-	                            disLineCount--;
-	                    } else if (disLineCount < bodyContentLineCount) {
-	                            ln = $(document.createElement('dt'));
-	                            ln.update(disLineCount+1+'.');
-	                            ln.addClassName(disLineCount%2==1?'even':'odd');
-	                            ln.setAttribute('id','ln'+(disLineCount+1));
-	                            this.linenum.appendChild(ln);
-	                            disLineCount++;
-	                    }
-	            }
-	            
-				this.fitem_status.update(bodyContentLineCount + ' lines');
-				this.fitem_name.update(this.documentname +(this.textModified?' <span alt="document has been modified">*</span>':''));
-			}
+		var theMatch = this.container.innerHTML.match(/<br/gi);
+        if (!theMatch) {
+            theMatch = '1';
+        } else if (isMSIE) { 
+			theMatch.push('1');
+		}
+
+        var bodyContentLineCount = theMatch.length;
+        disLineCount = this.linenum.childNodes.length;
+        while (disLineCount != bodyContentLineCount)    {
+	        if (disLineCount > bodyContentLineCount)        {
+	            this.linenum.removeChild(this.linenum.lastChild);
+	            disLineCount--;
+	        } else if (disLineCount < bodyContentLineCount) {
+	            ln = $(document.createElement('dt'));
+	            ln.update(disLineCount+1+'.');
+	            ln.addClassName(disLineCount%2==1?'even':'odd');
+	            ln.setAttribute('id','ln'+(disLineCount+1));
+	            this.linenum.appendChild(ln);
+	            disLineCount++;
+	        }
+        }
+
+		this.fitem_status.update(bodyContentLineCount + ' lines');
+		this.fitem_name.update(this.documentname + (this.textModified?' <span alt="document has been modified">*</span>':''));
     },
 
 	// scroll the line numbers
@@ -591,12 +901,21 @@ var t3editor = function(){
 		}
         this.linenum_wrap.scrollTop = scrOfY;
     },
+    
+    // click event. Refresh cursor object. if autocomplete is not finish - finish it and hide box
+    click: function()  {
+        if (this.ac === 1){this.ac = 0;this.autoCompleteBox.hide();}
+        this.refreshCursorObj();
+    },
 
     // Split a chunk of code into lines, put them in the frame, and
     // schedule them to be coloured.
     importCode: function(code) {
       replaceChildNodes(this.container);
+
+      if (code == "\n" || code == "\r\n" || code == "\r"){code = '';}
       var lines = code.replace(/[ \t]/g, nbsp).replace(/\r\n?/g, "\n").split("\n");
+
       for (var i = 0; i != lines.length; i++) {
         if (i > 0)
           this.container.appendChild(withDocument(this.doc, BR));
@@ -604,14 +923,14 @@ var t3editor = function(){
         if (line.length > 0)
           this.container.appendChild(this.doc.createTextNode(line));
       }
-	  
       if (code == "") {
-      	this.container.appendChild($(document.createElement('BR')));
+        var empty = this.win.document.createElement('BR');//(isGecko && !isSafari)?this.win.document.createElement('BR'):this.win.document.createElement('SPAN');
+      	this.container.appendChild(empty);
       }
-	  
+
       if (this.container.firstChild){
-        this.addDirtyNode(this.container.firstChild);
-        this.highlightDirty();
+		this.addDirtyNode(this.container.firstChild);
+        this.scheduleHighlight(); // this.highlightDirty();
       }
 	  this.updateLinenum();
     },
@@ -632,11 +951,16 @@ var t3editor = function(){
       var name = event.key().string;
 
       if (name == "KEY_ENTER") {
-			event.stop();
-			if (!isMac)	select.insertNewlineAtCursor(this.win);
-        	this.indentAtCursor();
-   	  }
-      else if (name == "KEY_S" && event.modifier().ctrl) { 	// save via ajax request
+            event.stop();
+			if (this.ac === 1)	{
+               this.insertCurrWordAtCursor();
+            } else if (!isMac) {
+                select.insertNewlineAtCursor(this.win);
+        	    this.indentAtCursor();
+            }
+            this.updateLinenum();
+			
+   	  } else if (name == "KEY_S" && event.modifier().ctrl) { 	// save via ajax request
       		this.saveAjax();
       		event.stop();
       		return;
@@ -645,6 +969,27 @@ var t3editor = function(){
       		this.toggleFullscreen();
       		event.stop();
       		return;
+			
+      } else if (name == "KEY_SPACEBAR" && event.modifier().ctrl && this.options.autoComplete){ // call autocomplete if autocomplete turn on
+        this.autoComplete();
+        event.stop();
+      } else if (name=="KEY_ARROW_UP" && this.ac == 1){ // move up cursor in autocomplete box
+        event.stop();
+        window.setTimeout('t3e_instances['+this.index+'].autoCompleteBoxMoveUpCursor()',100);
+      } else if (name=="KEY_ARROW_DOWN" && this.ac == 1){ // move down cursor in autocomplete box
+        event.stop();
+        window.setTimeout('t3e_instances['+this.index+'].autoCompleteBoxMoveDownCursor();',100);
+      } else if (name=="KEY_ESCAPE" && this.ac === 1){ // if autocomplete box is showing. by ESC press it's hide and autocomplete is finish
+            this.ac = 0;
+            this.autoCompleteBox.hide();
+      } else if (name=='KEY_Z' && event.modifier().ctrl){
+         this.undoable = 1;
+         this.undo();
+         event.stop();
+      } else if (name=='KEY_Y' && event.modifier().ctrl){
+         this.redoable = 1;
+         this.redo();
+         event.stop();
       }
     },
 
@@ -659,6 +1004,15 @@ var t3editor = function(){
         this.markCursorDirty();
         this.checkTextModified();
 	  }
+	  
+       if (this.ac===1){ // if autocomplete now is not finish, but started and continue typing - refresh autocomplete box
+            this.getLastWord();
+            if (this.lastTrigger!=this.lastWord){
+                this.autoCompleteBox.hide();
+                this.ac = 0;
+                this.autoComplete();     
+            }
+       } 
       
       if (name == "KEY_ENTER" || name == "KEY_BACKSPACE" || name == "KEY_DELETE" ){
           this.updateLinenum();
@@ -1046,7 +1400,9 @@ var t3editor = function(){
         }
       }
     });
-
+    this.refreshCursorObj();
+    this.initable = 1;
+    window.setTimeout ('t3e_instances['+this.index+'].checkHistoryChanges();',100);
     // The function returns some status information that is used by
     // hightlightDirty to determine whether and where it has to
     // continue.
@@ -1067,14 +1423,14 @@ function t3editor_toggleEditor(checkbox,index) {
 	if (index == undefined) {
 		$$('textarea.t3editor').each(
 			function(textarea,i) {
-				t3editor_toggleEditor(checkbox,i)
+				t3editor_toggleEditor(checkbox,i);
 			}
 		);	
 	} else {
 		if (t3e_instances[index] != undefined) {
 			var t3e = t3e_instances[index];
 			t3e.toggleView(checkbox.checked);
-		} else if (checkbox.checked) {
+		} else if (!checkbox.checked) {
 			var t3e = new t3editor($$('textarea.t3editor')[index], index);
 			t3e_instances[index] = t3e;
 		}
@@ -1090,7 +1446,7 @@ function t3editor_toggleEditor(checkbox,index) {
 Event.observe(window,'load',function() {
 	$$('textarea.t3editor').each(
 		function(textarea,i) {
-			if ($('t3editor_disableEditor_'+i+'_checkbox') && $('t3editor_disableEditor_'+i+'_checkbox').checked) {
+			if ($('t3editor_disableEditor_'+(i+1)+'_checkbox') && !$('t3editor_disableEditor_'+(i+1)+'_checkbox').checked) {
 				var t3e = new t3editor(textarea,i);
 				t3e_instances[i] = t3e;
 			}

@@ -56,7 +56,7 @@ var parseTypoScript = function() {
   TSLexical.prototype.indentation = function(firstChar) {
     var closing = firstChar == this.type;
 	if (this.type == "}")
-      return this.indented + 4;
+      return this.indented + 2;
 
     else if (this.align)
       return this.column - (closing ? 1 : 0);

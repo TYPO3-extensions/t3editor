@@ -1236,7 +1236,7 @@ var tokenizeTypoScript = function(){
     // the caller has already extracted the text from the stream
     // himself.
     function result(type, style, base){
-      nextWhile(isWhiteSpace);
+      // nextWhile(isWhiteSpace); - comment thats line because needed for autocomplete
       var value = {type: type, style: style, value: (base ? base + source.get() : source.get())};
       if (base) value.name = base;
       return value;

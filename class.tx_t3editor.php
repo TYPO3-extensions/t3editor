@@ -137,7 +137,7 @@ class tx_t3editor {
 				'</textarea></div>';
 			
 			$checked = $GLOBALS['BE_USER']->uc['disableT3Editor'] ? 'checked="checked"' : '';
-			$code.= '<br/><br/><input type="checkbox" onchange="t3editor_toggleEditor(this);" '.
+			$code.= '<br/><br/><input type="checkbox" onclick="t3editor_toggleEditor(this);" '.
 				' name="t3editor_disableEditor" value="true" id="t3editor_disableEditor_'.$this->editorCounter.'_checkbox" '.$checked.' />'.
 				'<label for="t3editor_disableEditor_'.$this->editorCounter.'_checkbox">'.
 				'deactivate t3editor</label><br/><br/>';

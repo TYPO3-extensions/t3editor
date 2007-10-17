@@ -22,8 +22,13 @@ var select = {};
 
   // Find the top-level node that contains the node before this one.
   function topLevelNodeBefore(node, top) {
-    while (!node.previousSibling && node.parentNode != top)
-      node = node.parentNode;
+    if (!node){
+        return null;
+    }
+    while (!node.previousSibling && node.parentNode != top){
+        node = node.parentNode;
+    }
+      
     return topLevelNodeAt(node.previousSibling, top);
   }
 
@@ -68,24 +73,25 @@ var select = {};
     // detailed information, but just this node is enough for most
     // purposes.
     select.Cursor = function(container) {
-      this.container = container;
-      this.doc = container.ownerDocument;
-      var selection = this.doc.selection;
-      this.valid = !!selection;
-      if (this.valid) {
-	var range = selection.createRange();
-	range.collapse(false);
-	var around = range.parentElement();
-	if (around && isAncestor(container, around)) {
-          this.start = topLevelNodeAt(around, container);
-	}
-	else {
-          range.pasteHTML("<span id='// temp //'></span>");
-          var temp = this.doc.getElementById("// temp //");
-          this.start = topLevelNodeBefore(temp, container);
-          removeElement(temp);
-	}
-      }
+        this.container = container;
+        this.doc = container.ownerDocument;
+        var selection = this.doc.selection;
+        this.valid = !!selection;
+        if (this.valid) {
+            var range = selection.createRange();
+            range.collapse(false);
+            var around = range.parentElement();
+            if (around && isAncestor(container, around)) {
+                  this.start = topLevelNodeAt(around, container);
+            }
+            else {
+                range.pasteHTML("<span id='// temp //'></span>");
+                var temp = this.doc.getElementById("// temp //");
+                this.start = topLevelNodeBefore(temp, container);
+                if (temp)
+                    removeElement(temp);
+            }
+        }
     };
 
     // Place the cursor after this.start. This is only useful when
@@ -261,6 +267,7 @@ var select = {};
 	// For text nodes, we look at the node itself if the cursor is
 	// inside, or at the node before it if the cursor is at the
 	// start.
+    
 	if (end.nodeType == 3){
           if (range.endOffset > 0)
             this.start = topLevelNodeAt(end, this.container);
@@ -299,14 +306,16 @@ var select = {};
     };
 
     select.Cursor.prototype.focus = function() {
-      var range = this.win.document.createRange();
-      range.setStartBefore(this.container.firstChild || this.container);
-      if (this.start)
-	range.setEndAfter(this.start);
-      else
-	range.setEndBefore(this.container.firstChild || this.container);
-      range.collapse(false);
-      selectRange(range, this.win);
+        var sel = this.win.getSelection();
+        var range = this.win.document.createRange();
+        range.setStartBefore(this.container.firstChild || this.container);
+        if (this.start)
+            range.setEndAfter(this.start);
+        else
+            range.setEndBefore(this.container.firstChild || this.container);
+                 
+        range.collapse(false);
+        selectRange(range, this.win);
     };
 	
 	

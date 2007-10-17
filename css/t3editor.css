@@ -24,21 +24,21 @@ span.other {
 	color: black;
 }
 
-span.reserved {
+span.reserved, .t3e_autoCompleteBox ul li span.word_reserved {
   color: #770088;
 }
 
-span.keyword {
+span.keyword, .t3e_autoCompleteBox ul li span.word_keyword {
 	color: #0000cc;
 	font-weight: bold;
 	font-size: 0.95em;
 }
 
-span.keyword2 {
+span.keyword2, .t3e_autoCompleteBox ul li span.word_keyword2 {
 	color: #0000cc;
 }
 
-span.keyword3 {
+span.keyword3, .t3e_autoCompleteBox ul li span.word_keyword3 {
 	color: #0000ff;
 }
 
