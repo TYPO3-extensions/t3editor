@@ -442,6 +442,8 @@ var t3editor = function(){
 	  
 	  // set focus
 	  this.win.focus();
+        var cursor = new select.Cursor(this.container);
+	cursor.focus();
     
     },
 	
