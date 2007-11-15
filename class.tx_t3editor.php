@@ -60,7 +60,7 @@ class tx_t3editor {
 	 *
 	 * @var bool
 	 */
-	private $isEnabled;
+	public $isEnabled;
 
 
 	/**
@@ -87,7 +87,7 @@ class tx_t3editor {
 	 * @param	boolean		$state
 	 * @return	void
 	 */
-	private function setBEUCdisableT3Editor($state) { //TODO better descriptive name for $state
+	public function setBEUCdisableT3Editor($state) { //TODO better descriptive name for $state
 		if ($GLOBALS['BE_USER']->uc['disableT3Editor'] != $state) {
 			$GLOBALS['BE_USER']->uc['disableT3Editor'] = $state;
 
@@ -100,7 +100,7 @@ class tx_t3editor {
 	 *
 	 * @return	string		DESCRIPTION GOES HERE
 	 */
-	public function getCodeJS()	{
+	public function getJavascriptCode()	{
 		$code = ''; //TODO find a more descriptive name (low prio)
 
 		if($this->isEnabled) {
