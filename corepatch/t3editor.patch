@@ -1,72 +1,62 @@
-Index: sysext/tstemplate/ts/index.php
+Index: typo3/sysext/tstemplate/ts/index.php
 ===================================================================
---- sysext/tstemplate/ts/index.php	(revision 2585)
-+++ sysext/tstemplate/ts/index.php	(working copy)
-@@ -116,7 +116,16 @@
- 			}
+--- typo3/sysext/tstemplate/ts/index.php	(revision 2717)
++++ typo3/sysext/tstemplate/ts/index.php	(working copy)
+@@ -117,6 +117,14 @@
  		</script>
  		';
-+		
  
 +			// include t3editor if its loaded
 +		if (t3lib_extMgm::isLoaded('t3editor')) {
 +			$GLOBALS['T3_VAR']['t3editorObj'] = t3lib_div::getUserObj('EXT:t3editor/class.tx_t3editor.php:&tx_t3editor');
 +			if (is_object($GLOBALS['T3_VAR']['t3editorObj'])) {
-+				$this->doc->JScode.= $GLOBALS['T3_VAR']['t3editorObj']->getCodeJS();
++				$this->doc->JScode.= $GLOBALS['T3_VAR']['t3editorObj']->getJavascriptCode();
 +			}
 +		}		
 +
  			$this->doc->postCode='
  		<script language="javascript" type="text/javascript">
  			script_ended = 1;
-Index: sysext/tstemplate_info/class.tx_tstemplateinfo.php
+Index: typo3/sysext/tstemplate_info/class.tx_tstemplateinfo.php
 ===================================================================
---- sysext/tstemplate_info/class.tx_tstemplateinfo.php	(revision 2585)
-+++ sysext/tstemplate_info/class.tx_tstemplateinfo.php	(working copy)
-@@ -25,12 +25,15 @@
- *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
- /**
-- * @author	Kasper Skårhøj <kasperYYYY@typo3.com>
-+ * @author	Kasper Skï¿½rhï¿½j <kasperYYYY@typo3.com>
-  */
- 
+--- typo3/sysext/tstemplate_info/class.tx_tstemplateinfo.php	(revision 2717)
++++ typo3/sysext/tstemplate_info/class.tx_tstemplateinfo.php	(working copy)
+@@ -31,6 +31,9 @@
  require_once(PATH_t3lib."class.t3lib_extobjbase.php");
  
  class tx_tstemplateinfo extends t3lib_extobjbase {
 +
-+	var $tce_processed = false;  // indicator for t3editor, if data is saved
++	var $tce_processed = false;  // indicator for t3editor, if data is stored
 +	
  	function modMenu()	{
  		global $LANG;
  
-@@ -233,7 +236,9 @@
- 					$tce->process_datamap();
+@@ -234,6 +237,9 @@
  						// Clear the cache (note: currently only admin-users can clear the cache in tce_main.php)
  					$tce->clear_cacheCmd("all");
--
-+					
+ 
++						// tce were processed successfully
 +					$this->tce_processed = true;
-+					
++
  						// re-read the template ...
  					$this->initialize_editor($this->pObj->id,$template_uid);
  				}
-@@ -264,7 +269,28 @@
+@@ -264,7 +270,28 @@
  					}
  				}
  			}
 +			
++		// response ajax call by t3editor
 +            if (is_object($GLOBALS['T3_VAR']['t3editorObj'])) {
-+            	// $GLOBALS['T3_VAR']['t3editorObj']->setBEUCdisableT3Editor(true);
-+            	
 +                    // if TSEditor is enabled
 +                	// this POST is a Ajax-Request
 +            	if ($GLOBALS['T3_VAR']['t3editorObj']->isEnabled
 +            		&& t3lib_div::_POST('submitAjax')) {
-+			$GLOBALS['T3_VAR']['t3editorObj']->setBEUCdisableT3Editor(false);
  
-+            	       	// abort request here and return message
-+			// TODO: Json-response here!
++			$GLOBALS['T3_VAR']['t3editorObj']->setBEUCdisableT3Editor(false);
++
++            	       		// abort request here and return message
++				// TODO JSON or other response here!?
 +                	if ($this->tce_processed) {
 +            			echo "OK";
 +                	} else {
@@ -80,7 +70,7 @@ Index: sysext/tstemplate_info/class.tx_tstemplateinfo.php
  			$theOutput.=$this->pObj->doc->spacer(5);
  			$theOutput.=$this->pObj->doc->section("Template information:",'<img src="'.$BACK_PATH.t3lib_iconWorks::getIcon("sys_template",$tplRow).'" width=18 height=16 align=top><b>'.htmlspecialchars($tplRow["title"]).'</b>'.htmlspecialchars(trim($tplRow["sitetitle"])?' - ('.$tplRow["sitetitle"].')':''),0,1);
  			if ($manyTemplatesMenu)	{
-@@ -368,8 +394,19 @@
+@@ -368,8 +395,19 @@
  				}
  			}
  			if ($e["config"])	{

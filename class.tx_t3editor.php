@@ -100,7 +100,7 @@ class tx_t3editor {
 	 *
 	 * @return	string		DESCRIPTION GOES HERE
 	 */
-	public function getJavascriptCode() {
+	public function getCodeJS()	{
 		$code = ''; //TODO find a more descriptive name (low prio)
 
 		if($this->isEnabled) {
