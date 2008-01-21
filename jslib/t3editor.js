@@ -133,7 +133,6 @@ var t3editor = function(){
         result.push(node);
       }
       else {
-        // forEach(node.childNodes, simplifyNode);
         $A(node.childNodes).each(simplifyNode);
         if (!leaving && newlineElements.hasOwnProperty(node.nodeName)) {
           leaving = true;
@@ -495,8 +494,6 @@ var t3editor = function(){
 		
 		this.markCursorDirty();
 		this.scheduleHighlight();
-
-		// this.doc.execCommand("undo", false, null);
 	},
 	
     // toggle between the textarea and t3editor
@@ -809,8 +806,10 @@ var t3editor = function(){
         }
         //save code and text to history object
         obj.code = this.container.innerHTML;
+       
        // TODO
        /// obj.text = this.getCode();
+       
         // check if was undo/redo than refresh history array
         if (this.currHistoryPosition+1 < this.history.length){
             this.history = this.history.slice (0,this.currHistoryPosition+1);
@@ -881,10 +880,9 @@ var t3editor = function(){
             this.pushToHistory();
             return ;
         }
-        // TODO
-       /* if (this.getCode(code) != this.history[this.currHistoryPosition].text){
+        if (code != this.history[this.currHistoryPosition].code){
             this.pushToHistory();
-        } */
+        }
         
     },
 
@@ -993,7 +991,6 @@ var t3editor = function(){
     // the current line.
     keyDown: function(event) {
       var keycode = event.keyCode;
-
       if (keycode == Event.KEY_RETURN)	{
             event.stop();
 			if (this.ac === 1)	{
@@ -1004,34 +1001,34 @@ var t3editor = function(){
             }
             this.updateLinenum();
 			
-   	  } else if (keycode == 83	&& event.ctrlKey) { 	// save via ajax request
+   	  } else if (keycode == 83	&& event.ctrlKey) { 	// CTRL-S   save via ajax request
       		this.saveAjax();
       		event.stop();
       		return;
 			
-      } else if (keycode == 122	&& event.ctrlKey)	{	// toogle fullscreen mode
+      } else if (keycode == 122	&& event.ctrlKey)	{	// CTRL-F11 toogle fullscreen mode
       		this.toggleFullscreen();
       		event.stop();
       		return;
 			
 			// TODO
-      } else if (name == "KEY_SPACEBAR" && event.modifier().ctrl && this.options.autoComplete){ // call autocomplete if autocomplete turn on
+      } else if (keycode == 32 && event.ctrlKey && this.options.autoComplete){ // CTRL-Space  call autocomplete if autocomplete turn on
         this.autoComplete();
         event.stop();
-      } else if (name=="KEY_ARROW_UP" && this.ac == 1){ // move up cursor in autocomplete box
+      } else if (keycode == 38 && this.ac == 1){ // arrow up:  move up cursor in autocomplete box
         event.stop();
         window.setTimeout('t3e_instances['+this.index+'].autoCompleteBoxMoveUpCursor()',100);
-      } else if (name=="KEY_ARROW_DOWN" && this.ac == 1){ // move down cursor in autocomplete box
+      } else if (keycode == 40 && this.ac == 1){ // Arrow down: move down cursor in autocomplete box
         event.stop();
         window.setTimeout('t3e_instances['+this.index+'].autoCompleteBoxMoveDownCursor();',100);
-      } else if (name=="KEY_ESCAPE" && this.ac === 1){ // if autocomplete box is showing. by ESC press it's hide and autocomplete is finish
+      } else if (keycode == 27 && this.ac === 1){ // Esc: if autocomplete box is showing. by ESC press it's hide and autocomplete is finish
             this.ac = 0;
             this.autoCompleteBox.hide();
-      } else if (name=='KEY_Z' && event.modifier().ctrl){
+      } else if (keycode == 90 && event.ctrlKey){
          this.undoable = 1;
          this.undo();
          event.stop();
-      } else if (name=='KEY_Y' && event.modifier().ctrl){
+      } else if (keycode == 89 && event.ctrlKey){
          this.redoable = 1;
          this.redo();
          event.stop();
@@ -1044,8 +1041,6 @@ var t3editor = function(){
     keyUp: function(event) {
       // var name = event.key().string;
       var keycode = event.keyCode;
-      
-      // window.document.title = keycode;
       
       // TODO
       /*
@@ -1064,9 +1059,11 @@ var t3editor = function(){
 			&& keycode != 34 
 			&& keycode != 16 
 			&& keycode != 17 
-			&& keycode != 18 ) {
+			&& keycode != 18 
+			&& !event.ctrlKey) {
         this.markCursorDirty();
         this.checkTextModified();
+        window.setTimeout('t3e_instances['+this.index+'].checkHistoryChanges();',100);
 	  }
 	  
        if (this.ac===1){ // if autocomplete now is not finish, but started and continue typing - refresh autocomplete box
@@ -1479,7 +1476,9 @@ var t3editor = function(){
 	}
     this.refreshCursorObj();
     this.initable = 1;
-    window.setTimeout ('t3e_instances['+this.index+'].checkHistoryChanges();',100);
+    
+    // window.setTimeout('t3e_instances['+this.index+'].checkHistoryChanges();',100);
+    
     // The function returns some status information that is used by
     // hightlightDirty to determine whether and where it has to
     // continue.
