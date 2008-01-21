@@ -137,8 +137,8 @@ var t3editor = function(){
         $A(node.childNodes).each(simplifyNode);
         if (!leaving && newlineElements.hasOwnProperty(node.nodeName)) {
           leaving = true;
-          el = withDocument(doc, SPAN);
-		  result.push(withDocument(doc, BR));
+          el = new Element('SPAN'); 		
+		  result.push(new Element('BR'));   
         }
       }
     }
@@ -362,7 +362,7 @@ var t3editor = function(){
 
 		// footer item: show help Window
 		// TODO make this more flexible! And get rid of inline css and unsed options!	
-		this.fitem_help = this.createFooterItem('Help', true, 'toggleHelp');
+		this.fitem_help = this.createFooterItem('Help', true, "this.toggleHelp()");
 		this.footer_wrap.appendChild(this.fitem_help);
 
 		// footer item: options menu
@@ -531,12 +531,11 @@ var t3editor = function(){
     		Event.observe(item, "mouseover", function(e){Event.element(e).addClassName('t3e_footeritem_active');} );
     		Event.observe(item, "mouseout",  function(e){Event.element(e).removeClassName('t3e_footeritem_active');} );
 		}
-		
 		if (typeof clickAction == 'object') { // display an overlay
 			Event.observe(item, "click",  function(e){ clickAction.toggle(); } );
 		
 		} else if (typeof clickAction == 'string' && clickAction != '') {	// execute a method
-			Event.observe(item, "click",  function(e){ clickAction.bindAsEventListener(this) });
+			Event.observe(item, "click",  function(e){ eval(clickAction); }.bindAsEventListener(this) );
 		}
 		
     	return item;
@@ -1053,7 +1052,7 @@ var t3editor = function(){
       if (this.options.reindentAfterKeys.hasOwnProperty(name))
         this.indentAtCursor();
       else */ 
-      // TODO
+      // TODO 
       if (
       		keycode != 37 
 			&& keycode != 38 
@@ -1214,7 +1213,8 @@ var t3editor = function(){
         }
 	// Otherwise, we have to add a new whitespace node.
         else {
-          whiteSpace = withDocument(this.doc, function(){return SPAN({"class": "part whitespace"}, repeatString(nbsp, indentDiff))});
+             whiteSpace = new Element('SPAN',{"class": "whitespace part"});
+			whiteSpace.innerHTML = repeatString(nbsp, indentDiff);
           if (start)
             insertAfter(whiteSpace, start);
           else
