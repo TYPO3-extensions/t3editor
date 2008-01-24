@@ -13,9 +13,6 @@ function nextOr(iter, alternative){
   }
 }
 
-/*
- * obsolete!
-
 // Create an ojbect to represent a set. Takes any number of strings as
 // arguments, and returns an object in which the properties named by
 // these strings are set to true.
@@ -26,7 +23,6 @@ function setObject(){
   });
   return obj;
 }
-*/
 
 // Create a predicate function that tests a string againsts a given
 // regular expression.
