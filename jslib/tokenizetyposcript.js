@@ -1330,26 +1330,28 @@ var tokenizeTypoScript = function(){
       else if (this.inComment)
         token = readMultilineComment.call(this, ch);
       
+      else if (this.inValue) {
+        token = nextUntilUnescaped(null) || {type: "value", style: "ts-value", value: source.get()};
+      	this.inValue = false;
+      }
       else if (isWhiteSpace(ch))
         token = nextWhile(isWhiteSpace) || result("whitespace", "whitespace");
       
       else if (ch == "\"" || ch == "'")
         token = nextUntilUnescaped(ch) || result("string", "string");
-      
-      else if (ch == "<")
-        token = nextUntilUnescaped("\n") || result("value", "ts-value_copy");
         
-      else if (ch == ">")
-        token = nextUntilUnescaped("\n") || result("value", "ts-value_unset");
-      
-      else if (ch == "=")
-        token = nextUntilUnescaped("\n") || result("value", "ts-value");
-      
+      else if (ch == "<"
+			|| ch == ">" 
+			|| ch == "=") {
+        this.inValue = true;
+        token = result(ch, "ts-operator");
+      	
+      }
       else if (ch == "[")
         token = nextUntilUnescaped("]") || result("condition", "ts-condition");
         
       // with punctuation, the type of the token is the symbol itself
-      else if (/[\[\]\(\),;\:\.]/.test(ch))
+      else if (/[\[\]\(\),;\:\.\<\>\=]/.test(ch))
         token = result(ch, "ts-operator");
         
       else if (ch == "{")
@@ -1399,6 +1401,6 @@ var tokenizeTypoScript = function(){
     // Wrap it in an iterator. The state (regexp and inComment) is
     // exposed because a parser will need to save it when making a
     // copy of its state.
-    return {next: next, regexp: true, inComment: false};
+    return {next: next, regexp: true, inComment: false, inValue: false};
   }
 }();

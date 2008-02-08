@@ -29,23 +29,6 @@
 
 
 
-/**
- * Browser checks
- *  inspired by tinyMCE
- */
-var ua = navigator.userAgent;
-var isMSIE = (navigator.appName == "Microsoft Internet Explorer");
-var isMSIE5 = this.isMSIE && (ua.indexOf('MSIE 5') != -1);
-var isMSIE5_0 = this.isMSIE && (ua.indexOf('MSIE 5.0') != -1);
-var isMSIE7 = this.isMSIE && (ua.indexOf('MSIE 7') != -1);
-var isGecko = ua.indexOf('Gecko') != -1; // Will also be true on Safari
-var isSafari = ua.indexOf('Safari') != -1;
-var isOpera = window['opera'] && opera.buildNumber ? true : false;
-var isMac = ua.indexOf('Mac') != -1;
-var isNS7 = ua.indexOf('Netscape/7') != -1;
-var isNS71 = ua.indexOf('Netscape/7.1') != -1;
-
-
 
 // collection of all t3editor instances on the current page
 var t3e_instances = {};
@@ -257,13 +240,6 @@ var t3editor = function(){
 		this.options[lo] = options[lo];
 	}
 	
-    //History Array
-    this.history = [];
-    //Max History Size
-    this.historySize = 100;
-    //Init history position
-    this.currHistoryPosition = -1;
-
 	// memorize the textarea
 	this.textarea = $(theTextarea);
     
@@ -306,8 +282,6 @@ var t3editor = function(){
 									"<strong>CTRL-S</strong> send code to server<br/>"+
 									"<strong>CTRL-F11</strong> toggle fullscreen mode<br/>"+
 									"<strong>CTRL-SPACE</strong> auto-complete (based on letters at current cursor-position)<br/>"+
-									"<strong>CTRL-Z</strong> undo<br/>"+
-									"<strong>CTRL-Y</strong> redo<br/>"+
 									"</p><br/>"+
 									"<p><a href='javascript:void(0)' onclick='t3e_instances["+this.index+"].toggleHelp();'>click here to close this help window</a></p>"+
 									"";
@@ -416,7 +390,6 @@ var t3editor = function(){
 		// dimensions
 		this.width   = $(this.textarea).getDimensions().width;
 		this.height  = $(this.textarea).getDimensions().height;
-
 		var content = this.textarea.value;
 
 		// hide the textarea
@@ -457,6 +430,16 @@ var t3editor = function(){
 			// get the form object (needed for Ajax saving)
 			var form = $(this.textarea.form)
 			this.saveButtons = form.getInputs('submit', 'submit');
+
+			// initialize ajax saving events
+			this.saveAjaxEvent = this.saveAjax.bind(this);
+			this.saveButtons.each(function(button) {
+				Event.observe(button,'click',this.saveAjaxEvent);
+			}.bind(this));
+			
+			// get the form object (needed for Ajax saving)
+			var form = $(this.textarea.form)
+			this.saveButtons = form.getInputs('image', 'submit');
 
 			// initialize ajax saving events
 			this.saveAjaxEvent = this.saveAjax.bind(this);
@@ -542,29 +525,25 @@ var t3editor = function(){
 	// resize the editor
     resize: function(width, height)	{
 		if (this.outerdiv) {
-			
-			// TODO: make it more flexible, get rid of "hardcoded" numbers!
-			
 			newheight = (height - 1);
 			newwidth  = (width + 11);
-			if (isMSIE) newwidth = newwidth + 8;
-
-			this.outerdiv.setStyle({
-					height: newheight,
-            		width: newwidth
+			if (Prototype.Browser.IE) newwidth = newwidth + 8;
+			$(this.outerdiv).setStyle({
+					height: newheight + 'px',
+            		width: newwidth + 'px'
                 });
 
 			this.linenum_wrap.setStyle({
-				height: (height - 22) 	// less footer height (TODO)
+				height: (height - 22) +'px' 	// less footer height (TODO)
 			});
 
 			numwwidth = this.linenum_wrap.getWidth();
-			if (isMSIE)  numwwidth = numwwidth - 17;
-			if (!isMSIE) numwwidth = numwwidth - 11;	
+			if (Prototype.Browser.IE)  numwwidth = numwwidth - 17;
+			if (!Prototype.Browser.IE) numwwidth = numwwidth - 11;	
 
 			this.iframe.setStyle({
-	            height: (height - 22),	// less footer height (TODO)
-				width:  (width - numwwidth)
+	            height: (height - 22) + 'px',	// less footer height (TODO)
+				width:  (width - numwwidth) + 'px' 
 			});
 			
 			this.modalOverlay.setStyle(this.outerdiv.getDimensions());
@@ -575,24 +554,30 @@ var t3editor = function(){
 	toggleFullscreen : function()	{
 		if (this.outerdiv.hasClassName('t3e_fullscreen')) {
 			// turn fullscreen off
+			
+			// unhide the scrollbar of the body
+//			$$('body')[0].setStyle({overflow : ''});
+			this.outerdiv.offsetParent.setStyle({overflow : ''});
+			
+			
 			this.outerdiv.removeClassName('t3e_fullscreen');
 			h = this.textarea.getDimensions().height;
 			w = this.textarea.getDimensions().width;
 			
-			// hide the scrollbar of the body
-			$$('body')[0].setStyle({overflow : ''});
-			
 		} else {
 			// turn fullscreen on
 			this.outerdiv.addClassName('t3e_fullscreen');
-			h = window.innerHeight ? window.innerHeight : $$('body')[0].getHeight();
-			w = window.innerWidth ? window.innerWidth : $$('body')[0].getWidth();
+			// h = window.innerHeight ? window.innerHeight : $$('body')[0].getHeight();
+			// w = window.innerWidth ? window.innerWidth : $$('body')[0].getWidth();
+			h = this.outerdiv.offsetParent.getHeight();
+			w = this.outerdiv.offsetParent.getWidth();
 			
-			// TODO: proof if this is needed anymore
+			// less scrollbar width
 			w = w - 13;
 			
 			// hide the scrollbar of the body
-			$$('body')[0].setStyle({overflow : 'hidden'});
+//			$$('body')[0].setStyle({overflow : 'hidden'});
+			this.outerdiv.offsetParent.setStyle({overflow : 'hidden'});
 		}
 
 		this.resize(w,h);
@@ -616,11 +601,12 @@ var t3editor = function(){
         this.getLastWord();
         // init vars for up/down moving in word list
         this.ac_up = 0;
-        this.ac_down = this.options.acWords-1;
+        this.ac_down = this.options.acWords - 1;
         
         //refresh cursorObj
         var cursor = new select.Cursor(this.container);
         this.cursorObj = cursor.start;
+
         //init currWord, used in word list. Contain selected word
         this.currWord = -1;
         
@@ -643,7 +629,7 @@ var t3editor = function(){
                 //  init styles
                 if (this.words.length > this.options.acWords){
                     this.autoCompleteBox.style.overflowY = 'scroll';
-                    if (isGecko){
+                    if (Prototype.Browser.Gecko){
                         this.autoCompleteBox.style.height = (this.options.acWords*($("ac_word_0").offsetHeight))+'px';
                     }else{
                         this.autoCompleteBox.style.height = (this.options.acWords*($("ac_word_0").offsetHeight))+4+'px';
@@ -651,17 +637,26 @@ var t3editor = function(){
                     }
                     
                 }else{
-                    this.autoCompleteBox.style.overflowY = 'auto';
-                    this.autoCompleteBox.style.height = 'auto';
-                    this.autoCompleteBox.style.width = 'auto'; // '0px';
+                    this.autoCompleteBox.setStyle({
+                    	overflowY: 'auto',
+                    	height: 'auto',
+                    	width: 'auto'
+					});
                 }
-                
                 // positioned box to word
-                this.autoCompleteBox.style.left = Position.cumulativeOffset(this.iframe)[0]-Position.cumulativeOffset(this.outerdiv)[0]+Position.cumulativeOffset(cursor.start)[0]+cursor.start.offsetWidth;
-                this.autoCompleteBox.style.top = Position.cumulativeOffset(this.iframe)[1]-Position.cumulativeOffset(this.outerdiv)[1]+Position.cumulativeOffset(cursor.start)[1]+cursor.start.offsetHeight-this.container.scrollTop;
+                this.autoCompleteBox.setStyle({
+                	left: (Position.cumulativeOffset(this.iframe)[0]
+                		- Position.cumulativeOffset(this.outerdiv)[0]
+                		+ Position.cumulativeOffset(cursor.start)[0] 
+                		+ cursor.start.offsetWidth)+'px',
+                	top: (Position.cumulativeOffset(this.iframe)[1] 
+                		- Position.cumulativeOffset(this.outerdiv)[1]
+                		+ Position.cumulativeOffset(cursor.start)[1] 
+                		+ cursor.start.offsetHeight
+                		- this.container.scrollTop)+'px' });
                 // set flag to 1 - needed for continue typing word. 
                 this.ac = 1;    
-                //highlight first word in list
+                // highlight first word in list
                 this.highlightCurrWord(0);
             } 
         }
@@ -690,7 +685,7 @@ var t3editor = function(){
         var insertText = this.words[this.currWord].word;
         //if MSIE and select word my mouse click
         var cursor = new select.Cursor(this.container);
-        if (isMSIE && this.clicked){
+        if (Prototype.Browser.IE && this.clicked){
             if (trigger.length > 0){
                 this.cursorObj.innerHTML = insertText;
                 this.win.focus();
@@ -700,7 +695,7 @@ var t3editor = function(){
             }
         }
         // if Safari browser
-        else if (isSafari){
+        else if (Prototype.Browser.WebKit){
              if (trigger.length > 0){
                 this.cursorObj.innerHTML = insertText;
                 if (this.clicked){
@@ -786,113 +781,15 @@ var t3editor = function(){
             this.autoCompleteBox.scrollTop = this.ac_up*16;
         }
     },
-    // put code to history
-    pushToHistory:function () {
-        var obj = {};
-        //create SPAN mark of cursor
-        var cursorEl  = this.win.document.createElement("SPAN");
-        cursorEl.id = "cursor";       
-        this.refreshCursorObj();
-        // added mark to code
-        if (this.initable){
-            if (!this.cursorObj){
-                if (this.container.firstChild){
-                   this.win.document.body.insertBefore(cursorEl,this.container.firstChild);
-                }
-            }else{
-                this.win.document.body.insertBefore(cursorEl,this.cursorObj);
-            }
-        }else{
-            this.win.document.body.appendChild(cursorEl);
-        }
-        //save code and text to history object
-        obj.code = this.container.innerHTML;
-       
-       // TODO
-       /// obj.text = this.getCode();
-       
-        // check if was undo/redo than refresh history array
-        if (this.currHistoryPosition+1 < this.history.length){
-            this.history = this.history.slice (0,this.currHistoryPosition+1);
-            this.currHistoryPosition = this.history.length-1;
-        }
-        //push history oject to history array
-        this.history.push(obj);
-        this.currHistoryPosition++;
-        //check limit of history size
-        if (this.currHistoryPosition > this.historySize){
-            this.history = this.history.slice ((this.history.length-this.historySize-1));
-            this.currHistoryPosition = this.history.length-1;
-        }
-    },
-    
-    //undo function
-    undo: function () {
-        //check if position in history not first
-        if (this.currHistoryPosition > 0){
-            this.currHistoryPosition--;
-            var obj = this.history[this.currHistoryPosition];
-            if (!obj){return ;}
-            //insert code from history
-            this.container.innerHTML = obj.code;
-            //focus cursor to next el of marked span
-            var cursor = new select.Cursor(this.container);
-            var cursorEl = this.win.document.getElementById('cursor');
-            if (cursorEl){
-                cursor.start = cursorEl.nextSibling;
-                cursor.focus();
-            }
-        }
-        
-    },
-    
-    //redo function
-    redo: function () {
-        //check if position in history not last
-        if (this.currHistoryPosition < this.history.length){
-            this.currHistoryPosition++;
-            var obj = this.history[this.currHistoryPosition];
-            if (!obj){return ;}
-            //insert code from history
-            this.container.innerHTML = obj.code;
-            //focus cursor to next el of marked span
-            var cursor = new select.Cursor(this.container);
-            var cursorEl = this.win.document.getElementById('cursor');
-            if (cursorEl){
-                cursor.start = cursorEl.nextSibling;
-                cursor.focus();
-            }
-        }
-        
-    },
-    // check changes in history
-    checkHistoryChanges:function () {
-        
-        var code = this.container.innerHTML;
-        if (this.undoable == 1){
-            this.undoable = 0;
-            return ;
-        }
-        if (this.redoable == 1){
-            this.redoable = 0;
-            return ;
-        }
-        if (!this.history[this.currHistoryPosition]){
-            this.pushToHistory();
-            return ;
-        }
-        if (code != this.history[this.currHistoryPosition].code){
-            this.pushToHistory();
-        }
-        
-    },
+
 
 	// update the line numbers
     updateLinenum: function()      {
 		var theMatch = this.container.innerHTML.match(/<br/gi);
+        
         if (!theMatch) {
-            theMatch = '1';
-        } else if (isMSIE) { 
+            theMatch = [1];
+        } else if (Prototype.Browser.IE) { 
 			theMatch.push('1');
 		}
 
@@ -959,14 +856,22 @@ var t3editor = function(){
         if (line.length > 0)
           this.container.appendChild(this.doc.createTextNode(line));
       }
+      if (i > 0)
+          this.container.appendChild(this.win.document.createElement('BR'));
+      
       if (code == "") {
-        var empty = this.win.document.createElement('BR');//(isGecko && !isSafari)?this.win.document.createElement('BR'):this.win.document.createElement('SPAN');
-      	this.container.appendChild(empty);
+      	this.container.appendChild(this.win.document.createElement('SPAN'));
+      	this.container.appendChild((Prototype.Browser.Gecko && !Prototype.Browser.WebKit) ? 
+      		this.win.document.createElement('BR') : 
+      		this.win.document.createElement('SPAN'));
       }
 
-      if (this.container.firstChild){
+      if (this.container.firstChild) {
+      	var cursor = new select.Cursor(this.container);
+      	cursor.start = (this.container.firstChild);
+		cursor.focus();
 		this.addDirtyNode(this.container.firstChild);
-        this.scheduleHighlight(); // this.highlightDirty();
+        this.highlightDirty();
       }
 	  this.updateLinenum();
     },
@@ -997,7 +902,7 @@ var t3editor = function(){
             event.stop();
 			if (this.ac === 1)	{
                this.insertCurrWordAtCursor();
-            } else if (!isMac) {
+            } else if (!(navigator.userAgent.indexOf('Mac') != -1)) { // isMac
                 select.insertNewlineAtCursor(this.win);
         	    this.indentAtCursor();
             }
@@ -1026,14 +931,6 @@ var t3editor = function(){
       } else if (keycode == 27 && this.ac === 1){ // Esc: if autocomplete box is showing. by ESC press it's hide and autocomplete is finish
             this.ac = 0;
             this.autoCompleteBox.hide();
-      } else if (keycode == 90 && event.ctrlKey){
-         this.undoable = 1;
-         this.undo();
-         event.stop();
-      } else if (keycode == 89 && event.ctrlKey){
-         this.redoable = 1;
-         this.redo();
-         event.stop();
       }
     },
 
@@ -1065,7 +962,6 @@ var t3editor = function(){
 			&& !event.ctrlKey) {
         this.markCursorDirty();
         this.checkTextModified();
-        window.setTimeout('t3e_instances['+this.index+'].checkHistoryChanges();',100);
       }
 	  
        if (this.ac===1){ // if autocomplete now is not finish, but started and continue typing - refresh autocomplete box
@@ -1111,21 +1007,11 @@ var t3editor = function(){
 		
 		this.modalOverlay.show();
 		this.textarea.value = this.getCode();
-		
-		/* erst ab prototype 1.5.1
+		$('submitAjax').value = '1';
 		Form.request($(this.textarea.form),{
-  			onComplete: function(){ alert('Form data saved!'); }
+			onComplete: this.saveAjaxOnSuccess.bind(this)
 		});
-		*/
-		
-		formdata = "submitAjax=1&" + Form.serialize($(this.textarea.form));
-
-		var myAjax = new Ajax.Request(
-			$(this.textarea.form).action, 
-			{ method: "post",
-			  parameters: formdata, 
-			  onComplete: this.saveAjaxOnSuccess.bind(this)
-			});
+		// X-Requested-With
 	},
 
 	// callback if ajax saving was successful
@@ -1138,6 +1024,7 @@ var t3editor = function(){
 			// TODO: handle if session is timed out
 			alert("An error occured while saving the data.");
 		};
+		$('submitAjax').value = '0';
 		this.modalOverlay.hide();
 		
 	},
@@ -1252,7 +1139,6 @@ var t3editor = function(){
       // start is the <br> before the current line, or null if this is
       // the first line.
       var start = cursor.startOfLine();
-      
       this.autoCloseBracket(start.previousSibling);
       
       // whiteSpace is the whitespace span at the start of the line,
@@ -1291,7 +1177,7 @@ var t3editor = function(){
           if (start)
             insertAfter(whiteSpace, start);
           else
-            insertAtStart(whiteSpace, this.containter);
+            insertAtStart(whiteSpace, this.container);
         }
 	// If the cursor is at the start of the line, move it to after
 	// the whitespace.
@@ -1422,7 +1308,8 @@ var t3editor = function(){
       var part = new Element('SPAN',{"class": "part " + token.style});
 		part.update(token.value);
 		part.currentText = token.value;
-		part.innerHTML = token.value;
+		// part.innerHTML = token.value;
+		part.innerHTML = token.value.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
       return part;
     }
 
@@ -1597,13 +1484,19 @@ function t3editor_toggleEditor(checkbox,index) {
 /**
  * everything ready: turn textareas into fancy editors
  */
-Event.observe(window,'load',function() {
-	$$('textarea.t3editor').each(
-		function(textarea,i) {
-			if ($('t3editor_disableEditor_'+(i+1)+'_checkbox') && !$('t3editor_disableEditor_'+(i+1)+'_checkbox').checked) {
-				var t3e = new t3editor(textarea,i);
-				t3e_instances[i] = t3e;
+if (!Prototype.Browser.MobileSafari) {
+	Event.observe(window,'load',function() {
+		$$('textarea.t3editor').each(
+			function(textarea,i) {
+				if ($('t3editor_disableEditor_'+(i+1)+'_checkbox') && !$('t3editor_disableEditor_'+(i+1)+'_checkbox').checked) {
+					var t3e = new t3editor(textarea,i);
+					t3e_instances[i] = t3e;
+				}
 			}
-		}
-	);
-});
+		);
+	});
+}
+
+if (document.characterSet != "UTF-8") {
+	encodeURIComponent = escape;
+}

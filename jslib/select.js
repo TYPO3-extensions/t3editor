@@ -184,8 +184,10 @@ var select = {};
     // Helper for selecting a range object.
     function selectRange(range, window) {
       var selection = window.getSelection();
-      selection.removeAllRanges();
-      selection.addRange(range);
+      if (selection) {
+      	selection.removeAllRanges();
+      	selection.addRange(range);
+      }
     };
 
     select.selectMarked = function (sel) {

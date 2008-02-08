@@ -55,6 +55,7 @@ var parseTypoScript = function() {
   // My favourite indentation rules.
   TSLexical.prototype.indentation = function(firstChar) {
     var closing = firstChar == this.type;
+
 	if (this.type == "}")
       return this.indented + 2;
 
