@@ -1,6 +1,6 @@
 <?php
 /***************************************************************
-*  Copyright notice
+*  Copyright notice 
 *
 *  (c) 2007 Tobias Liebig <mail_typo3@etobi.de>
 *  All rights reserved
