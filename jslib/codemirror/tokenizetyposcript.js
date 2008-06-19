@@ -1208,18 +1208,6 @@ var tokenizeTypoScript = function() {
 
 		function readNumber() {
 			nextWhile(isDigit);
-			if (source.peek() == ".") {
-				source.next();
-				nextWhile(isDigit);
-			}
-
-			if (source.peek() == "e" || source.peek() == "E") {
-				source.next();
-				if (source.peek() == "-") {
-					source.next();
-				}
-				nextWhile(isDigit);
-			}
 			return result("number", "atom");
 		}
 
@@ -1298,9 +1286,14 @@ var tokenizeTypoScript = function() {
 			} else if (ch == "\"" || ch == "'") {
 				token = nextUntilUnescaped(ch) || result("string", "string");
 
-			} else if (ch == "<"
-			  || ch == ">"
-			  || ch == "=") {
+			} else if (
+			   ( ch == "<" || 
+				 ch == ">" ||
+				 ( ch == "=" 
+				   && source.peek() != "<" 
+				 )
+			   )
+			   && source.peek() != "\n" ) { // there must be some value behind the operator!
 				this.inValue = true;
 				token = result(ch, "ts-operator");
 
