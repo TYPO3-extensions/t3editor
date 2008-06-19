@@ -240,10 +240,17 @@ T3editor.prototype = {
 			}
 			this.modalOverlay.show();
 			this.textarea.value = this.mirror.editor.getCode();
-			$('submitAjax').value = '1';
-			Form.request($(this.textarea.form), {
-				onComplete: this.saveFunctionComplete.bind(this)
-			});
+			
+			params = $(this.textarea.form).serialize(true);
+			params = Object.extend( { ajaxID: 'tx_t3editor::saveCode' }, params);
+			
+			new Ajax.Request(
+				(top && top.TS ? top.TS.PATH_typo3 : PATH_t3e + '../../' ) + 'ajax.php', { 
+					parameters: params,
+					onComplete: this.saveFunctionComplete.bind(this)
+				}
+			);
+			
 		},
 
 		// callback if ajax saving was successful
@@ -256,7 +263,6 @@ T3editor.prototype = {
 			} else {
 				alert("An error occured while saving the data.");
 			};
-			$('submitAjax').value = '0';
 			this.modalOverlay.hide();
 		},
 		
@@ -357,18 +363,18 @@ T3editor.prototype = {
 				this.textarea.value = this.mirror.editor.getCode();
 				this.outerdiv.hide();
 				this.textarea.show();
-				/* this.saveButtons.each(function(button) {
-					Event.stopObserving(button, 'click', this.saveAjaxEvent);
+				this.saveButtons.each(function(button) {
+					Event.stopObserving(button,'click',this.saveFunctionEvent);
 				}.bind(this));
-				*/
+				
 			} else {
 				this.mirror.editor.importCode(this.textarea.value);
 				this.textarea.hide();
 				this.outerdiv.show();
-				/* this.saveButtons.each(function(button) {
-					Event.observe(button, 'click', this.saveAjaxEvent);
+				this.saveButtons.each(function(button) {
+					this.saveFunctionEvent = this.saveFunction.bind(this);
+					Event.observe(button,'click',this.saveFunctionEvent);
 				}.bind(this));
-				*/
 			}
 		},
 		
@@ -439,12 +445,6 @@ T3editor.prototype = {
 } // T3editor.prototype
 
 
-// fix prototype issue: ajax request do not respect charset of the page and screw up code
-if (document.characterSet != "UTF-8") {
-	encodeURIComponent = escape;
-}
-
-
 // ------------------------------------------------------------------------
 
 
@@ -453,14 +453,14 @@ if (document.characterSet != "UTF-8") {
  */
 function t3editor_toggleEditor(checkbox, index) {
 	if (!Prototype.Browser.MobileSafari
-		&& !Prototype.Browser.IE
 		&& !Prototype.Browser.WebKit) {
 		
 		if (index == undefined) {
 			$$('textarea.t3editor').each(
-			function(textarea, i) {
-				t3editor_toggleEditor(checkbox, i);
-			});
+				function(textarea, i) {
+					t3editor_toggleEditor(checkbox, i);
+				}
+			);
 		} else {
 			if (t3e_instances[index] != undefined) {
 				var t3e = t3e_instances[index];
@@ -477,7 +477,6 @@ function t3editor_toggleEditor(checkbox, index) {
 
 
 if (!Prototype.Browser.MobileSafari
-	// && !Prototype.Browser.IE
 	&& !Prototype.Browser.WebKit) {
 	
 	// everything ready: turn textarea's into fancy editors	
