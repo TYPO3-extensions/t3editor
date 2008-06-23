@@ -46,11 +46,13 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
   var extTsObjTree = new Object();
   var parser = new TsParser(tsRef,extTsObjTree);
   loadExtTemplatesAsync();
-  
-  
-  // plugin-array should be retrieved through AJAX from a server-config-array, so plugins can be attached by regular TYPO3-extensions
-  var pluginContext = new Object();
-  var plugins = []; 
+    
+  // plugin-array will be retrieved through AJAX from the conf array
+  // plugins can be attached by regular TYPO3-extensions
+  var plugins = [];
+
+  // we add the description plugin here because its packed with the codecompletion currently
+  // maybe we will swap it to an external plugin in future
   var plugin = new Object();
   plugin.extpath = PATH_t3e;
   plugin.classpath =  'ts_codecompletion/descriptionPlugin.js';
@@ -63,21 +65,23 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
   var nodeBeforeInsert;
   
   
-	var codeCompleteBox = new Element("DIV", {
-		"class": "t3e_codeCompleteBox"
-	});
-	codeCompleteBox.hide();
-	outerdiv.appendChild(codeCompleteBox);
+  var codeCompleteBox = new Element("DIV", {
+  	"class": "t3e_codeCompleteBox"
+  });
+  codeCompleteBox.hide();
+  outerdiv.appendChild(codeCompleteBox);
 
   var toolbardiv = new Element("DIV", {
 		"class": "t3e_toolbar"
 	});
-	toolbardiv.show();
-	outerdiv.appendChild(toolbardiv);
+  toolbardiv.show();
+  outerdiv.appendChild(toolbardiv);
 
   // load the external xml-reference
   tsRef.loadTsrefAsync();
   
+  // plugins will be provided with the pluginContext
+  var pluginContext = new Object();
   pluginContext.outerdiv = outerdiv;
   pluginContext.codeCompleteBox = codeCompleteBox;
   pluginContext.toolbardiv = toolbardiv;
@@ -87,10 +91,14 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
   
   // should we use a pluginmanager so no for loops are required on each hook?
   // e.g. pluginmanager.call('afterKeyUp',....);
-  loadPluginArray();
+  loadPluginArray();                   
   
-  
-  
+  /* loads the array of registered codecompletion plugins
+   * to register a plugin you have to add an array to the localconf
+   * $TYPO3_CONF_VARS['EXTCONF']['t3editor']['plugins'][] = array( 'extpath' => t3lib_div::getIndpEnv('TYPO3_SITE_URL').t3lib_extMgm::siteRelPath($_EXTKEY),
+                                                              'classpath' => 'js/my_plugin.js',
+                                                              'classname'=> 'MyPlugin');
+   */
   function loadPluginArray(){
     var url = PATH_t3e+'ts_codecompletion/pluginLoader.php?action=getPlugins';
     new Ajax.Request(url, {
@@ -103,6 +111,8 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
       }
     });
   }
+  /* instantiates all plugins and adds the instances to the plugin array
+  */
   function loadPlugins(){
     for(var i=0;i<plugins.length;i++){
       var script = document.createElement('script');
@@ -112,6 +122,8 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
       window.setTimeout(makeInstance.bind(this,plugins[i],i),1000);
     } 
   }
+  /* makes a single plugin instance
+  */
   function makeInstance(plugin,i){
     try{
       var localname = "plugins[" + i + "].obj";
