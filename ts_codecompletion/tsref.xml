@@ -1,0 +1,990 @@
+<?xml version="1.0"?>
+<tsref>
+  <COA name="COA" extends="array">
+    <property name="if" type="checkIf" />
+    <property name="wrap" type="wrap" />
+    <property name="stdWrap" type="stdWrap" />
+  </COA>
+  <HTML name="HTML">
+    <property name="value" type="stdWrap" />
+  </HTML>
+  <TEXT name="TEXT" extends="stdWrap">
+    <property name="value" type="string">
+      <description>
+      the value of the text
+      </description>
+    </property>
+  </TEXT>
+  <CLEARGIF name="CLEARGIF">
+    <property name="width" type="stdWrap" />
+    <property name="height" type="stdWrap" />
+    <property name="wrap" type="wrap" />
+    <property name="stdWrap" type="stdWrap" />
+  </CLEARGIF>
+  <FILE name="FILE">
+    <property name="linkWrap" type="wrap" />
+    <property name="wrap" type="wrap" />
+    <property name="__getAltParam" type="func" />
+    <property name="file" type="stdWrap">
+      <description>the filename of the file</description>
+    </property>
+  </FILE>
+  <IMAGE name="IMAGE">
+    <property name="if" type="checkIf">
+      <description>
+        if "if" returns false the image is not shown!
+      </description>
+    </property>
+    <property name="stdWrap" type="stdWrap" />
+    <property name="wrap" type="wrap">
+      <description>
+      </description>
+    </property>
+    <property name="altText" type="stdWrap">
+      <description>
+        If no titltext is specified, it will use the alttext insteadIf no alttext is specified, it will use an empty alttext
+        ("alttext" is the old spelling of this attribute. It will be used only if "altText" does not specify a value or properties)
+      </description>
+    </property>
+    <property name="border" type="int">
+      <description>
+        Value of the "border" attribute of the image tag.
+      </description>
+    </property>
+    <property name="longdescURL" type="stdWrap">
+      <description>
+        "longdesc" attribute (URL pointing to document with extensive details about image).
+      </description>
+    </property>
+    <property name="linkWrap" type="linkWrap">
+      <description>
+        (before ".wrap")
+      </description>
+    </property>
+    <property name="imageLinkWrap" type="imageLinkWrap">
+      <description>
+        NOTE: ONLY active if linkWrap is NOT set and file is NOT GIFBUILDER (as it works with the original imagefile)
+      </description>
+    </property>
+    <property name="file" type="IMG_RESOURCE" />
+  </IMAGE>
+  <IMG_RESOURCE name="IMG_RESOURCE">
+    <property name="ext" type="stdWrap" />
+    <property name="height" type="stdWrap" />
+    <property name="width" type="stdWrap" />
+    <property name="width" type="stdWrap" />
+    <property name="import" type="stdWrap" />
+    <property name="to be continued" type="stdWrap" />
+  </IMG_RESOURCE>
+  <IMGTEXT name="TEXT">
+    <property name="text" type="cObjGet" />
+    <property name="imgList" type="stdWrap" />
+    <property name="imgStart" type="stdWrap" />
+    <property name="imgMax" type="stdWrap" />
+    <property name="imgPath" type="stdWrap" />
+    <property name="captionSplit" type="bool" />
+    <property name="imageTextSplit" type="bool" />
+    <property name="caption" type="stdWrap" />
+    <property name="textPos" type="stdWrap" />
+    <property name="textMargin" type="stdWrap" />
+    <property name="textMargin_outOfText" type="bool" />
+    <property name="cols" type="stdWrap" />
+    <property name="rows" type="stdWrap" />
+    <property name="colSpace" type="stdWrap" />
+    <property name="rowSpace" type="stdWrap" />
+    <property name="border" type="stdWrap" />
+    <property name="borderCol" type="stdWrap" />
+    <property name="borderThick" type="stdWrap" />
+    <property name="captionAlign" type="stdWrap" />
+    <property name="colRelations" type="stdWrap" />
+    <property name="maxWInText" type="stdWrap" />
+    <property name="image_compression" type="stdWrap" />
+    <property name="image_effects" type="stdWrap" />
+    <property name="image_frames" type="Array" />
+    <property name="imgObjNum" type="optionSplit" />
+    <property name="equalH" type="stdWrap" />
+    <property name="noRows" type="stdWrap" />
+    <property name="noCols" type="stdWrap" />
+    <property name="editIcons" type="editIcons" />
+    <property name="noStretchAndMarginCells" type="bool" />
+    <property name="netprintApplicationLink" type="netprintApplication_offsiteLinkWrap" />
+    <property name="__getAltParam" type="func" />
+    <property name="tableStdWrap" type="stdWrap" />
+    <property name="spaceBelowAbove" type="stdWrap" />
+    <property name="stdWrap" type="stdWrap" />
+  </IMGTEXT>
+  <GIFBUILDER name="GIFBUILDER">
+    <property name="subGifBuilder" type="GIFBUILDER" />
+    <property name="test" type="stdWrap" />
+    <property name="to be continued" type="stdWrap" />
+  </GIFBUILDER>
+  <CONTENT name="CONTENT">
+    <property name="table" type="tablename" />
+    <property name="renderObj" type="cObjGetSingle" />
+    <property name="slide" type="int" />
+    <property name="select" type="getQuery" />
+    <property name="wrap" type="wrap" />
+    <property name="stdWrap" type="stdWrap" />
+  </CONTENT>
+  <RECORDS name="RECORDS">
+    <property name="source" type="stdWrap" />
+    <property name="tables" type="tablenamelist" />
+    <property name="dontCheckPid" type="bool" />
+    <property name="wrap" type="wrap" />
+    <property name="conf" type="list." />
+    <property name="stdWrap" type="stdWrap" />
+  </RECORDS>
+  <HMENU name="HMENU" extends="array">
+    <property name="if" type="checkIf" />
+    <property name="stdWrap" type="stdWrap" />
+    <property name="special" type="string" />
+    <property name="minItems" type="int" />
+    <property name="maxItems" type="int" />
+    <property name="begin" type="int" />
+    <property name="entryLevel" type="int" />
+    <property name="alwaysActivePIDlist" type="string" />
+    <property name="addQueryString" type="bool" />
+    <property name="excludeDoktypes" type="intlist" />
+    <property name="excludeUidList" type="list" />
+    <property name="includeNotInMenu" type="bool" />
+    <property name="protectLvar" type="bool" />
+    <property name="wrap" type="wrap" />
+  </HMENU>
+  <CTABLE name="CTABLE">
+    <property name="tableParams" type="string" />
+    <property name="cWidth" type="int" />
+    <property name="cMargins" type="string" />
+    <property name="offset" type="stringxy" />
+    <property name="c" type="cObjGet" />
+    <property name="lm" type="cObjGet" />
+    <property name="tm" type="cObjGet" />
+    <property name="rm" type="cObjGet" />
+    <property name="bm" type="cObjGet" />
+  </CTABLE>
+  <OTABLE name="OTABLE">
+    <property name="__cObjGet" type="func" />
+    <property name="tableParams" type="string" />
+    <property name="offset" type="stringxy" />
+  </OTABLE>
+  <COLUMNS name="COLUMNS" extends="array">
+    <property name="if" type="checkIf" />
+    <property name="tableParams" type="string" />
+    <property name="TDparams" type="string" />
+    <property name="rows" type="int:2-20" />
+    <property name="totalWidth" type="int" />
+    <property name="gapWidth" type="stdWrap" />
+    <property name="gapBgCol" type="stdWrap" />
+    <property name="gapLineThickness" type="stdWrap" />
+    <property name="gapLineCol" type="stdWrap" />
+    <property name="after" type="cObjGetSingle" />
+    <property name="stdWrap" type="stdWrap" />
+  </COLUMNS>
+  <HRULER name="HRULER">
+    <property name="lineThickness" type="stdWrap" />
+    <property name="lineColor" type="color" />
+    <property name="spaceLeft" type="int" />
+    <property name="spaceRight" type="int" />
+    <property name="tableWidth" type="string" />
+    <property name="stdWrap" type="stdWrap" />
+  </HRULER>
+  <CASE name="CASE">
+    <property name="if" type="checkIf" />
+    <property name="setCurrent" type="stdWrap" />
+    <property name="key" type="stdWrap" />
+    <property name="__list" type="cObjGetSingle" />
+    <property name="stdWrap" type="stdWrap" />
+  </CASE>
+  <LOAD_REGISTER name="LOAD_REGISTER">
+    <property name="__list" type="stdWrap" />
+  </LOAD_REGISTER>
+  <RESTOR_REGISTER name="RESTOR_REGISTER"></RESTOR_REGISTER>
+  <FORM name="FORM">
+    <property name="data" type="stdWrap" />
+    <property name="dataArray" type="intlist." />
+    <property name="formName" type="string" />
+    <property name="fieldPrefix" type="string" />
+    <property name="wrapFieldName" type="wrap" />
+    <property name="params" type="list" />
+    <property name="dontMd5FieldNames" type="bool" />
+    <property name="accessibility" type="bool" />
+    <property name="compensateFieldWidth" type="float" />
+    <property name="noWrapAttr" type="bool" />
+    <property name="noValueInsert" type="bool" />
+    <property name="radioWrap" type="stdWrap" />
+    <property name="image" type="cImage" />
+    <property name="fieldWrap" type="stdWrap" />
+    <property name="labelWrap" type="stdWrap" />
+    <property name="commentWrap" type="stdWrap" />
+    <property name="layout" type="string" />
+    <property name="REQ" type="bool" />
+    <property name="goodMess" type="string" />
+    <property name="badMess" type="string" />
+    <property name="emailMess" type="string" />
+    <property name="COMMENT" type="Array" />
+    <property name="CHECK" type="Array" />
+    <property name="RADIO" type="Array" />
+    <property name="LABEL" type="Array" />
+    <property name="redirect" type="stdWrap" />
+    <property name="target" type="string" />
+    <property name="no_cache" type="string" />
+    <property name="type" type="stdWrap" />
+    <property name="recipient" type="stdWrap" />
+    <property name="locationData" type="string" />
+    <property name="stdWrap" type="stdWrap" />
+    <property name="hiddenFields" type="list." />
+    <property name="method" type="string" />
+    <property name="arrayReturnMode" type="bool" />
+  </FORM>
+  <SEARCHRESULT name="SEARCHRESULT">
+    <property name="allowedCols" type="string" />
+    <property name="addExtUrlsAndShortCuts" type="bool" />
+    <property name="languageField" type="tablename" />
+    <property name="range" type="int" />
+    <property name="noOrderBy" type="bool" />
+    <property name="target" type="string" />
+    <property name="layout" type="cObjGetSingle" />
+    <property name="next" type="cObjGetSingle" />
+    <property name="prev" type="cObjGetSingle" />
+    <property name="renderObj" type="cObjGetSingle" />
+    <property name="renderWrap" type="wrap" />
+    <property name="noResultObj" type="cObjGetSingle" />
+    <property name="wrap" type="wrap" />
+    <property name="stdWrap" type="stdWrap" />
+  </SEARCHRESULT>
+  <PHP_SCRIPT name="PHP_SCRIPT">
+    <property name="file" type="file" />
+    <property name="__custom" type="true" />
+  </PHP_SCRIPT>
+  <USER name="USER">
+    <property name="userFunc" type="string" />
+    <property name="__custom" type="1" />
+  </USER>
+  <TEMPLATE name="TEMPLATE">
+    <property name="markerWrap" type="string" />
+    <property name="template" type="cObjGetSingle" />
+    <property name="workOnSubpart" type="string" />
+    <property name="relPathPrefix" type="string" />
+    <property name="nonCachedSubst" type="bool" />
+    <property name="marks" type="list." />
+    <property name="subparts" type="list." />
+    <property name="wraps" type="list." />
+    <property name="substMarksSeparately" type="bool" />
+  </TEMPLATE>
+  <EDITPANEL name="EDITPANEL">
+    <property name="newRecordFromTable" type="tablename" />
+    <property name="newRecordInPid" type="int" />
+    <property name="onlyCurrentPid" type="bool" />
+    <property name="allow" type="string" />
+    <property name="line" type="int" />
+    <property name="edit" type="Array" />
+    <property name="label" type="stdWrap" />
+    <property name="innerWrap" type="stdWrap" />
+    <property name="outerWrap" type="stdWrap" />
+    <property name="previewBorder" type="int" />
+  </EDITPANEL>
+  <MULTIMEDIA name="MULTIMEDIA">
+    <property name="file" type="stdWrap" />
+    <property name="params" type="stdWrap" />
+    <property name="stdWrap" type="stdWrap" />
+  </MULTIMEDIA>
+  <stdWrap name="stdWrap">
+    <property name="setContentToCurrent" type="bool" />
+    <property name="setCurrent" type="stdWrap" />
+    <property name="lang" type="ARR_languages_strings." />
+    <property name="parentFields" type="stdWrap" />
+    <property name="data" type="string" />
+    <property name="field" type="string" />
+    <property name="current" type="bool" />
+    <property name="cObject" type="cObjGetSingle" />
+    <property name="numRows" type="numRows" />
+    <property name="filelist" type="stdWrap" />
+    <property name="preUserFunc" type="custom" />
+    <property name="override" type="stdWrap" />
+    <property name="preIfEmptyListNum" type="string" />
+    <property name="ifEmpty" type="stdWrap" />
+    <property name="ifBlank" type="stdWrap" />
+    <property name="listNum" type="string" />
+    <property name="trim" type="bool" />
+    <property name="stdWrap" type="stdWrap" />
+    <property name="required" type="bool" />
+    <property name="if" type="checkIf" />
+    <property name="fieldRequired" type="bool" />
+    <property name="csConv" type="charset" />
+    <property name="parseFunc" type="parseFunc" />
+    <property name="HTMLparser" type="HTMLparser_TSbridge" />
+    <property name="split" type="splitObj" />
+    <property name="prioriCalc" type="int|list:intval" />
+    <property name="char" type="int:0-255" />
+    <property name="intval" type="bool" />
+    <property name="date" type="string" />
+    <property name="strftime" type="string" />
+    <property name="age" type="string" />
+    <property name="case" type="list:upper\\lower" />
+    <property name="bytes" type="bool" />
+    <property name="substring" type="intlist" />
+    <property name="removeBadHTML" type="bool" />
+    <property name="stripHtml" type="bool" />
+    <property name="crop" type="string" />
+    <property name="rawUrlEncode" type="bool" />
+    <property name="htmlSpecialChars" type="bool" />
+    <property name="doubleBrTag" type="string" />
+    <property name="br" type="bool" />
+    <property name="brTag" type="string" />
+    <property name="encapsLines" type="encaps_lineSplit" />
+    <property name="keywords" type="bool" />
+    <property name="innerWrap" type="stdWrap" />
+    <property name="innerWrap2" type="stdWrap" />
+    <property name="fontTag" type="wrap" />
+    <property name="addParams" type="addParams" />
+    <property name="textStyle" type="textStyle" />
+    <property name="tableStyle" type="tableStyle" />
+    <property name="filelink" type="filelink" />
+    <property name="preCObject" type="cObjGetSingle" />
+    <property name="postCObject" type="cObjGetSingle" />
+    <property name="wrapAlign" type="stdWrap" />
+    <property name="typolink" type="typolink" />
+    <property name="TCAselectItem" type="Array" />
+    <property name="space" type="string" />
+    <property name="spaceBefore" type="stdWrap" />
+    <property name="spaceAfter" type="stdWrap" />
+    <property name="wrap" type="wrap" />
+    <property name="noTrimWrap" type="string" />
+    <property name="wrap2" type="wrap" />
+    <property name="dataWrap" type="wrap" />
+    <property name="prepend" type="cObjGetSingle" />
+    <property name="append" type="cObjGetSingle" />
+    <property name="wrap3" type="wrap" />
+    <property name="outerWrap" type="stdWrap" />
+    <property name="insertData" type="bool" />
+    <property name="offsetWrap" type="bool" />
+  </stdWrap>
+  <GIF_calcWordSpacing name="GIF_calcWordSpacing">
+    <property name="spacing" type="int" />
+    <property name="wordSpacing" type="int" />
+  </GIF_calcWordSpacing>
+  <GIF_imageTTFBBoxWrapper name="GIF_imageTTFBBoxWrapper">
+    <property name="compX" type="int" />
+    <property name="xSpaceBefore" type="int" />
+    <property name="xSpaceAfter" type="int" />
+    <property name="compY" type="int" />
+    <property name="ySpaceBefore" type="int" />
+    <property name="ySpaceAfter" type="int" />
+    <property name="__GIF_splitRendering" type="func" />
+  </GIF_imageTTFBBoxWrapper>
+  <GIF_getResource name="GIF_getResource">
+    <property name="ext" type="string" />
+    <property name="__getImgResource" type="func" />
+  </GIF_getResource>
+  <GIF_checkTextObj name="GIF_checkTextObj">
+    <property name="fontFile" type="file" />
+    <property name="iterations" type="int" />
+    <property name="fontSize" type="int" />
+    <property name="wordSpacing" type="int" />
+    <property name="spacing" type="int" />
+    <property name="angle" type="string" />
+    <property name="antiAlias" type="bool" />
+    <property name="fontColor" type="stdWrap" />
+    <property name="text" type="stdWrap" />
+    <property name="doNotStripHTML" type="bool" />
+    <property name="textMagLength" type="int" />
+    <property name="splitRendering" type="GIF_splitRendering" />
+  </GIF_checkTextObj>
+  <GIF_txtPosition name="GIF_txtPosition">
+    <property name="angle" type="string" />
+    <property name="align" type="list:right\center\left" />
+    <property name="offset" type="offset" />
+    <property name="__GIF_calcBBox" type="func" />
+  </GIF_txtPosition>
+  <GIF_calcTextCordsForMap name="GIF_calcTextCordsForMap">
+    <property name="explode" type="offset" />
+  </GIF_calcTextCordsForMap>
+  <GIF_addToMap name="GIF_addToMap">
+    <property name="noBlur" type="bool" />
+    <property name="url" type="string" />
+    <property name="target" type="string" />
+    <property name="titleText" type="string" />
+    <property name="altText" type="string" />
+  </GIF_addToMap>
+  <GIF_makeText name="GIF_makeText">
+    <property name="__GIF_calcWordSpacing" type="func" />
+    <property name="__GIF_txtPosition" type="func" />
+    <property name="imgMap" type="string" />
+    <property name="impMap" type="Array" />
+    <property name="hideButCreateMap" type="bool" />
+    <property name="fontColor" type="string" />
+    <property name="niceText" type="bool" />
+    <property name="antiAlias" type="bool" />
+    <property name="iterations" type="int" />
+    <property name="fontSize" type="int" />
+    <property name="angle" type="string" />
+    <property name="splitRendering" type="GIF_imageTTFBBoxWrapper" />
+  </GIF_makeText>
+  <GIF_getTextScalFactor name="GIF_getTextScalFactor">
+    <property name="niceText" type="bool" />
+  </GIF_getTextScalFactor>
+  <GIF_calcBBox name="GIF_calcBBox">
+    <property name="__GIF_getTextScalFactor" type="func" />
+    <property name="__GIF_calcWordSpacing" type="func" />
+    <property name="splitRendering" type="GIF_imageTTFBBoxWrapper" />
+    <property name="angle" type="string" />
+  </GIF_calcBBox>
+  <GIF_splitRendering name="GIF_splitRendering" extends="array"></GIF_splitRendering>
+  <GIF_fontResize name="GIF_fontResize">
+    <property name="maxWidth" type="int" />
+    <property name="__GIF_calcWordSpacing" type="func" />
+    <property name="fontSize" type="int" />
+    <property name="angle" type="string" />
+    <property name="fontFile" type="file" />
+    <property name="text" type="string" />
+    <property name="splitRendering" type="GIF_imageTTFBBoxWrapper" />
+  </GIF_fontResize>
+  <GIF_makeEmboss name="GIF_makeEmboss">
+    <property name="highColor" type="color" />
+    <property name="lowColor" type="color" />
+    <property name="offset" type="offset" />
+    <property name="__GIF_makeShadow" type="func" />
+  </GIF_makeEmboss>
+  <GIF_makeOutline name="GIF_makeOutline">
+    <property name="thickness" type="offset" />
+    <property name="color" type="color" />
+  </GIF_makeOutline>
+  <GIF_makeShadow name="GIF_makeShadow">
+    <property name="color" type="color" />
+    <property name="offset" type="offset" />
+    <property name="intensity" type="int:0-100" />
+    <property name="opacity" type="int:0-100" />
+    <property name="blur" type="int:0-99" />
+  </GIF_makeShadow>
+  <numRows name="numRows">
+    <property name="table" type="tablename" />
+    <property name="select" type="getQuery" />
+  </numRows>
+  <parseFunc name="parseFunc">
+    <property name="externalBlocks" type="list." />
+  </parseFunc>
+  <HTMLparser_TSbridge name="HTMLparser_TSbridge">
+    <property name="allowTags" type="list" />
+    <property name="tags" type="llist." />
+    <property name="localNesting" type="list" />
+    <property name="globalNesting" type="list" />
+    <property name="rmTagIfNoAttrib" type="list" />
+    <property name="noAttrib" type="list" />
+    <property name="removeTags" type="list" />
+    <property name="xhtml_cleaning" type="bool" />
+    <property name="keepNonMatchedTags" type="bool" />
+    <property name="htmlSpecialChars" type="intlist:-1,0,1,2" />
+  </HTMLparser_TSbridge>
+  <http_makelinks name="http_makelinks">
+    <property name="__getATagParams" type="func" />
+    <property name="keep" type="list" />
+    <property name="extTarget" type="string" />
+    <property name="ATagBeforeWrap" type="bool" />
+    <property name="wrap" type="wrap" />
+  </http_makelinks>
+  <mailto_makelinks name="mailto_makelinks">
+    <property name="__getATagParams" type="func" />
+    <property name="ATagBeforeWrap" type="bool" />
+    <property name="wrap" type="wrap" />
+  </mailto_makelinks>
+  <splitObj name="splitObj">
+    <property name="token" type="stdWrap" />
+    <property name="min" type="stdWrap" />
+    <property name="max" type="stdWrap" />
+    <property name="returnKey" type="stdWrap" />
+    <property name="wrap" type="string" />
+    <property name="cObjNum" type="string" />
+    <property name="__intlist" type="stdWrap" />
+  </splitObj>
+  <encaps_lineSplit name="encaps_lineSplit">
+    <property name="encapsTagList" type="list" />
+    <property name="defaultAlign" type="stdWrap" />
+    <property name="remapTag" type="list" />
+    <property name="innerStdWrap_all" type="stdWrap" />
+    <property name="addAttributes" type="list." />
+    <property name="encapsLinesStdWrap" type="list." />
+    <property name="removeWrapping" type="bool" />
+    <property name="wrapNonWrappedLines" type="wrap" />
+  </encaps_lineSplit>
+  <addParams name="addParams">
+    <property name="_offset" type="int" />
+    <property name="__list" type="stdWrap" />
+  </addParams>
+  <textStyle name="textStyle">
+    <property name="properties" type="Array" />
+    <property name="face" type="intlist" />
+    <property name="size" type="intlist" />
+    <property name="color" type="intlist" />
+    <property name="align" type="Array" />
+    <property name="altWrap" type="string" />
+  </textStyle>
+  <tableStyle name="tableStyle">
+    <property name="params" type="string" />
+    <property name="align" type="stdWrap" />
+    <property name="border" type="stdWrap" />
+    <property name="cellspacing" type="string" />
+    <property name="cellpadding" type="stdWrap" />
+    <property name="color" type="intlist" />
+  </tableStyle>
+  <filelink name="filelink">
+    <property name="__getATagParams" type="func" />
+    <property name="path" type="stdWrap" />
+    <property name="jumpurl" type="bool" />
+    <property name="icon" type="bool" />
+    <property name="icon_image_ext_list" type="stdWrap" />
+    <property name="iconCObject" type="cObjGetSingle" />
+    <property name="icon_thumbSize" type="stdWrap" />
+    <property name="__getAltParam" type="func" />
+    <property name="icon_link" type="bool" />
+    <property name="size" type="stdWrap" />
+    <property name="removePrependedNumbers" type="bool" />
+    <property name="labelStdWrap" type="stdWrap" />
+    <property name="ATagBeforeWrap" type="bool" />
+    <property name="wrap" type="wrap" />
+    <property name="file" type="stdWrap" />
+    <property name="stdWrap" type="stdWrap" />
+  </filelink>
+  <TCAlookup name="TCAlookup">
+    <property name="table" type="tablename" />
+    <property name="field" type="string" />
+    <property name="delimiter" type="string" />
+  </TCAlookup>
+  <ARR_languages_strings name="ARR_languages_strings">
+    <property name="default" type="string" />
+    <property name="en" type="string" />
+    <property name="dk" type="string" />
+    <property name="de" type="string" />
+    <property name="no" type="string" />
+    <property name="it" type="string" />
+    <property name="fr" type="string" />
+    <property name="nl" type="string" />
+    <property name="cz" type="string" />
+    <property name="pl" type="string" />
+    <property name="si" type="string" />
+    <property name="fi" type="string" />
+    <property name="tr" type="string" />
+    <property name="se" type="string" />
+    <property name="pt" type="string" />
+    <property name="ru" type="string" />
+    <property name="ro" type="string" />
+    <property name="ch" type="string" />
+    <property name="sk" type="string" />
+    <property name="lt" type="string" />
+    <property name="is" type="string" />
+    <property name="hr" type="string" />
+    <property name="hu" type="string" />
+    <property name="gl" type="string" />
+    <property name="th" type="string" />
+    <property name="gr" type="string" />
+    <property name="hk" type="string" />
+    <property name="eu" type="string" />
+    <property name="bg" type="string" />
+    <property name="br" type="string" />
+    <property name="et" type="string" />
+    <property name="ar" type="string" />
+    <property name="he" type="string" />
+    <property name="ua" type="string" />
+    <property name="lv" type="string" />
+    <property name="jp" type="string" />
+    <property name="vn" type="string" />
+    <property name="ca" type="string" />
+    <property name="ba" type="string" />
+    <property name="kr" type="string" />
+    <property name="eo" type="string" />
+    <property name="my" type="string" />
+    <property name="hi" type="string" />
+  </ARR_languages_strings>
+  <cImage name="cImage">
+    <property name="file" type="getImgResource" />
+    <property name="alttext" type="stdWrap" />
+    <property name="__getAltParam" type="func" />
+    <property name="border" type="string|deprecated" />
+    <property name="params" type="string" />
+    <property name="linkWrap" type="wrap" />
+    <property name="wrap" type="wrap" />
+    <property name="imageLinkWrap" type="imageLinkWrap" />
+  </cImage>
+  <typolink name="typolink">
+    <property name="__getATagParams" type="func" />
+    <property name="parameter" type="stdWrap" />
+    <property name="section" type="stdWrap" />
+    <property name="JSwindow_params" type="list" />
+    <property name="target" type="stdWrap" />
+    <property name="title" type="stdWrap" />
+    <property name="extTarget" type="stdWrap" />
+    <property name="no_cache" type="stdWrap" />
+    <property name="addQueryString" type="string" />
+    <property name="additionalParams" type="stdWrap" />
+    <property name="useCacheHash" type="bool" />
+    <property name="userFunc" type="custom" />
+    <property name="returnLast" type="list:url\\target" />
+    <property name="ATagBeforeWrap" type="bool" />
+    <property name="wrap" type="wrap" />
+  </typolink>
+  <imageLinkWrap name="imageLinkWrap">
+    <property name="--info" type="Array" />
+    <property name="enable" type="stdWrap" />
+    <property name="typolink" type="typolink" />
+    <property name="width" type="int" />
+    <property name="height" type="int" />
+    <property name="effects" type="string" />
+    <property name="sample" type="bool" />
+    <property name="alternativeTempPath" type="string" />
+    <property name="bodyTag" type="string" />
+    <property name="title" type="string" />
+    <property name="wrap" type="string" />
+    <property name="target" type="string" />
+    <property name="JSwindow" type="bool" />
+  </imageLinkWrap>
+  <netprintApplication_offsiteLinkWrap name="netprintApplication_offsiteLinkWrap">
+    <property name="url" type="string" />
+    <property name="thisUrl" type="string" />
+    <property name="linkOnlyPixelsAbove" type="int" />
+    <property name="cObject" type="cObjGetSingle" />
+    <property name="__getATagParams" type="func" />
+    <property name="outerStdWrap" type="stdWrap" />
+    <property name="before" type="bool" />
+  </netprintApplication_offsiteLinkWrap>
+  <getATagParams name="getATagParams">
+    <property name="ATagParams" type="stdWrap" />
+  </getATagParams>
+  <checkIf name="checkIf">
+    <property name="directReturn" type="bool" />
+    <property name="isTrue" type="stdWrap" />
+    <property name="isFalse" type="stdWrap" />
+    <property name="isPositive" type="stdWrap" />
+    <property name="value" type="stdWrap" />
+    <property name="isGreaterThan" type="stdWrap" />
+    <property name="isLessThan" type="stdWrap" />
+    <property name="equals" type="stdWrap" />
+    <property name="isInList" type="stdWrap" />
+    <property name="negate" type="bool" />
+  </checkIf>
+  <cObjGetSingle name="cObjGetSingle">
+    <property name="__getObject" type="func" />
+  </cObjGetSingle>
+  <cObjGet name="cObjGet" extends="array"></cObjGet>
+  <getAltParam name="getAltParam">
+    <property name="altText" type="stdWrap" />
+    <property name="titleText" type="stdWrap" />
+    <property name="longdescURL" type="stdWrap" />
+    <property name="emptyTitleHandling" type="list:keepEmpty\\useAlt\\removeAttr" />
+  </getAltParam>
+  <getImgResource name="getImgResource">
+    <property name="import" type="stdWrap" />
+    <property name="width" type="stdWrap" />
+    <property name="heigth" type="stdWrap" />
+    <property name="ext" type="stdWrap" />
+    <property name="maxW" type="stdWrap" />
+    <property name="maxH" type="stdWrap" />
+    <property name="minW" type="int" />
+    <property name="minH" type="int" />
+    <property name="m" type="Array" />
+    <property name="sample" type="bool" />
+    <property name="alternativeTempPath" type="string" />
+    <property name="params" type="string" />
+    <property name="frame" type="int" />
+    <property name="reduceColors" type="int" />
+  </getImgResource>
+  <editIcons name="editIcons">
+    <property name="styleAttribute" type="string" />
+    <property name="iconTitle" type="stdWrap" />
+    <property name="iconImg" type="stdWrap" />
+    <property name="beforeLastTag" type="int" />
+  </editIcons>
+  <getQuery name="getQuery">
+    <property name="pidInList" type="stdWrap" />
+    <property name="__getWhere" type="func" />
+    <property name="selectFields" type="string" />
+    <property name="max" type="string" />
+    <property name="begin" type="string" />
+    <property name="join" type="string" />
+    <property name="leftjoin" type="string" />
+    <property name="rightjoin" type="string" />
+  </getQuery>
+  <getWhere name="getWhere">
+    <property name="uidInList" type="string" />
+    <property name="pidInList" type="string" />
+    <property name="where" type="string" />
+    <property name="languageField" type="string" />
+    <property name="andWhere" type="stdWrap" />
+    <property name="groupBy" type="string" />
+    <property name="orderBy" type="string" />
+  </getWhere>
+  <MENU_getBeforeAfter name="MENU_getBeforeAfter">
+    <property name="beforeImgTagParams" type="string" />
+    <property name="beforeImgLink" type="string" />
+    <property name="beforeWrap" type="string" />
+    <property name="before" type="stdWrap" />
+    <property name="beforeImg" type="getImgResource" />
+    <property name="afterImgTagParams" type="string" />
+    <property name="afterImgLink" type="string" />
+    <property name="afterWrap" type="string" />
+    <property name="after" type="stdWrap" />
+    <property name="afterImg" type="getImgResource" />
+    <property name="beforeROImg" type="getImgResource" />
+    <property name="afterROImg" type="getImgResource" />
+  </MENU_getBeforeAfter>
+  <MENU_TMENU_itemstates name="MENU_TMENU_itemstates">
+    <property name="NO" type="MENU_TMENU_ITEM" />
+    <property name="RO" type="MENU_TMENU_ITEM" />
+    <property name="IFSUB" type="MENU_TMENU_ITEM" />
+    <property name="IFSUBRO" type="MENU_TMENU_ITEM" />
+    <property name="ACT" type="MENU_TMENU_ITEM" />
+    <property name="ACTRO" type="MENU_TMENU_ITEM" />
+    <property name="ACTIFSUB" type="MENU_TMENU_ITEM" />
+    <property name="ACTIFSUBRO" type="MENU_TMENU_ITEM" />
+    <property name="CUR" type="MENU_TMENU_ITEM" />
+    <property name="CURRO" type="MENU_TMENU_ITEM" />
+    <property name="CURIFSUB" type="MENU_TMENU_ITEM" />
+    <property name="CURIFSUBRO" type="MENU_TMENU_ITEM" />
+    <property name="USR" type="MENU_TMENU_ITEM" />
+    <property name="USRRO" type="MENU_TMENU_ITEM" />
+    <property name="SPC" type="MENU_TMENU_ITEM" />
+    <property name="USERDEF1" type="MENU_TMENU_ITEM" />
+    <property name="USERDEF1RO" type="MENU_TMENU_ITEM" />
+    <property name="USERDEF2" type="MENU_TMENU_ITEM" />
+    <property name="USERDEF2RO" type="MENU_TMENU_ITEM" />
+  </MENU_TMENU_itemstates>
+  <MENU_TMENU_common name="MENU_TMENU_common">
+    <property name="debugItemConf" type="bool" />
+    <property name="submenuObjSuffixes" type="string" />
+    <property name="forceTypeValue" type="string" />
+    <property name="noBlur" type="bool" />
+    <property name="IProcFunc" type="string" />
+    <property name="wrap" type="wrap" />
+  </MENU_TMENU_common>
+  <MENU_foldout name="MENU_foldout">
+    <property name="arrowNO" type="getImgResource" />
+    <property name="arrowACT" type="getImgResource" />
+    <property name="dontLinkIfSubmenu" type="bool" />
+    <property name="displayActiveOnLoad" type="bool" />
+    <property name="dontWrapInTable" type="bool" />
+    <property name="arrowImgParams" type="string" />
+    <property name="bottomHeight" type="int:0-3000" />
+    <property name="bottomContent" type="cObjGetSingle" />
+    <property name="adjustItemsH" type="int" />
+    <property name="adjustSubItemsH" type="int" />
+    <property name="menuWidth" type="int:0-3000" />
+    <property name="menuHeight" type="int:0-3000" />
+    <property name="menuBackColor" type="color" />
+    <property name="bottomBackColor" type="color" />
+    <property name="menuOffset" type="offset" />
+    <property name="subMenuOffset" type="offset" />
+    <property name="foldTimer" type="int:1-3000" />
+    <property name="foldSpeed" type="int:1-100" />
+    <property name="stayFolded" type="bool" />
+    <property name="wrap" type="wrap" />
+  </MENU_foldout>
+  <MENU_layers name="MENU_layers">
+    <property name="layer_menu_id" type="string" />
+    <property name="displayActiveOnLoad" type="bool" />
+    <property name="bordersWithin" type="intlist" />
+    <property name="freezeMouseover" type="bool" />
+    <property name="lockPosition_addSelf" type="bool" />
+    <property name="setFixedHeight" type="int" />
+    <property name="setFixedWidth" type="int" />
+    <property name="lockPosition_adjust" type="int" />
+    <property name="ieSelectFix" type="bool" />
+    <property name="hideMenuWhenNotOver" type="int:0-600" />
+    <property name="dontHideOnMouseUp" type="bool" />
+    <property name="dontFollowMouse" type="bool" />
+    <property name="hideMenuTimer" type="int" />
+    <property name="layerStyle" type="string" />
+    <property name="relativeToTriggerItem" type="bool" />
+    <property name="leftOffset" type="int" />
+    <property name="topOffset" type="int" />
+    <property name="xPosOffset" type="int" />
+    <property name="yPosOffset" type="int" />
+    <property name="lockPosition" type="list:x\\y" />
+    <property name="blankStrEqFalse" type="bool" />
+    <property name="directionLeft" type="bool" />
+    <property name="directionUp" type="bool" />
+    <property name="relativeToParentLayer" type="bool" />
+  </MENU_layers>
+  <MENU_TMENU_ITEM name="MENU_TMENU_ITEM">
+    <property name="__getATagParams" type="func" />
+    <property name="ATagParams" type="string" />
+    <property name="addATagParams" type="string" />
+    <property name="ATagBeforeWrap" type="bool" />
+    <property name="altTarget" type="string" />
+    <property name="ATagTitle" type="string" />
+    <property name="RO_chBgColor" type="string" />
+    <property name="doNotLinkIt" type="bool" />
+    <property name="linkWrap" type="string" />
+    <property name="ATagTitle" type="stdWrap" />
+    <property name="__MENU_getBeforeAfter" type="func" />
+    <property name="allWrap" type="stdWrap" />
+    <property name="subst_elementUid" type="bool" />
+    <property name="allStdWrap" type="stdWrap" />
+    <property name="stdWrap" type="stdWrap" />
+    <property name="stdWrap2" type="stdWrap" />
+    <property name="wrapItemAndSub" type="string" />
+  </MENU_TMENU_ITEM>
+  <MENU_TMENU_LAYERS_ITEM name="MENU_TMENU_LAYERS_ITEM">
+    <property name="__getATagParams" type="func" />
+    <property name="ATagParams" type="string" />
+    <property name="addATagParams" type="string" />
+    <property name="ATagBeforeWrap" type="bool" />
+    <property name="altTarget" type="string" />
+    <property name="ATagTitle" type="string" />
+    <property name="RO_chBgColor" type="string" />
+    <property name="doNotLinkIt" type="bool" />
+    <property name="linkWrap" type="string" />
+    <property name="ATagTitle" type="stdWrap" />
+    <property name="__MENU_getBeforeAfter" type="func" />
+    <property name="allWrap" type="stdWrap" />
+    <property name="subst_elementUid" type="bool" />
+    <property name="allStdWrap" type="stdWrap" />
+    <property name="stdWrap" type="stdWrap" />
+    <property name="stdWrap2" type="stdWrap" />
+    <property name="wrapItemAndSub" type="string" />
+  </MENU_TMENU_LAYERS_ITEM>
+  <MENU_GMENU_itemstates name="MENU_GMENU_itemstates">
+    <property name="NO" type="MENU_GMENU_ITEM" />
+    <property name="RO" type="MENU_GMENU_ITEM" />
+    <property name="IFSUB" type="MENU_GMENU_ITEM" />
+    <property name="IFSUBRO" type="MENU_GMENU_ITEM" />
+    <property name="ACT" type="MENU_GMENU_ITEM" />
+    <property name="ACTRO" type="MENU_GMENU_ITEM" />
+    <property name="ACTIFSUB" type="MENU_GMENU_ITEM" />
+    <property name="ACTIFSUBRO" type="MENU_GMENU_ITEM" />
+    <property name="CUR" type="MENU_GMENU_ITEM" />
+    <property name="CURRO" type="MENU_GMENU_ITEM" />
+    <property name="CURIFSUB" type="MENU_GMENU_ITEM" />
+    <property name="CURIFSUBRO" type="MENU_GMENU_ITEM" />
+    <property name="USR" type="MENU_GMENU_ITEM" />
+    <property name="USRRO" type="MENU_GMENU_ITEM" />
+    <property name="SPC" type="MENU_GMENU_ITEM" />
+    <property name="USERDEF1" type="MENU_GMENU_ITEM" />
+    <property name="USERDEF1RO" type="MENU_GMENU_ITEM" />
+    <property name="USERDEF2" type="MENU_GMENU_ITEM" />
+    <property name="USERDEF2RO" type="MENU_GMENU_ITEM" />
+  </MENU_GMENU_itemstates>
+  <MENU_GMENU_common name="MENU_GMENU_common">
+    <property name="debugItemConf" type="bool" />
+    <property name="applyTotalH" type="int" />
+    <property name="applyTotalW" type="int" />
+    <property name="min" type="int" />
+    <property name="max" type="int" />
+    <property name="useLargestItemX" type="bool" />
+    <property name="useLargestItemY" type="bool" />
+    <property name="distributeX" type="bool" />
+    <property name="distributeY" type="bool" />
+    <property name="removeObjectsOfDummy" type="bool" />
+    <property name="submenuObjSuffixes" type="string" />
+    <property name="accessKey" type="bool" />
+    <property name="forceTypeValue" type="string" />
+    <property name="noBlur" type="bool" />
+    <property name="disableAltText" type="bool" />
+    <property name="IProcFunc" type="string" />
+    <property name="wrap" type="wrap" />
+  </MENU_GMENU_common>
+  <MENU_GMENU_ITEM name="MENU_GMENU_ITEM">
+    <property name="__cObjGetSingle" type="func:gifbuildercoa:GIFBUILDER" />
+  </MENU_GMENU_ITEM>
+  <MENU_GMENU_LAYERS_ITEM name="MENU_GMENU_LAYERS_ITEM">
+    <property name="__cObjGetSingle" type="func:gifbuildercoa:GIFBUILDER" />
+  </MENU_GMENU_LAYERS_ITEM>
+  <MENU_IMGMENU_ITEM name="MENU_IMGMENU_ITEM" extends="array"></MENU_IMGMENU_ITEM>
+  <MENU_JSMENU_ITEM name="MENU_JSMENU_ITEM">
+    <property name="noLink" type="bool" />
+    <property name="alwaysLink" type="bool" />
+    <property name="showActive" type="bool" />
+    <property name="showFirst" type="bool" />
+    <property name="firstLabel" type="string" />
+    <property name="width" type="int" />
+    <property name="elements" type="int" />
+    <property name="additionalParams" type="string" />
+    <property name="wrap" type="wrap" />
+  </MENU_JSMENU_ITEM>
+  <MENU_common name="MENU_common">
+    <property name="imgNamePrefix" type="string" />
+    <property name="imgNameNotRandom" type="bool" />
+    <property name="showAccessRestrictedPages" type="bool" />
+    <property name="expAll" type="bool" />
+    <property name="alternativeSortingField" type="string" />
+    <property name="sectionIndex" type="string" />
+    <property name="minItems" type="int" />
+    <property name="maxItems" type="int" />
+    <property name="begin" type="int" />
+    <property name="itemArrayProcFunc" type="string" />
+    <property name="NO" type="bool" />
+    <property name="RO" type="bool" />
+    <property name="IFSUB" type="bool" />
+    <property name="IFSUBRO" type="bool" />
+    <property name="ACT" type="bool" />
+    <property name="ACTRO" type="bool" />
+    <property name="ACTIFSUB" type="bool" />
+    <property name="ACTIFSUBRO" type="bool" />
+    <property name="CUR" type="bool" />
+    <property name="CURRO" type="bool" />
+    <property name="CURIFSUB" type="bool" />
+    <property name="CURIFSUBRO" type="bool" />
+    <property name="USR" type="bool" />
+    <property name="USRRO" type="bool" />
+    <property name="SPC" type="bool" />
+    <property name="USERDEF1" type="bool" />
+    <property name="USERDEF1RO" type="bool" />
+    <property name="USERDEF2" type="bool" />
+    <property name="USERDEF2RO" type="bool" />
+    <property name="overrideId" type="int" />
+    <property name="target" type="string" />
+    <property name="collapse" type="bool" />
+    <property name="addParams" type="string" />
+    <property name="JSWindow" type="bool" />
+  </MENU_common>
+  <PAGE name="PAGE" extends="array">
+    <property name="typeNum" type="int" />
+    <property name="wrap" type="wrap" />
+    <property name="stdWrap" type="stdWrap" />
+    <property name="bodyTagCObject" type="cObject" />
+    <property name="bodyTag" type="tag" />
+    <property name="headTag" type="tag" />
+    <property name="bodyTagMargins" type="int" />
+    <property name="config" type="CONFIG" />
+  </PAGE>
+  <CONFIG name="CONFIG">
+    <property name="listVars" type="list" />
+    <property name="uniqueLinkVars" type="bool" />
+    <property name="MP_defaults" type="string" />
+    <property name="MP_mapRootPoints" type="stringlist" />
+    <property name="MP_disableTypolinkClosestMPvalue" type="bool" />
+    <property name="headTag" type="tag" />
+    <property name="renderCharset" type="string" />
+    <property name="metaCharset" type="string" />
+    <property name="disableCharsetHeader" type="bool" />
+    <property name="enableContentLengthHeader" type="bool" />
+    <property name="sendCacheHeaders" type="bool" />
+    <property name="sendCacheHeaders_onlyWhenLoginDeniedInBranch" type="bool" />
+    <property name="doctype" type="string" />
+    <property name="beLoginLinkIPList_login" type="HTML" />
+    <property name="to be continued" type="incomplete" />
+  </CONFIG>
+  <PERSON name="PERSON">
+    <property name="Vorname" type="string" />
+    <property name="Nachname" type="string" />
+    <property name="TelefonNummer" type="string" />
+    <property name="Strasse" type="string" />
+  </PERSON>
+  <TEST2 name="TEST2" extends="TEST3">
+    <property name="prop2" type="string" />
+  </TEST2>
+  <TEST3 name="TEST3" extends="TEST4">
+    <property name="prop3" type="string" />
+  </TEST3>
+  <TEST4 name="TEST4">
+    <property name="prop4" type="string" />
+  </TEST4>
+  <int name=""></int>
+  <intlist name=""></intlist>
+  <bool name=""></bool>
+  <string name=""></string>
+  <text name=""></text>
+  <array name="">
+    <parameterRange from="0" type="COBJ" />
+  </array>
+  <HMENU name="">
+    <parameterRange from="1" type="GMENU" />
+    <parameterRange from="1" type="TMENU" />
+  </HMENU>
+</tsref>
