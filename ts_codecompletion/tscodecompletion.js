@@ -27,10 +27,10 @@
 var TsCodeCompletion = function(codeMirror,outerdiv) {
 
   // private Vars
-	var tsRef  = new TsRef();
-	var mirror = codeMirror;
-	var options = {ccWords : 10};
-	// t3editor index (=0 if there is just one editor on the page, should be set from outside)
+  var tsRef  = new TsRef();
+  var mirror = codeMirror;
+  var options = {ccWords : 10};
+  // t3editor index (=0 if there is just one editor on the page, should be set from outside)
   var index = 0;
   
  
@@ -314,8 +314,15 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
         currWord = -1;
         mirror.editor.highlightAtCursor();
         
+        // retrieves the node right to the cursor
         var cursorNode = mirror.editor.win.select.selectionTopNode(mirror.editor.win.document.body, false);
-        
+        // cursorNode is null if the cursor is positioned at the beginning of the first line
+        if(cursorNode == null)
+          cursorNode = mirror.editor.container.firstChild;
+        else if(cursorNode.tagName=='BR') // at the beginning of the line
+          cursorNode = cursorNode.nextSibling;
+  			
+        // the cursornode has to be stored cause inserted breaks have to be deleted after pressing enter if the codecompletion is active
         nodeBeforeInsert = cursorNode;
         filter = getFilter(cursorNode);
         
@@ -359,6 +366,8 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 							codeCompleteBox.style.width = codeCompleteBox.offsetWidth + 20 + 'px';
 						}
   					
+  					
+  					   
   					codeCompleteBox.setStyle({
   						left: (Position.cumulativeOffset($$('.t3e_iframe_wrap')[index])[0] + Position.cumulativeOffset(cursorNode)[0] + cursorNode.offsetWidth) + 'px',
   						top:  (Position.cumulativeOffset(cursorNode)[1] + cursorNode.offsetHeight - mirror.win.scrollY) + 'px'
