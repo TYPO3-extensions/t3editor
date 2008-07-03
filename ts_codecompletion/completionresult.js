@@ -23,19 +23,25 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
-/** 
- * this class post-processes the result from the codecompletion, so that it can be
- * displayed in the next step.  
- */
+/**
+ * @fileoverview contains the CompletionResult class 
+ */ 
  
+/** 
+ * @class this class post-processes the result from the codecompletion, so that it can be
+ * displayed in the next step.
+ * @constructor
+ * @param tsRef the TsRef Tree
+ * @param tsTreeNode the current Node in the codetree built by the parser
+ * @return a new CompletionResult instance      
+ */
 var CompletionResult = function(tsRef,tsTreeNode){
   
   var currentTsTreeNode = tsTreeNode;
   var tsRef = tsRef;
   
   /**
-   * returns the type of the currentTsTreeNode 
+   * returns the type of the currentTsTreeNode
    */     
   this.getType = function(){
     var val = currentTsTreeNode.getValue();
@@ -48,6 +54,8 @@ var CompletionResult = function(tsRef,tsTreeNode){
    * a list of the children of the current TsTreeNode (= userdefined properties)
    * and a list of properties allowed for the current object in the TsRef  
    * remove all words from list that don't start with the string in filter
+   * @param {String} filter beginning of the words contained in the proposal list
+   * @returns an Array of Proposals 
    */
   this.getFilteredProposals = function(filter) {
       

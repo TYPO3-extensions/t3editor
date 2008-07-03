@@ -24,6 +24,21 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+/**
+ * @fileoverview contains the TsCodeCompletion class
+ */ 
+
+/**
+ * Construct a new TsCodeCompletion object.
+ * @class This is the main class of the codeCompletion.
+ * it is directly invoked by the editor. It instantiates all other classes
+ * manages the control flow and takes care of the completionbox
+ *  
+ * @constructor
+ * @param codeMirror codeMirror instance, for retrieving the cursor position
+ * @param outerdiv div that contains the editor, for DOM manipulation 
+ * @return A new TsCodeCompletion instance
+ */
 var TsCodeCompletion = function(codeMirror,outerdiv) {
 
   // private Vars
@@ -192,6 +207,12 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
     return extTree;
   }
   
+  /**
+   * Eventhandler class for mouseclicks
+   * ends the codecompletion
+   * @param event fired prototype event object      
+   * @type void   
+   */     
   this.click=function(event) {
     endAutoCompletion();
   }
@@ -222,6 +243,12 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
     return line;
   }
   
+  /**
+   * Eventhandler function executed after keystroke release
+   * triggers CC on pressed dot and typing on   
+   * @param event fired prototype event object
+   * @type void      
+   */     
   this.keyUp = function(event) {
     var keycode = event.keyCode;
     if  (keycode == 190){
@@ -233,21 +260,15 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
     }
 
   }
-  function method(obj, name) {
-    return function() {obj[name].apply(obj, arguments);};
-  }
+
+  /**
+   * Eventhandler function executed after keystroke release
+   * triggers CC on pressed dot and typing on   
+   * @param event fired prototype event object
+   * @type void
+   */     
   this.keyDown = function(event){
     var keycode = event.keyCode;
-    // ensure that the current line is tokenized
-    
-    //tried to remove eventlisteners, does not work :(    
-    /*
-     if(keycode == 109){
-        mirror.win.document.removeEventListener("keyup",method(mirror.editor,"keyUp"),true);
-        mirror.win.document.removeEventListener("keydown",method(mirror.editor,"keyDown"),true);
-        mirror.win.document.removeEventListener("keypress",method(mirror.editor,"keyPress"),true);
-     }
-     */
     if (cc == 1){
       if (keycode == Event.KEY_UP) {
   			// arrow up:  move up cursor in codecomplete box
@@ -306,7 +327,6 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
   }
 
   function refreshCodeCompletion() {
-        //var proposals = [];
         // init vars for up/down moving in word list
         cc_up = 0;
         cc_down = options.ccWords-1;
@@ -386,7 +406,11 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 
   
   
-  // hide codecomplete box
+  /**
+   * hides codecomplete box and resets completionResult
+   * afterwards the interceptor method endCodeCompletion gets called
+   * @type void      
+   */    
 	this.endAutoCompletion = function() {
     endAutoCompletion();
   }  
@@ -446,8 +470,11 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 		}
 	}
 	
-	// highlightIng word in codecomplete box by id
-	
+	/**
+	 * highlights entry in codecomplete box by id
+	 * @param {int} id
+	 * @type void           
+	 */     	 
   this.highlightCurrWord = function(id){
     highlightCurrWord(id);
   }
@@ -459,7 +486,12 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 		currWord = id;
 	}
 
-  
+  /**
+   * Insert the currently selected item in the proposal list 
+   * of the codecompletion box into the editor div at cursor position 
+   * @type void
+   * @see #highlightCurrWord
+   */  
   this.insertCurrWordAtCursor = function(){
     insertCurrWordAtCursor();
   }
@@ -471,6 +503,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
   	mirror.editor.win.select.insertTextAtCursor(mirror.editor.win, word);
   	mirror.win.focus();
 	}
+	
   /**
    * determines what kind of completion is possible and return a array of proposals
    * if we have no suggestions, the list will be empty
@@ -507,7 +540,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
     return compResult;
   }*/
 
-/**
+  /**
    * retrieves the get-variable with the specified name
    */
         

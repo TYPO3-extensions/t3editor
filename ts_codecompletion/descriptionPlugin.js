@@ -25,12 +25,14 @@
 ***************************************************************/
 
 /**
- * Descriptionbox plugin for the t3editor-codecompletion which displays the datatype 
+ * @class Descriptionbox plugin for the t3editor-codecompletion which displays the datatype 
  * and the desciption for each property displayed in the completionbox
+ * @constructor
+ * @return A new DescriptionPlugin instance  
  **/
   
 var DescriptionPlugin = function(){
-  
+
   var outerdiv;
   var descriptionBox;
   var completionBox;

@@ -23,10 +23,28 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+/**
+ * @fileoverview contains the TsParser class and the TreeNode helper class
+ */ 
 
+/**
+ * Construct a new TsParser object.
+ * @class This class takes care of the parsing and builds the codeTree
+ *  
+ * @constructor
+ * @param tsRef typoscript reference tree
+ * @param extTsObjTree codeTree for all typoscript templates 
+ *       excluding the current one. 
+ * @return A new TsParser instance
+ */
 var TsParser = function(tsRef,extTsObjTree){
   
-  // class for mainly used for retrieving the externals templates childnodes 
+  /**
+   * @class data structure for the nodes of the code tree
+   * mainly used for retrieving the externals templates childnodes
+   * @constructor
+   * @param {String} name       
+   */     
   function TreeNode(nodeName){
     this.name = nodeName;
     //this.tsObjTree = tsObjTree;
@@ -40,9 +58,10 @@ var TsParser = function(tsRef,extTsObjTree){
     // current template or external template
     this.isExternal = false;
     
-    //var extNode = null;
-    
-    // returns local properties and the properties of the external templates
+    /**
+     * returns local properties and the properties of the external templates
+     * @returns {Array} ChildNodes
+     */           
     this.getChildNodes = function(){  
       var node = this.getExtNode();
       if(node){
@@ -56,6 +75,7 @@ var TsParser = function(tsRef,extTsObjTree){
       }
       return this.childNodes;
     }
+    
     this.getValue = function(){
       if(this.value != "")
         return this.value;
@@ -94,6 +114,9 @@ var TsParser = function(tsRef,extTsObjTree){
    * and store it in tsTree.
    * also store string from cursor position to the beginning of the line in currentLine
    * and return the reference to the last path before the cursor position in currentTsTreeNode
+   * @param startNode DOM Node containing the first word in the editor
+   * @param cursorNode DOM Node containing the word at cursor position       
+   * @return currentTsTreeNode   
    */
   this.buildTsObjTree = function(startNode, cursorNode){
     return buildTsObjTree(startNode, cursorNode);
