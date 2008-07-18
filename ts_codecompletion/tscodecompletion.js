@@ -77,7 +77,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
   
   
   // to roll back linebreaks inserted by hitting enter, the current node has to be stored before the codecompletion outside of the eventlistener
-  var nodeBeforeInsert;
+  //var nodeBeforeInsert;
   
   
   var codeCompleteBox = new Element("DIV", {
@@ -298,12 +298,17 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
           mirror.editor.highlightAtCursor();
           var insertedNode = mirror.editor.win.select.selectionTopNode(mirror.editor.win.document.body, false);
           var brNode = insertedNode.previousSibling;
-          while (brNode.currentText != nodeBeforeInsert.currentText) {
+          while (true) {
+            if(brNode.nodeName == "BR") { 
+              brNode.parentNode.removeChild(brNode);
+              break; 
+            }
             var tempNode = brNode.previousSibling;
             brNode.parentNode.removeChild(brNode);
             brNode = tempNode;         
           }
           // HACK END
+          event.stop();
           endAutoCompletion();
         }
   		}else if(keycode == 32 && !event.ctrlKey){
@@ -343,7 +348,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
           cursorNode = cursorNode.nextSibling;
   			
         // the cursornode has to be stored cause inserted breaks have to be deleted after pressing enter if the codecompletion is active
-        nodeBeforeInsert = cursorNode;
+        //nodeBeforeInsert = cursorNode;
         filter = getFilter(cursorNode);
         
         if(compResult == null || cursorNode.innerHTML == '.'){
@@ -399,7 +404,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
             for(var i=0;i<plugins.length;i++){
               if(plugins[i].obj && plugins[i].obj.afterCCRefresh)plugins[i].obj.afterCCRefresh(proposals[currWord],compResult);
             }
-        }
+        } else { endAutoCompletion();}
         
   }
   
