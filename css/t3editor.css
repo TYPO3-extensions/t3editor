@@ -3,12 +3,12 @@
   font-weight: bold;
 }
 .t3e_codeCompleteBox ul li span.word_definedTSREFProperty {
-  color:#f78f1e;
+  color:#b15800;
   font-size:0.95em;
   font-weight:bold;
 }
 .t3e_codeCompleteBox ul li span.word_undefinedTSREFProperty {
-  color:#fdaf5c;
+  color:#de811e;
   font-size:0.95em;
   font-weight:bold;
 }
