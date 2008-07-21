@@ -56,6 +56,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
   var compResult;
   var cc = 0;
   var filter = "";
+  var linefeedsPrepared = false;
   
   // load the external templates ts-setup into extTsObjTree
   var extTsObjTree = new Object();
@@ -106,7 +107,8 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
   
   // should we use a pluginmanager so no for loops are required on each hook?
   // e.g. pluginmanager.call('afterKeyUp',....);
-  loadPluginArray();                   
+  loadPluginArray();        
+            
   
   /* loads the array of registered codecompletion plugins
    * to register a plugin you have to add an array to the localconf
@@ -146,7 +148,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
       var obj = eval(localname);
       console.log("initialized a new "+plugin.classname+" in "+localname);
     }catch(e){
-      throw("error occured while trying to make new instance of \""+plugin.classname+"\"! maybee synthax error or wrong filepath?");
+      throw("error occured while trying to make new instance of \""+plugin.classname+"\"! maybe syntax error or wrong filepath?");
       return;
     }
     obj.init(pluginContext,plugin);
@@ -206,9 +208,29 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
     }
     return extTree;
   }
-  
+
   /**
-   * Eventhandler class for mouseclicks
+   * replaces editor functions insertNewlineAtCursor and indentAtCursor 
+   * with modified ones that only execute when codecompletion box is not shown
+   */        
+  function prepareLinefeeds() {
+    mirror.editor.win.select.insertNewlineAtCursor_original = mirror.editor.win.select.insertNewlineAtCursor;
+    mirror.editor.win.select.insertNewlineAtCursor = function(window) {
+      if (cc==0) {
+        mirror.editor.win.select.insertNewlineAtCursor_original(window);   
+      }
+    };
+    mirror.editor.indentAtCursor_original = mirror.editor.indentAtCursor;
+    mirror.editor.indentAtCursor = function() {
+      if (cc==0) {
+        mirror.editor.indentAtCursor_original();   
+      }
+    };
+    linefeedsPrepared = true;
+  }
+
+  /**
+   * Eventhandler function for mouseclicks
    * ends the codecompletion
    * @param event fired prototype event object      
    * @type void   
@@ -258,7 +280,6 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
         refreshCodeCompletion();
       }
     }
-
   }
 
   /**
@@ -268,6 +289,11 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
    * @type void
    */     
   this.keyDown = function(event){
+    // prepareLinefeeds() gets called the first time keyDown is executed.
+    // we have to put this here, cause in the constructor mirror.editor is not yet loaded 
+    if (!linefeedsPrepared) {
+      prepareLinefeeds();
+    }
     var keycode = event.keyCode;
     if (cc == 1){
       if (keycode == Event.KEY_UP) {
@@ -294,28 +320,14 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
           endAutoCompletion();
         } else {
           insertCurrWordAtCursor();
-    			// HACK: a linebreak gets inserted before the inserted word by an observer for KEY_RETURN in codemirror, so remove the linebreak (and the indentation too)
-          mirror.editor.highlightAtCursor();
-          var insertedNode = mirror.editor.win.select.selectionTopNode(mirror.editor.win.document.body, false);
-          var brNode = insertedNode.previousSibling;
-          while (true) {
-            if(brNode.nodeName == "BR") { 
-              brNode.parentNode.removeChild(brNode);
-              break; 
-            }
-            var tempNode = brNode.previousSibling;
-            brNode.parentNode.removeChild(brNode);
-            brNode = tempNode;         
-          }
-          // HACK END
           event.stop();
           endAutoCompletion();
         }
-  		}else if(keycode == 32 && !event.ctrlKey){
+  		} else if(keycode == 32 && !event.ctrlKey) {
   		  endAutoCompletion();
-      }else if(keycode == 32 && event.ctrlKey){
+      } else if(keycode == 32 && event.ctrlKey) {
   		  refreshCodeCompletion();
-      }else if(keycode == Event.KEY_BACKSPACE){
+      } else if(keycode == Event.KEY_BACKSPACE) {
         var cursorNode = mirror.editor.win.select.selectionTopNode(mirror.editor.win.document.body, false);
         if(cursorNode.innerHTML == '.'){
           // force full refresh at keyUp 
