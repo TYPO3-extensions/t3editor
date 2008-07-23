@@ -28,8 +28,8 @@
 
 
 unset($MCONF);
-define('TYPO3_MOD_PATH', 'sysext/t3editor/ts_codecompletion/');
-$BACK_PATH='../../../';
+define('TYPO3_MOD_PATH', 'sysext/t3editor/lib/ts_codecompletion/');
+$BACK_PATH='../../../../';
 
 //$MCONF['script']='class.tsref.php';
 $MCONF['access']='admin';		// If this is changed so not only admin-users can manipulate templates, there need to be done something with the constant editor that is not allowed to 'clear all cache' then!!

@@ -29,8 +29,8 @@
 
 unset($MCONF);
 //define('TYPO3_MOD_PATH', 'sysext/tstemplate/ts/');
-define('TYPO3_MOD_PATH', 'sysext/t3editor/ts_codecompletion/');
-$BACK_PATH='../../../';
+define('TYPO3_MOD_PATH', 'sysext/t3editor/lib/ts_codecompletion/');
+$BACK_PATH='../../../../';
 
 $MLANG['default']['tabs_images']['tab'] = 'ts1.gif';
 $MLANG['default']['ll_ref']='LLL:EXT:tstemplate/ts/locallang_mod.php';

@@ -40,7 +40,7 @@ var TsRefProperty = function(parentType,name,value){
     var descriptionCache = null;
     this.getDescription = function(callBack){
       if(descriptionCache == null){
-        var url = PATH_t3e+'ts_codecompletion/tsrefLoader.php?action=getDescription&typeId='+this.parentType+'&parameterName='+this.name;
+        var url = PATH_t3e+'lib/ts_codecompletion/tsrefLoader.php?action=getDescription&typeId='+this.parentType+'&parameterName='+this.name;
         new Ajax.Request(url, {
             method: 'get',
             onSuccess: function(transport) {
@@ -82,7 +82,7 @@ var TsRef = function(){
     var doc;
     
     this.loadTsrefAsync = function(){
-      var url = PATH_t3e+'ts_codecompletion/tsrefLoader.php?action=getTypes';
+      var url = PATH_t3e+'lib/ts_codecompletion/tsrefLoader.php?action=getTypes';
       new Ajax.Request(url, {
         method: 'get',
         onSuccess: function(transport) {

@@ -71,7 +71,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
   // maybe we will swap it to an external plugin in future
   var plugin = new Object();
   plugin.extpath = PATH_t3e;
-  plugin.classpath =  'ts_codecompletion/descriptionPlugin.js';
+  plugin.classpath =  'jslib/ts_codecompletion/descriptionPlugin.js';
   plugin.classname = 'DescriptionPlugin';
   
   plugins.push(plugin);
@@ -117,7 +117,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
                                                               'classname'=> 'MyPlugin');
    */
   function loadPluginArray(){
-    var url = PATH_t3e+'ts_codecompletion/pluginLoader.php?action=getPlugins';
+    var url = PATH_t3e+'lib/ts_codecompletion/pluginLoader.php?action=getPlugins';
     new Ajax.Request(url, {
       method: 'get',
       onSuccess: function(transport) {
@@ -158,7 +158,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
    * this function retrieves the JSON code by comitting a AJAX request
    */    
   function loadExtTemplatesAsync(){
-    var url = PATH_t3e+'ts_codecompletion/ext_ts_templatesloader.php?id='+getGetVar('id');
+    var url = PATH_t3e+'lib/ts_codecompletion/ext_ts_templatesloader.php?id='+getGetVar('id');
     new Ajax.Request(url, {
       method: 'get',
       onSuccess: function(transport) {
