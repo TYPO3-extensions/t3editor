@@ -140,10 +140,10 @@ class tx_t3editor {
 			$doc->loadJavascriptLib($path_t3e . 'jslib/t3editor.js');
 			
 			// stoefln: include the ts-codecompletion
-			$doc->loadJavascriptLib($path_t3e.'jslib/ts_codecompletion/tsref.js');
-			$doc->loadJavascriptLib($path_t3e.'jslib/ts_codecompletion/completionresult.js');
-			$doc->loadJavascriptLib($path_t3e.'jslib/ts_codecompletion/tsparser.js');
-			$doc->loadJavascriptLib($path_t3e.'jslib/ts_codecompletion/tscodecompletion.js');
+			$doc->loadJavascriptLib($path_t3e.'ts_codecompletion/tsref.js');
+			$doc->loadJavascriptLib($path_t3e.'ts_codecompletion/completionresult.js');
+			$doc->loadJavascriptLib($path_t3e.'ts_codecompletion/tsparser.js');
+			$doc->loadJavascriptLib($path_t3e.'ts_codecompletion/tscodecompletion.js');
 			// stoefln end
 			
 			// set correct path to the editor
