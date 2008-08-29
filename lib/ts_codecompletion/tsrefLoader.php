@@ -45,10 +45,11 @@ require_once ($BACK_PATH."template.php");
 class tsref{
   
   var $types; 
-    
+    // todo: rewrite the whole class with phps' XML Classes
   public function getTypesJSON(){
     if(!$this->types)throw new exception('you have to load a tsref specification!');
     $res = array();
+    //t3lib_div::debug($this->types);
     foreach($this->types as $typeId => $typeArr){
       $res[$typeId] = array();
       $res[$typeId]['properties'] = array();
@@ -57,11 +58,15 @@ class tsref{
           $propName = $propArr['attrs']['name'];
           $propType = $propArr['attrs']['type'];
           $res[$typeId]['properties'][$propName] = array();
-          $res[$typeId]['properties'][$propName]['type'] = $propType;          
-          
+          $res[$typeId]['properties'][$propName]['type'] = $propType;                    
         }
       }
-      //t3lib_div::debug($typeArr);
+      /*
+      if($typeArr[0]['ch']['description']){
+        $res[$typeId]['description'] = $typeArr[0]['ch']['description'][0]['values'][0];
+      }*/
+      
+     // t3lib_div::debug($typeArr);
       if($typeArr[0]['attrs']['extends'])
         $res[$typeId]['extends'] = $typeArr[0]['attrs']['extends'];
     }
