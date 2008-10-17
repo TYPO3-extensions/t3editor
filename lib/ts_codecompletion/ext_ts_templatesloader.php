@@ -46,6 +46,11 @@ require_once(PATH_t3lib.'class.t3lib_page.php');
 
 require_once ('class.ux_t3lib_tsparser_ext.php');
 
+/**
+ * loads the templates from the database so the codecompletion can display the predefined
+ * properties from other templates. All templates along the rootline are accumulated and sent
+ * in JSON to the client
+ */
 class extTsTemplatesLoader{
     
   // cache for the ts-setup in JSON-Format
@@ -53,65 +58,72 @@ class extTsTemplatesLoader{
   //private $finalArr = array();
   
   public function getJSONTree($pageId,$template_uid=0){
-  //global $SOBE,$BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
     global $tmpl,$tplRow;
     
-      if(!$this->jsonTS){
-          $tmpl = t3lib_div::makeInstance("ux_t3lib_tsparser_ext");        
-          $tmpl->tt_track = 0;        // Do not log time-performance information
-          $tmpl->init();
+    if(!$this->jsonTS){
+        $tmpl = t3lib_div::makeInstance("t3lib_tsparser_ext");        
+        $tmpl->tt_track = 0;        // Do not log time-performance information
+        $tmpl->init();
+    
+                        // Gets the rootLine
+        $sys_page = t3lib_div::makeInstance("t3lib_pageSelect");
+        $rootLine = $sys_page->getRootLine($pageId);
+        
+        $tplRow = $tmpl->ext_getFirstTemplate($pageId,0);        // Get the row of the first VISIBLE template of the page. whereclause like the frontend.
+        if (!is_array($tplRow))        {        // if there is no template...
+                throw new Exception("no template found on this page!");
+        }
+        
+        $templatesOnPage = $tmpl->ext_getAllTemplates($pageId,"");
+        $templatesOnPageArr = explode(",",$templatesOnPage);
+        if(count($templatesOnPageArr)== 0){
+           return ""; 
+        }
+        
+        // determine which template on the current page is currently edited
+        // but how can we tell the parser not to include this template?
+        /* 
+        else if(count($templatesOnPageArr)>1){
+            $settings = $GLOBALS['BE_USER']->getModuleData("web_ts","");
+            $templateUid = $settings['templatesOnPage'];
+        }else{
+            $templateUid = $templatesOnPage[0]['uid'];
+        }*/
+        
+        $tmpl->runThroughTemplates($rootLine,0);        // This generates the constants/config + hierarchy info for the template.
+        
+        // ts-setup & ts-constants of the currently edited template should not be included
+        // therefor we have to delete the last template from the stack
+        array_pop($tmpl->config);
+        array_pop($tmpl->constants);
 
-                          // Gets the rootLine
-          $sys_page = t3lib_div::makeInstance("t3lib_pageSelect");
-          $rootLine = $sys_page->getRootLine($pageId);
-          //debug($rootLine);
-          // ts-setup & ts-constants of the currently edited template should not be included
-          $templatesOnPage = $tmpl->ext_getAllTemplates($pageId,"");
-//debug($templatesOnPage); 
-          $templatesOnPageArr = explode(",",$templatesOnPage);
-          if(count($templatesOnPageArr)== 0){
-             return ""; 
-          }else if(count($templatesOnPageArr)>1){
-          $settings = $GLOBALS['BE_USER']->getModuleData("web_ts","");
-          $templateUid = $settings['templatesOnPage'];
-      }else{
-        $templateUid = $templatesOnPage[0]['uid'];
-      }
-      
-      $tmpl->currentTemplateUid = $templateUid;        
-      // stoefln end
-      $tmpl->runThroughTemplates($rootLine,0);        // This generates the constants/config + hierarchy info for the template.
-                  
-      $tplRow = $tmpl->ext_getFirstTemplate($pageId,0);        // Get the row of the first VISIBLE template of the page. whereclause like the frontend.
-      /*if (!is_array($tplRow))        {        // IF there was a template...
-              throw new Exception("no template found on this page!");
-      }*/
-      $tmpl->matchAlternative[] = 'dummydummydummydummydummydummydummydummydummydummydummy';        // This is just here to make sure that at least one element is in the array so that the tsparser actually uses this array to match.
-      //$tmpl->regexMode = $this->pObj->MOD_SETTINGS["ts_browser_regexsearch"];
-      // ??
-      //$tmpl->fixedLgd=$this->pObj->MOD_SETTINGS["ts_browser_fixedLgd"];
-      //$tmpl->matchAlternative = $this->pObj->MOD_SETTINGS['tsbrowser_conditions'];
-      $tmpl->linkObjects = TRUE;
-      $tmpl->ext_regLinenumbers = FALSE;
-      $tmpl->bType=$bType;
-      $tmpl->resourceCheck=1;
-      $tmpl->uplPath = PATH_site.$tmpl->uplPath;
-      $tmpl->removeFromGetFilePath = PATH_site;
-      $tmpl->generateConfig();
-      $this->jsonTS = $this->buildJSONTree($tmpl->setup);
+          
+        // some of the lines are not clear to me... do we need them?
+        //$tmpl->matchAlternative[] = 'dummydummydummydummydummydummydummydummydummydummydummy';        // This is just here to make sure that at least one element is in the array so that the tsparser actually uses this array to match.
+        //$tmpl->regexMode = $this->pObj->MOD_SETTINGS["ts_browser_regexsearch"];
+        // ??
+        //$tmpl->fixedLgd=$this->pObj->MOD_SETTINGS["ts_browser_fixedLgd"];
+        //$tmpl->matchAlternative = $this->pObj->MOD_SETTINGS['tsbrowser_conditions'];
+        $tmpl->linkObjects = TRUE;
+        $tmpl->ext_regLinenumbers = FALSE;
+        $tmpl->bType=$bType;
+        $tmpl->resourceCheck=1;
+        $tmpl->uplPath = PATH_site.$tmpl->uplPath;
+        $tmpl->removeFromGetFilePath = PATH_site;
+        $tmpl->generateConfig();
+        $this->jsonTS = $this->buildJSONTree($tmpl->setup);
     }
     return $this->jsonTS;
                 
   }
   private function buildJSONTree($setupArr){
-    
     $arr = $this->shrinkTreeRec($setupArr);
-    // is done at clientside now, cause there is less to transmit this way  
-    //$this->resolveReferencesRec($this->finalArray);
-    //return $this->finalArray;
     $json = t3lib_div::array2json($arr);
     return $json;
   }
+  
+  // there is a lot of information in the templates which we do not need (linenumbers,...)
+  // so we dont add them to the output
   private function shrinkTreeRec($arr){
     $sarr = array();
     while(list($key,$val)=each($arr)){
@@ -136,49 +148,7 @@ class extTsTemplatesLoader{
     }
     if(count($sarr)==0)return null;
     else return $sarr;
-  }/*
-  private function resolveReferencesRec(&$arr){
-    $out = array();
-    
-    foreach($arr as $key => $subArr){ 
-      if($subArr['v']){
-        $str = trim($subArr['v']);
-        // if there is a reference "<" character which is possibly part of the reference operator
-        // and its not e.g. a html-tag (with ">" in it)
-        if($str[0] == '<' && !strpos($str,">")){
-          // delete the trailing "<" and the trailing whitespaces, if then there is still a whitespace in the value its no path 
-          $path = trim(substr($str, 1));
-          if(!strpos($path," ")){
-            $arr[$key] = $this->getNode($path);
-          }
-          //array_push($this->finalArr,$subArr['v']);//$out
-        }
-      }
-      if($subArr['c']){
-        $this->resolveReferencesRec($subArr['c']);
-      }
-      // array_push($out,$subArr['c']);
-    }
-  } 
-  private function getNode($path){
-    debug($path);
-    $pathArr = explode('.',$path);
-    $tree = $this->finalArray;
-    for($i=0;i<count($pathArr);$i++){
-      $seq = $path[$i];
-      if($tree[$seq]){
-        if(!$tree[$seq]['c'])
-          $tree[$seq]['c'] = array();       
-      }else{
-        $tree[$seq] = array();
-        $tree[$seq]['c'] = array();
-      }
-      if(count($pathArr)==$i+1)
-        return $tree[$seq];
-      $tree = $tree[$seq]['c'];
-    }
-    return null;
-  } */
+  }
 }
 
 $pageId = intval(t3lib_div::_GP('id'));
@@ -186,10 +156,9 @@ $extTsTempl = new extTsTemplatesLoader();
 if($pageId){
   echo($extTsTempl->getJSONTree($pageId));
 }else echo("parameter \"id\" is missing!");
-/*if(defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['sysext/t3editor/class.tsTemplateSetup.php']) {
-        include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['sysext/t3editor/class.tsTemplateSetup.php']);
-}*/
 
 
-
+if(defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['sysext/t3editor/lib/codecompletion/ext_ts_templatesloader.php']) {
+        include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['sysext/t3editor/lib/codecompletion/ext_ts_templatesloader.php']);
+}
 ?>
