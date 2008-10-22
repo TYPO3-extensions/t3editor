@@ -107,7 +107,7 @@ var TsParser = function(tsRef,extTsObjTree){
   
   var tsTree = new TreeNode("");
   var currentLine = "";
-  var operators = new Array(":=", "=<", "<", ">", "=");
+  
      
   /** 
    * build Tree of TsObjects from beginning of editor to actual cursorPos
@@ -214,7 +214,8 @@ var TsParser = function(tsRef,extTsObjTree){
         if (currentNode.tagName == "BR") {
           // ignore comments, ...
           if(!stack.lastElementEquals('/*') && !stack.lastElementEquals('(') && !ignoreLine && !insideCondition) {           
-            // check if there is any operator in this line        
+            line = line.replace(/\s/g,"");
+            // check if there is any operator in this line
             var op = getOperator(line);
             if (op != -1) {
               // figure out the position of the operator
@@ -293,9 +294,17 @@ var TsParser = function(tsRef,extTsObjTree){
    * if there is none, return -1
    */
   function getOperator(line) {
+    var operators = new Array(":=", "=<", "<", ">", "=");
     for (var i=0; i<operators.length; i++) {
-      if (line.indexOf(operators[i]) != -1) {
-        return operators[i];
+      var op = operators[i];
+      if (line.indexOf(op) != -1) {
+        // check if there is some HTML in this line (simple check, however it's the only difference between a reference operator and HTML)
+        // we do this check only in case of the two operators "=<" and "<" since the delete operator would trigger our "HTML-finder"
+        if((op == "=<" || op == "<") && line.indexOf(">") != -1){
+            // if there is a ">" in the line suppose there's some HTML
+            return "=";
+        }
+        return op;
       }
     }
     return -1; 

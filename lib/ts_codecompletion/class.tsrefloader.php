@@ -47,6 +47,10 @@ class TsrefLoader{
         $typeArr = array();
         foreach($types as $type){
             $typeId = $type->getAttribute('id');
+            $typeName = $type->getAttribute('name');
+            if(!$typeName){
+                $typeName = $typeId;
+            }
             $properties = $type->getElementsByTagName('property');
             $propArr = array();
             foreach($properties as $property){
@@ -57,7 +61,7 @@ class TsrefLoader{
             }
             $typeArr[$typeId] = array();
             $typeArr[$typeId]['properties'] = $propArr;
-            $typeArr[$typeId]['name'] = $type->getAttribute('name');
+            $typeArr[$typeId]['name'] = $typeName;
             if($type->hasAttribute('extends')){
                 $typeArr[$typeId]['extends'] = $type->getAttribute('extends');
             }

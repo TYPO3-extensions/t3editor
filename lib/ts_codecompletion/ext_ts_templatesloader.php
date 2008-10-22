@@ -44,7 +44,7 @@ require_once ($BACK_PATH."template.php");
 require_once(PATH_t3lib.'class.t3lib_page.php');
 
 
-require_once ('class.ux_t3lib_tsparser_ext.php');
+
 
 /**
  * loads the templates from the database so the codecompletion can display the predefined
