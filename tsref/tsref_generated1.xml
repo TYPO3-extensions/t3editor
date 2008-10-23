@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2006 rel. 3 sp2 (http://www.altova.com) by Christian (schinkistan) -->
 <tsRef>
 	<type id="CARRAY" extends="stdWrap" name="CARRAY">
 		<property name="1" type="cObj">
@@ -23,15 +24,15 @@
 		</property>
 	</type>
 	<type id="CARRAY+TDParams" extends="CARRAY" name="CARRAY+TDParams">
-    <property name="TDParams" type="string">
-      <description><![CDATA[&lt;TD&gt;-params 
+		<property name="TDParams" type="string">
+			<description><![CDATA[&lt;TD&gt;-params 
       NOTE: This applies ONLY if "CARRAY +TDParams" is set to be data type
 This property is used only in some cases where CARRAY is used. Please look out for a note about that in the various cases.
 ]]></description>
-      <default><![CDATA[
+			<default><![CDATA[
 ]]></default>
-    </property>	
-    </type>		
+		</property>
+	</type>
 	<type id="CASE" extends="cObjArray" name="CASE">
 		<property name="default" type="cObj">
 			<description><![CDATA[The default object, if not defined, nothing is returned in the default case.
@@ -73,7 +74,7 @@ helloWorld.value = this item will be returned
 			<default><![CDATA[1]]></default>
 		</property>
 		<property name="wrap" type="wrap">
-			<description><![CDATA[ stdwrap property "wrap"
+			<description><![CDATA[ 
 ]]></description>
 			<default><![CDATA[ | <BR>]]></default>
 		</property>
@@ -91,7 +92,7 @@ helloWorld.value = this item will be returned
 ]]></default>
 		</property>
 		<property name="wrap" type="wrap">
-			<description><![CDATA[ stdwrap property "wrap"
+			<description><![CDATA[
 ]]></description>
 			<default><![CDATA[
 ]]></default>
@@ -1387,7 +1388,7 @@ The maximum filesize of documents to be read is set to 1024 kb internally!]]></d
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="linkWrap" type="linkWrap">
+		<property name="linkWrap" type="wrap">
 			<description><![CDATA[(before ".wrap")]]></description>
 			<default><![CDATA[
 ]]></default>
@@ -1423,22 +1424,11 @@ The maximum filesize of documents to be read is set to 1024 kb internally!]]></d
 			<description><![CDATA[Alternative layout for radiobuttons]]></description>
 			<default><![CDATA[the "layout"-property]]></default>
 		</property>
-		<property name="REQ" type="boolean">
-			<description><![CDATA[Defines if required-fields should be checked and marked up]]></description>
+		<property name="REQ" type="REQ">
+			<description><![CDATA[boolean 
+			Defines if required-fields should be checked and marked up]]></description>
 			<default><![CDATA[
 ]]></default>
-		</property>
-		<property name="REQ.fieldWrap" type="stdWrap">
-			<description><![CDATA[Field: Wraps the fields, but for reuired fields]]></description>
-			<default><![CDATA[the "fieldWrap"-property]]></default>
-		</property>
-		<property name="REQ.labelWrap" type="stdWrap">
-			<description><![CDATA[Labels: Wraps the label, but for reuired fields]]></description>
-			<default><![CDATA[the "labelWrap"-property]]></default>
-		</property>
-		<property name="REQ.layout" type="string">
-			<description><![CDATA[The same as "layout" above, but for reuired fields]]></description>
-			<default><![CDATA[the "layout"-property]]></default>
 		</property>
 		<property name="accessibility" type="boolean">
 			<description><![CDATA[If set, then the form will be compliant with accessibility guidelines (XHTML compliant). This includes:
@@ -1471,7 +1461,7 @@ NOTE: May be overridden by the property override feature of the formdata (see ab
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="data" type="string /stdWrap">
+		<property name="data" type="stdWrap">
 			<description><![CDATA[This is the data that sets up the form. See above.
 "||" can be used instead of linebreaks]]></description>
 			<default><![CDATA[
@@ -1570,7 +1560,7 @@ NOTE: May be overridden by the property override feature of the formdata (see ab
 NOTE: May be overridden by the property override feature of the formdata (see above)]]></description>
 			<default><![CDATA[No message]]></default>
 		</property>
-		<property name="hiddenFields" type="[array of cObject]">
+		<property name="hiddenFields" type="cObjArray">
 			<description><![CDATA[Used to set hiddenFields from TS.
 
 Example:
@@ -1581,7 +1571,7 @@ This makes a hidden-field with the name “pid” and value “2”.]]></descrip
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="image" type="IMAGE (cObject)">
+		<property name="image" type="IMAGE">
 			<description><![CDATA[If this is a valid image the submitbutton is rendered as this image!!
 
 NOTE: CurrentValue is set to the caption-label before generating the image.]]></description>
@@ -1605,8 +1595,9 @@ You can also use the marker ###COMMENT### which is ALSO the label value inserted
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="locationData" type="boolean / string">
-			<description><![CDATA[If this value is true, then a hidden-field called "locationData" is added to the form. This field wil be loaded with a value like this:
+		<property name="locationData" type="string">
+			<description><![CDATA[boolean / string
+			If this value is true, then a hidden-field called "locationData" is added to the form. This field wil be loaded with a value like this:
 [page id]:[current record table]:[current record id]
 For example, if a formfield is inserted on page with uid = "100", as a page-content item from the table "tt_content" with id "120", then the value would be "100:tt_content:120".
 The value is use by eg. the cObject SEARCHRESULT. If the value $GLOBALS["HTTP_POST_VARS"]["locationData"] is detected here, the search is done as if it was performed on this page! This is very usefull if you want a search functionality implemented on a page with the "stype" field set to "L1" which means that the search is carried out from the first level in the rootline. 
@@ -1640,8 +1631,9 @@ The wrap attributes can also be disabled on a per-field basis by using the speci
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="params" type="form-element tag parameters">
-			<description><![CDATA[Extra parameters to form elements
+		<property name="params" type="string">
+			<description><![CDATA[form-element tag parameters
+			Extra parameters to form elements
 
 Example:
 params = style=”width:200px;”
@@ -1657,11 +1649,12 @@ This sets the default to 200 px width, but excludes check-boxes and sets textare
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="recipient" type="(list of) string /stdWrap">
-			<description><![CDATA[Email recipient of the formmail content (generates the hiddenfield "recipient")]]></description>
+		<property name="recipient" type="stdWrap">
+			<description><![CDATA[(list of) string /stdWrap
+			Email recipient of the formmail content (generates the hiddenfield "recipient")]]></description>
 			<default><![CDATA[No email]]></default>
 		</property>
-		<property name="redirect" type="string /stdWrap">
+		<property name="redirect" type="stdWrap">
 			<description><![CDATA[URL to redirect to (generates the hidden field "redirect")
 
 Integer: this is regarded to be a page in TYPO3
@@ -1706,104 +1699,169 @@ If value is tx_myextension[input][  |  ]  then the fieldname "email" would be
 ]]></default>
 		</property>
 	</type>
+	<type id="REQ">
+		<property name="fieldWrap" type="stdWrap">
+			<description><![CDATA[Field: Wraps the fields, but for reuired fields]]></description>
+			<default><![CDATA[the "fieldWrap"-property]]></default>
+		</property>
+		<property name="labelWrap" type="stdWrap">
+			<description><![CDATA[Labels: Wraps the label, but for reuired fields]]></description>
+			<default><![CDATA[the "labelWrap"-property]]></default>
+		</property>
+		<property name="layout" type="string">
+			<description><![CDATA[The same as "layout" above, but for reuired fields]]></description>
+			<default><![CDATA[the "layout"-property]]></default>
+		</property>
+	</type>
 	<type id="FRAMESET">
-		<property name="1,2,3,4..." type="frameObj">
+		<property name="1" type="FRAME">
 			<description><![CDATA[Configuration of frames and nested framesets.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="cols" type="&lt;frameset&gt;-data:cols">
-			<description><![CDATA[Cols]]></description>
+		<property name="2" type="FRAME">
+			<description><![CDATA[Configuration of frames and nested framesets.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="params" type="&lt;frameset&gt;-params">
-			<description><![CDATA[Example:
+		<property name="3" type="FRAME">
+			<description><![CDATA[Configuration of frames and nested framesets.]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="4" type="FRAME">
+			<description><![CDATA[Configuration of frames and nested framesets.]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="cols" type="string">
+			<description><![CDATA[&lt;frameset&gt;-data:cols
+			Cols]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="params" type="string">
+			<description><![CDATA[&lt;frameset&gt;-params
+			Example:
 border="0" framespacing="0" frameborder="NO"]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="rows" type="&lt;frameset&gt;-data:rows">
-			<description><![CDATA[Rows]]></description>
+		<property name="rows" type="string">
+			<description><![CDATA[&lt;frameset&gt;-data:rows
+			Rows]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
 	</type>
-	<type id="FRAMESET.X(number)">
-		<property name="name" type="&lt;frame&gt;-data:name">
-			<description><![CDATA[Manually set name of frame
+	<type id="FRAME">
+		<property name="name" type="string">
+			<description><![CDATA[&lt;frame&gt;-data:name
+			Manually set name of frame
 
 NOTE: Is set automatically and should not be overridden under normal conditions!]]></description>
 			<default><![CDATA[value of ".obj"]]></default>
 		</property>
-		<property name="obj" type="pointer to toplevel object-name">
-			<description><![CDATA[toplevel object-name of a PAGE / FRAMESET
+		<property name="obj" type="string">
+			<description><![CDATA[pointer to toplevel object-name
+			toplevel object-name of a PAGE / FRAMESET
 
 Example:
 "left", "page", "frameset"]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="options" type="url-parameters">
-			<description><![CDATA[Example:
+		<property name="options" type="string">
+			<description><![CDATA[url-parameters
+			Example:
 print=1&othervar=anotherthing
 would add '&print=1&othervar=anotherthing' to the ".src"-content (if not ".src" is set manually!!)]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="params" type="&lt;frame&gt;-params">
-			<description><![CDATA[Example:
+		<property name="params" type="string">
+			<description><![CDATA[&lt;frame&gt;-params
+			Example:
 scrolling="AUTO" noresize frameborder="NO"]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="src" type="&lt;frame&gt;-data:src">
-			<description><![CDATA[Manually set the src of the frame
+		<property name="src" type="string">
+			<description><![CDATA[&lt;frame&gt;-data:src
+			Manually set the src of the frame
 
 NOTE: Is set automatically and should not be overridden under normal conditions!]]></description>
 			<default><![CDATA[could be index.php?$id&$type ]]></default>
 		</property>
 	</type>
+	<type id="GifBuilderObj">
+		<property name="if" type="if">
+			<description><![CDATA[.if (->if)  is a property of all gifbuilder-objects. If the property is present and NOT set, the object is NOT rendered! This corresponds to the functionallity of ".if" of the stdWrap-function.]]></description>
+		</property>
+	</type>
 	<type id="GIFBUILDER">
-		<property name="1,2,3,4..." type="GifBuilderObj">
+		<property name="1" type="GifBuilderObj">
 			<description><![CDATA[.if (->if)  is a property of all gifbuilder-objects. If the property is present and NOT set, the object is NOT rendered! This corresponds to the functionallity of ".if" of the stdWrap-function.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="XY" type="x,y +calc">
-			<description><![CDATA[Size of the gif-file. ]]></description>
+		<property name="2" type="GifBuilderObj">
+			<description><![CDATA[.if (->if)  is a property of all gifbuilder-objects. If the property is present and NOT set, the object is NOT rendered! This corresponds to the functionallity of ".if" of the stdWrap-function.]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="3" type="GifBuilderObj">
+			<description><![CDATA[.if (->if)  is a property of all gifbuilder-objects. If the property is present and NOT set, the object is NOT rendered! This corresponds to the functionallity of ".if" of the stdWrap-function.]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="4" type="GifBuilderObj">
+			<description><![CDATA[.if (->if)  is a property of all gifbuilder-objects. If the property is present and NOT set, the object is NOT rendered! This corresponds to the functionallity of ".if" of the stdWrap-function.]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="XY" type="string">
+			<description><![CDATA[x,y +calc
+			Size of the gif-file. ]]></description>
 			<default><![CDATA[100,20]]></default>
 		</property>
-		<property name="backColor" type="GraphicColor ">
-			<description><![CDATA[Background color for the gif]]></description>
+		<property name="backColor" type="string">
+			<description><![CDATA[GraphicColor 
+			Background color for the gif]]></description>
 			<default><![CDATA[white]]></default>
 		</property>
-		<property name="format" type="&quot;gif&quot; / &quot;jpg&quot;">
-			<description><![CDATA[Output type. 
+		<property name="format" type="string">
+			<description><![CDATA[&quot;gif&quot; / &quot;jpg&quot;
+			Output type. 
 "jpg"/"jpeg" = jpg-image]]></description>
 			<default><![CDATA[gif]]></default>
 		</property>
-		<property name="maxHeight" type="pixels">
-			<description><![CDATA[Maximal heigth of gif-file]]></description>
+		<property name="maxHeight" type="int">
+			<description><![CDATA[pixels
+			Maximal heigth of gif-file]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="maxWidth" type="pixels">
-			<description><![CDATA[Maximal width of gif-file]]></description>
+		<property name="maxWidth" type="int">
+			<description><![CDATA[pixels
+			Maximal width of gif-file]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="offset" type="x,y +calc">
-			<description><![CDATA[Offset all objects on the gif.]]></description>
+		<property name="offset" type="string">
+			<description><![CDATA[x,y +calc
+			Offset all objects on the gif.]]></description>
 			<default><![CDATA[0,0]]></default>
 		</property>
-		<property name="quality" type="posint (10-100)">
-			<description><![CDATA[JPG-quality (if “.format” = jpg/jpeg)]]></description>
+		<property name="quality" type="int">
+			<description><![CDATA[posint (10-100)
+			JPG-quality (if “.format” = jpg/jpeg)]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="reduceColors" type="posint (1-255)">
-			<description><![CDATA[Reduce the number of colors (if gif-file)]]></description>
+		<property name="reduceColors" type="int">
+			<description><![CDATA[posint (1-255)
+			Reduce the number of colors (if gif-file)]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -1813,8 +1871,9 @@ If you render text you should leave the niceText option OFF as the result with p
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="transparentColor" type="HTMLColor /stdWrap">
-			<description><![CDATA[Specify a color that should be transparent
+		<property name="transparentColor" type="stdWrap">
+			<description><![CDATA[HTMLColor /stdWrap 
+			Specify a color that should be transparent
 
 Example-values:
 #ffffcc 
@@ -1829,205 +1888,151 @@ NOTE: You may experience that this doesn't work if you use reduceColors-option o
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="workArea" type="x,y,w,h + calc">
-			<description><![CDATA[Define the workarea on the giffile. All the GifBuilderObj's will see this as the dimensions of the gif-file regarding alignment, overlaying of images an so on. Only will TEXT-objects exceeding the boundaries of the workarea print outside this area.]]></description>
+		<property name="workArea" type="string">
+			<description><![CDATA[x,y,w,h + calc
+			Define the workarea on the giffile. All the GifBuilderObj's will see this as the dimensions of the gif-file regarding alignment, overlaying of images an so on. Only will TEXT-objects exceeding the boundaries of the workarea print outside this area.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
 	</type>
-	<type id="GIFBUILDER.X(GBObj).ADJUST">
-		<property name="autoLevels" type="-">
-			<description><![CDATA[
-]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="inputLevels" type="low,high">
-			<description><![CDATA[
-]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="outputLevels" type="low, high">
-			<description><![CDATA[
+	<type id="GB_ADJUST" extends="GifBuilderObj">
+		<property name="value" type="string">
+			<description><![CDATA[This lets you adjust the input-levels like in Photoshops "levels"-dialog. If you need to adjust gamma, look at the EFFECT-object.
+Example:
+
+20 = ADJUST
+20.value = inputLevels = 13,230
+
+properties:
+
+inputLevels: low,high
+outputLevels: low, high
+autoLevels: -
 ]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
 	</type>
-	<type id="GIFBUILDER.X(GBObj).BOX">
-		<property name="align" type="VHalign">
-			<description><![CDATA[
+	<type id="GB_BOX" extends="GifBuilderObj">
+		<property name="align" type="string">
+			<description><![CDATA[VHalign
 ]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="color" type="GraphicColor">
-			<description><![CDATA[fill-color]]></description>
+		<property name="color" type="string">
+			<description><![CDATA[GraphicColor
+			fill-color]]></description>
 			<default><![CDATA[black]]></default>
 		</property>
-		<property name="dimensions" type="x,y,w,h +calc">
-			<description><![CDATA[Dimensions of a filled box. 
+		<property name="dimensions" type="string">
+			<description><![CDATA[x,y,w,h +calc
+			Dimensions of a filled box. 
 x,y    is the offset. 
 w,h    is the dimensions. Dimensions of 1 will result in 1-pixel wide lines!]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
 	</type>
-	<type id="GIFBUILDER.X(GBObj).CROP">
-		<property name="align" type="VHalign">
-			<description><![CDATA[
+	<type id="GB_CROP" extends="GifBuilderObj">
+		<property name="align" type="string">
+			<description><![CDATA[VHalign
 ]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="backColor" type="GraphicColor">
-			<description><![CDATA[
+		<property name="backColor" type="string">
+			<description><![CDATA[GraphicColor
 ]]></description>
 			<default><![CDATA[The original backColor]]></default>
 		</property>
-		<property name="crop" type="x,y,v,h + calc">
-			<description><![CDATA[x,y is offset of the crop-frame, 
+		<property name="crop" type="string">
+			<description><![CDATA[x,y,v,h + calc
+			x,y is offset of the crop-frame, 
 v,h  is the dimensions]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
 	</type>
-	<type id="GIFBUILDER.X(GBObj).EFFECT">
-		<property name="blur" type="1-99">
-			<description><![CDATA[
-]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="charcoal" type="0-100">
-			<description><![CDATA[
-]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="colors" type="2-255">
-			<description><![CDATA[
-]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="edge" type="0-99">
-			<description><![CDATA[
-]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="emboss" type="-">
-			<description><![CDATA[
-]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="flip" type="-">
-			<description><![CDATA[Vertical flipping]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="flop" type="-">
-			<description><![CDATA[Horizontal flipping]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="gamma" type="0.5 - 3.0">
-			<description><![CDATA[
-]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="gray" type="-">
-			<description><![CDATA[
-]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="invert" type="-">
-			<description><![CDATA[invert the colors]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="rotate" type="0-360">
-			<description><![CDATA[Rotation]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="sharpen" type="1-99">
-			<description><![CDATA[
-]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="shear" type="-90 - 90">
-			<description><![CDATA[Horizontal shearing]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="solarize" type="0-99">
-			<description><![CDATA[
-]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="swirl" type="0-100">
-			<description><![CDATA[
-]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="wave" type="ampli , length ">
-			<description><![CDATA[
+	<type id="GB_EFFECT" extends="GifBuilderObj">
+		<property name="value" type="string">
+			<description><![CDATA[.value = [Varnavn] = [value] | [Varnavn] = [value]
+
+Example:
+20 = EFFECT
+20.value = gamme=1.3 | flip | rotate=180
+
+
+gamma: 0.5 - 3.0
+blur: 1-99
+sharpen: 1-99
+solarize: 0-99
+swirl: 0-100
+wave: ampli , length
+charcoal: 0-100
+gray: -
+edge: 0-99
+emboss: -
+flip: - (Vertical flipping)
+flop: - (Horizontal flipping)
+rotate: 0-360 (Rotation)
+colors: 2-255
+shear: -90 - 90 (Horizontal shearing)
+invert: - (invert the colors)
 ]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
 	</type>
-	<type id="GIFBUILDER.X(GBObj).EMBOSS">
-		<property name="blur" type="posint (1-99)">
-			<description><![CDATA[Blurring of the shadow. Above 40 only values of 40,50,60,70,80,90 means something.]]></description>
+	<type id="GB_EMBOSS" extends="GifBuilderObj">
+		<property name="blur" type="int">
+			<description><![CDATA[posint (1-99)
+			Blurring of the shadow. Above 40 only values of 40,50,60,70,80,90 means something.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="highColor" type="GraphicColor">
-			<description><![CDATA[Upper border-color]]></description>
+		<property name="highColor" type="string">
+			<description><![CDATA[GraphicColor
+			Upper border-color]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="intensity" type="posint(0-100)">
-			<description><![CDATA[How "massive" the emboss is. This value can - if it has a high value combined with a blurred shadow - create a kind of soft-edged outline.]]></description>
+		<property name="intensity" type="int">
+			<description><![CDATA[posint(0-100)
+			How "massive" the emboss is. This value can - if it has a high value combined with a blurred shadow - create a kind of soft-edged outline.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="lowColor" type="GraphicColor">
-			<description><![CDATA[lower border-color]]></description>
+		<property name="lowColor" type="string">
+			<description><![CDATA[GraphicColor
+			lower border-color]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="offset" type="x,y">
-			<description><![CDATA[Offset of the emboss]]></description>
+		<property name="offset" type="string">
+			<description><![CDATA[x,y
+			Offset of the emboss]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="opacity" type="posint (1-100)">
-			<description><![CDATA[Opacity (transparency^-1) 
+		<property name="opacity" type="int">
+			<description><![CDATA[posint (1-100)
+			Opacity (transparency^-1) 
 100% opacity = 0% transparency). Only active with a value for blur.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="textObjNum" type="pos-int">
-			<description><![CDATA[Must point to the TEXT-object if these shadow-properties are not properties to a TEXT-object directly ("stand-alone-shadow"). Then the shadow needs to know which TEXT-object it should be a shadow of!
+		<property name="textObjNum" type="int">
+			<description><![CDATA[pos-int
+			Must point to the TEXT-object if these shadow-properties are not properties to a TEXT-object directly ("stand-alone-shadow"). Then the shadow needs to know which TEXT-object it should be a shadow of!
 If - on the other hand - the shadow is a property to a text-object, this property is not needed.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
 	</type>
-	<type id="GIFBUILDER.X(GBObj).IMAGE">
-		<property name="align" type="VHalign">
-			<description><![CDATA[
+	<type id="GB_IMAGE" extends="GifBuilderObj">
+		<property name="align" type="string">
+			<description><![CDATA[VHalign
 ]]></description>
 			<default><![CDATA[
 ]]></default>
@@ -2042,104 +2047,117 @@ If - on the other hand - the shadow is a property to a text-object, this propert
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="offset" type="x,y +calc">
-			<description><![CDATA[Offset ]]></description>
+		<property name="offset" type="string">
+			<description><![CDATA[x,y +calc
+			Offset ]]></description>
 			<default><![CDATA[0,0]]></default>
 		</property>
-		<property name="tile" type="x,y">
-			<description><![CDATA[tile x,y times. 
+		<property name="tile" type="string">
+			<description><![CDATA[x,y
+			tile x,y times. 
 Maximum times is 20 each direction. If you need more, use a larger image.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
 	</type>
-	<type id="GIFBUILDER.X(GBObj).OUTLINE">
-		<property name="color" type="GraphicColor">
-			<description><![CDATA[Outline color]]></description>
+	<type id="GB_OUTLINE" extends="GifBuilderObj">
+		<property name="color" type="string">
+			<description><![CDATA[GraphicColor
+			Outline color]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="textObjNum" type="pos-int">
-			<description><![CDATA[Must point to the TEXT-object if these shadow-properties are not properties to a TEXT-object directly ("stand-alone-shadow"). Then the shadow needs to know which TEXT-object it should be a shadow of!
+		<property name="textObjNum" type="int">
+			<description><![CDATA[pos-int
+			Must point to the TEXT-object if these shadow-properties are not properties to a TEXT-object directly ("stand-alone-shadow"). Then the shadow needs to know which TEXT-object it should be a shadow of!
 If - on the other hand - the shadow is a property to a text-object, this property is not needed.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="thickness" type="x,y">
-			<description><![CDATA[Thickness in each direction, range 1-2]]></description>
+		<property name="thickness" type="string">
+			<description><![CDATA[x,y
+			Thickness in each direction, range 1-2]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
 	</type>
-	<type id="GIFBUILDER.X(GBObj).SCALE">
-		<property name="height" type="pixels + calc">
-			<description><![CDATA[
+	<type id="GB_SCALE" extends="GifBuilderObj">
+		<property name="height" type="string">
+			<description><![CDATA[pixels + calc
 ]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="params" type="ImageMagickParams">
-			<description><![CDATA[
+		<property name="params" type="string">
+			<description><![CDATA[ImageMagickParams
 ]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="width" type="pixels + calc">
-			<description><![CDATA[
+		<property name="width" type="string">
+			<description><![CDATA[pixels + calc
 ]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
 	</type>
-	<type id="GIFBUILDER.X(GBObj).SHADOW">
-		<property name="blur" type="posint (1-99)">
-			<description><![CDATA[Blurring of the shadow. Above 40 only values of 40,50,60,70,80,90 means something.
+	<type id="GB_SHADOW" extends="GifBuilderObj">
+		<property name="blur" type="int">
+			<description><![CDATA[posint (1-99)
+			Blurring of the shadow. Above 40 only values of 40,50,60,70,80,90 means something.
 
 NOTE: Unfortunately the blurring capabilities of ImageMagick is not very mature in the version 4.2.9. This is addressed in the later version 5.2.0 where a gaussian blur-function is added. BUT as we do cannot use the latest ImageMagick development yet, this is not utilized so far.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="color" type="GraphicColor">
-			<description><![CDATA[Shadow color]]></description>
+		<property name="color" type="string">
+			<description><![CDATA[GraphicColor
+			Shadow color]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="intensity" type="posint(0-100)">
-			<description><![CDATA[How "massive" the shadow is. This value can - if it has a high value combined with a blurred shadow - create a kind of soft-edged outline.]]></description>
+		<property name="intensity" type="int">
+			<description><![CDATA[posint(0-100)
+			How "massive" the shadow is. This value can - if it has a high value combined with a blurred shadow - create a kind of soft-edged outline.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="offset" type="x,y">
-			<description><![CDATA[Shadow offset]]></description>
+		<property name="offset" type="string">
+			<description><![CDATA[x,y
+			Shadow offset]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="opacity" type="posint (1-100)">
-			<description><![CDATA[Opacity (transparency^-1) 
+		<property name="opacity" type="int">
+			<description><![CDATA[posint (1-100) 
+			Opacity (transparency^-1) 
 100% opacity = 0% transparency). Only active with a value for blur.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="textObjNum" type="pos-int">
-			<description><![CDATA[Must point to the TEXT-object if these shadow-properties are not properties to a TEXT-object directly ("stand-alone-shadow"). Then the shadow needs to know which TEXT-object it should be a shadow of!
+		<property name="textObjNum" type="int">
+			<description><![CDATA[pos-int
+			Must point to the TEXT-object if these shadow-properties are not properties to a TEXT-object directly ("stand-alone-shadow"). Then the shadow needs to know which TEXT-object it should be a shadow of!
 If - on the other hand - the shadow is a property to a text-object, this property is not needed.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
 	</type>
-	<type id="GIFBUILDER.X(GBObj).TEXT">
-		<property name="align" type="align">
-			<description><![CDATA[Alignment of the text]]></description>
+	<type id="GB_TEXT" extends="GifBuilderObj">
+		<property name="align" type="string">
+			<description><![CDATA[align 
+			Alignment of the text]]></description>
 			<default><![CDATA[left]]></default>
 		</property>
-		<property name="angle" type="degree">
-			<description><![CDATA[Rotation degrees of the text. 
+		<property name="angle" type="string">
+			<description><![CDATA[degree
+			Rotation degrees of the text. 
 
 NOTE: Angle is not available if spacing/wordSpacing is set.]]></description>
 			<default><![CDATA[0
 Range: -90 til 90]]></default>
 		</property>
-		<property name="antiAlias" type="Boolean">
+		<property name="antiAlias" type="boolean">
 			<description><![CDATA[FreeType antialiasing. Notice, the default mode is "on"!
 
 Note: This option is not available if .niceText is enabled]]></description>
@@ -2149,22 +2167,24 @@ Note: This option is not available if .niceText is enabled]]></description>
 			<description><![CDATA[If set, HTML-tags in the string inserted are NOT removed. Any other way HTML-code is removed by default!]]></description>
 			<default><![CDATA[0]]></default>
 		</property>
-		<property name="emboss" type="GifBuilderObjEMBOSS">
+		<property name="emboss" type="GB_EMBOSS">
 			<description><![CDATA[
 ]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="fontColor" type="GraphicColor /stdWrap">
-			<description><![CDATA[Font color]]></description>
+		<property name="fontColor" type="stdWrap">
+			<description><![CDATA[GraphicColor /stdWrap
+			Font color]]></description>
 			<default><![CDATA[black]]></default>
 		</property>
-		<property name="fontFile" type="resource">
+		<property name="fontFile" type="string">
 			<description><![CDATA[Font face (truetype font you can upload!!)]]></description>
 			<default><![CDATA[Nimbus (Arial-clone)]]></default>
 		</property>
-		<property name="fontSize" type="posint">
-			<description><![CDATA[Font size]]></description>
+		<property name="fontSize" type="int">
+			<description><![CDATA[posint
+			Font size]]></description>
 			<default><![CDATA[12]]></default>
 		</property>
 		<property name="hide" type="boolean">
@@ -2183,14 +2203,16 @@ This feature may be used if you need a shadow-object to base a shadow on the tex
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="iterations" type="posint">
-			<description><![CDATA[How many times the text should be "printed" onto it self. This will add the effect of bold text.
+		<property name="iterations" type="int">
+			<description><![CDATA[posint
+			How many times the text should be "printed" onto it self. This will add the effect of bold text.
 
 Note: This option is not available if .niceText is enabled]]></description>
 			<default><![CDATA[1]]></default>
 		</property>
-		<property name="maxWidth" type="pixels">
-			<description><![CDATA[Sets the maximum width in pixels, the text must be. Reduces the fontSize if the text does not fit within this width.
+		<property name="maxWidth" type="int">
+			<description><![CDATA[pixels
+			Sets the maximum width in pixels, the text must be. Reduces the fontSize if the text does not fit within this width.
 
 Does not support setting alternative fontSizes in splitRendering options.
 
@@ -2211,27 +2233,74 @@ Some properties:
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="offset" type="x,y +calc">
-			<description><![CDATA[Offset of the text]]></description>
+		<property name="offset" type="string">
+			<description><![CDATA[x,y +calc
+			Offset of the text]]></description>
 			<default><![CDATA[0,0]]></default>
 		</property>
-		<property name="outline" type="GifBuilderObjOUTLINE">
+		<property name="outline" type="GB_OUTLINE">
 			<description><![CDATA[
 ]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="shadow" type="GifBuilderObjSHADOW">
+		<property name="shadow" type="GB_SHADOW">
 			<description><![CDATA[
 ]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="spacing" type="posint">
-			<description><![CDATA[Pixel-distance between letters. This may render ugly!]]></description>
+		<property name="spacing" type="int">
+			<description><![CDATA[posint
+			Pixel-distance between letters. This may render ugly!]]></description>
 			<default><![CDATA[0]]></default>
 		</property>
-		<property name="splitRendering.compX" type="">
+		<property name="splitRendering.compX" type="string">
+			<description><![CDATA[Split the rendering of a string into separate processes with individual configurations. By this method a certain range of characters can be rendered with another font face or size. This is very useful if you want to use separate fonts for strings where you have latin characters combined with eg. Japanese and there is a separate font file for each.
+You can also render keywords in another font/size/color.
+
+Properties:
+splitRendering.compX = Additional pixelspace between parts, x direction
+splitRendering.compY = Additional pixelspace between parts, y direction
+splitRendering.[array] = keyword  [charRange, highlightWord]
+splitRendering.[array] {
+  fontFile = Alternative font file for this rendering
+  fontSize = Alternative font size for this rendering
+  color = Alternative color for this rendering, works ONLY without “niceText”
+  xSpaceBefore = x-Space before this part
+  xSpaceAfter = x-Space after this part
+  ySpaceBefore = y-Space before this part
+  ySpaceAfter =  y-Space after this part
+}
+
+Keyword: charRange
+splitRendering.[array].value = Commaseparated list of character ranges (eg. “100-200”) given as Unicode character numbers. The list accepts optional starting and ending points, eg. “ - 200” or “ 200 -” and single values, eg. “65, 66, 67”
+
+Keyword: highlightWord
+splitRendering.[array].value = Word to highlight, makes a case sensitive search for this.
+
+Limitations:
+The pixelcompensation values are not corrected for scale factor used with niceText. Basically this means that when niceText is used, these values will have only the half effect.When word spacing is used the “highlightWord” mode doesn't work.The color override works only without “niceText”.
+
+Example:
+  10.splitRendering.compX = 2
+  10.splitRendering.compY = -2
+  10.splitRendering.10 = charRange
+  10.splitRendering.10 {
+    value = 200-380 , 65, 66
+    fontSize = 50
+    fontFile =  t3lib/fonts/nimbus.ttf
+    xSpaceBefore = 30
+  }
+  10.splitRendering.20 = highlightWord
+  10.splitRendering.20 {
+    value = TheWord
+    color = red
+  }]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="splitRendering.compY" type="string">
 			<description><![CDATA[Split the rendering of a string into separate processes with individual configurations. By this method a certain range of characters can be rendered with another font face or size. This is very useful if you want to use separate fonts for strings where you have latin characters combined with eg. Japanese and there is a separate font file for each.
 You can also render keywords in another font/size/color.
 
@@ -2291,22 +2360,53 @@ The cObj->data-array is loaded with the page-record, if for example the GIFBUILD
 			<default><![CDATA[= ".spacing"*2]]></default>
 		</property>
 	</type>
-	<type id="GIFBUILDER.X(GBObj).WORKAREA">
-		<property name="clear" type="(isset)">
+	<type id="GB_WORKAREA" extends="GifBuilderObj">
+		<property name="clear" type="string">(isset)
 			<description><![CDATA[
 ]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="set" type="x,y,w,h + calc">
-			<description><![CDATA[
+		<property name="set" type="string">
+			<description><![CDATA[x,y,w,h + calc
+			Sets another workarea
 ]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
 	</type>
 	<type id="HMENU">
-		<property name="(1 / 2 / 3 /...)" type="menuObj">
+		<property name="1" type="mObj">
+			<description><![CDATA[Required!
+Defines which menuObj that should render the menuitems on the various levels. 
+1 is the first level, 2 is the second level, 3 is the third level, 4 is ....
+
+Example:
+temp.sidemenu = HMENU
+temp.sidemenu.1 = GMENU  ]]></description>
+			<default><![CDATA[ (no menu)]]></default>
+		</property>
+		<property name="2" type="mObj">
+			<description><![CDATA[Required!
+Defines which menuObj that should render the menuitems on the various levels. 
+1 is the first level, 2 is the second level, 3 is the third level, 4 is ....
+
+Example:
+temp.sidemenu = HMENU
+temp.sidemenu.1 = GMENU  ]]></description>
+			<default><![CDATA[ (no menu)]]></default>
+		</property>
+		<property name="3" type="mObj">
+			<description><![CDATA[Required!
+Defines which menuObj that should render the menuitems on the various levels. 
+1 is the first level, 2 is the second level, 3 is the third level, 4 is ....
+
+Example:
+temp.sidemenu = HMENU
+temp.sidemenu.1 = GMENU  ]]></description>
+			<default><![CDATA[ (no menu)]]></default>
+		</property>
+		<property name="4" type="mObj">
 			<description><![CDATA[Required!
 Defines which menuObj that should render the menuitems on the various levels. 
 1 is the first level, 2 is the second level, 3 is the third level, 4 is ....
@@ -2323,13 +2423,15 @@ Notice: This works only for special=language.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="alwaysActivePIDlist" type="list of integers">
-			<description><![CDATA[This is a list of page UID numbers that will always be regarded as active menu items and thereby automatically opened regardless of the rootline.]]></description>
+		<property name="alwaysActivePIDlist" type="intList">
+			<description><![CDATA[List of Integers
+			This is a list of page UID numbers that will always be regarded as active menu items and thereby automatically opened regardless of the rootline.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="begin" type="int +calc">
-			<description><![CDATA[The first item in the menu. 
+		<property name="begin" type="int">
+			<description><![CDATA[int +calc
+			The first item in the menu. 
 
 Example:
 This results in a menu, where the first two items are skipped starting with item number 3:
@@ -2345,12 +2447,14 @@ Default is "0" which gives us a menu of the very first pages on the site.
 If the value is < 0, entryLevel is chosen from "behind" in the rootLine. Thus "-1" is a menu with items from the outermost level, "-2" is the level before the outermost...]]></description>
 			<default><![CDATA[0]]></default>
 		</property>
-		<property name="excludeDoktypes" type="list of integers">
-			<description><![CDATA[Enter the list of page document types (doktype) to exclude from menus. By default pages that are “not in menu” (5) are excluded and those marked for backend user access only (6). ]]></description>
+		<property name="excludeDoktypes" type="intList">
+			<description><![CDATA[list of integers
+			Enter the list of page document types (doktype) to exclude from menus. By default pages that are “not in menu” (5) are excluded and those marked for backend user access only (6). ]]></description>
 			<default><![CDATA[5,6]]></default>
 		</property>
-		<property name="excludeUidList" type="list of int">
-			<description><![CDATA[This is a list of page uid's to exclude when the select statement is done. Comma-separated. You may add “current” to the list to exclude the current page.
+		<property name="excludeUidList" type="int">
+			<description><![CDATA[list of integers
+			This is a list of page uid's to exclude when the select statement is done. Comma-separated. You may add “current” to the list to exclude the current page.
 
 Example:
 The pages with these uid-number will NOT be within the menu!! Additionally the current page is always excluded too.
@@ -2383,8 +2487,9 @@ Notice: Affects all sub menus as well. To set the value for each menu level indi
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="protectLvar" type="boolean / keyword">
-			<description><![CDATA[If set, then for each page in the menu it will be checked if an Alternative Page Language record for the language defined in "config.sys_language_uid" (typically defined via &L) exists for the page. If that is not the case and the pages “Localization settings” have the “Hide page if no translation for current language exists” flag set, then the menu item will link to a non accessible page that will yield an error page to the user. Setting this option will prevent that situation by simply adding “&L=0” for such pages, meaning that they will switch to the default language rather than keeping the current language.
+		<property name="protectLvar" type="string">
+			<description><![CDATA[boolean / keyword
+			If set, then for each page in the menu it will be checked if an Alternative Page Language record for the language defined in "config.sys_language_uid" (typically defined via &L) exists for the page. If that is not the case and the pages “Localization settings” have the “Hide page if no translation for current language exists” flag set, then the menu item will link to a non accessible page that will yield an error page to the user. Setting this option will prevent that situation by simply adding “&L=0” for such pages, meaning that they will switch to the default language rather than keeping the current language.
 The check is only carried out if a translation is requested ("config.sys_language_uid" is not zero).
 
 Keyword: “all”
@@ -2394,13 +2499,11 @@ For these options to make sense, they should only be used when “config.sys_lan
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="special" type="&quot;directory&quot; / &quot;list&quot; / &quot;updated&quot; / &quot;browse&quot; / &quot;rootline&quot; / &quot;keywords&quot; / “language”">
-			<description><![CDATA[(See separate table below)]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="special.value" type="list of page-uid's /stdWrap">
-			<description><![CDATA[See above]]></description>
+		<property name="special" type="HMENU_SPECIAL">
+			<description><![CDATA[&quot;directory&quot; / &quot;list&quot; / &quot;updated&quot; / &quot;browse&quot; / &quot;rootline&quot; / &quot;keywords&quot; / “language”
+			(See tsref for details: 
+			<a href="http://typo3.org/documentation/document-library/references/doc_core_tsref/4.1.0/view/8/11/#id4080403">
+			http://typo3.org/documentation/document-library/references/doc_core_tsref/4.1.0/view/8/11/#id4080403</a> )]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -2417,19 +2520,14 @@ For these options to make sense, they should only be used when “config.sys_lan
 ]]></default>
 		</property>
 	</type>
-	<type id="HMENU.X(mObj)">
-		<property name="JSWindow" type="boolean">
-			<description><![CDATA[If set, the links of the menu-items will open by JavaScript in a pop-up window. 
-
-.newWindow boolean, that lets every menuitem open in its own window opposite to opening in the same window for each click.
-
-.params is the list of parameters sent to the JavaScript open-window function, eg: 
-width=200,height=300,status=0,menubar=0
-
-NOTE: Does not work with JSMENU's]]></description>
+	<type id="HMENU_SPECIAL">
+		<property name="value" type="stdWrap">
+			<description><![CDATA[list of page-uid's /stdWrap]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
+	</type>
+	<type id="mObj">
 		<property name="addParams" type="string">
 			<description><![CDATA[Additional parameter for the menu-links. 
 
@@ -2440,7 +2538,7 @@ Applies to GMENU, TMENU, IMGMENU]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="alternativeSortingField" type="">
+		<property name="alternativeSortingField" type="string">
 			<description><![CDATA[Normally the menuitems are sorted by the fields "sorting" in the pages- and tt_content-table. Here you can enter a list of fields that is used in the SQL- "ORDER BY" statement instead.
 
 Examples (for "pages" table):
@@ -2452,8 +2550,9 @@ This property works with normal menus, sectionsIndex menus and special-menus of 
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="begin" type="int +calc">
-			<description><![CDATA[The first item in the menu. 
+		<property name="begin" type="int">
+			<description><![CDATA[int +calc
+			The first item in the menu. 
 
 Example:
 This results in a menu, where the first two items are skipped starting with item number 3:
@@ -2463,7 +2562,7 @@ Takes precedence over HMENU.begin]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="debugItemConf" type="">
+		<property name="debugItemConf" type="string">
 			<description><![CDATA[Outputs (by the debug()-function) the configuration arrays for each menuitem. Useful to debug optionSplit things and such...
 Applies to GMENU, TMENU, IMGMENU]]></description>
 			<default><![CDATA[
@@ -2480,8 +2579,9 @@ NOTE: Don't set this if you're working with a menu with sectionIndex! In that ca
 			<description><![CDATA[prefix for the imagenames. This prefix is appended with the uid of the page.]]></description>
 			<default><![CDATA["img"]]></default>
 		</property>
-		<property name="itemArrayProcFunc" type="function-name">
-			<description><![CDATA[The first variable passed to this function is the “menuArr” array with the menuitems as they are collected based on the type of menu.
+		<property name="itemArrayProcFunc" type="string">
+			<description><![CDATA[function-name
+			The first variable passed to this function is the “menuArr” array with the menuitems as they are collected based on the type of menu.
 You're free to manipulate or add to this array as you like. Just remember to return the array again!
 
 Note:
@@ -2489,6 +2589,18 @@ Note:
 
 Presetting element state
 You can override element states like SPC, IFSUB, ACT, CUR or USR by setting the key ITEM_STATE in the page records. See cObject HMENU/special=userdefined for more information.]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="JSWindow" type="boolean">
+			<description><![CDATA[If set, the links of the menu-items will open by JavaScript in a pop-up window. 
+
+.newWindow boolean, that lets every menuitem open in its own window opposite to opening in the same window for each click.
+
+.params is the list of parameters sent to the JavaScript open-window function, eg: 
+width=200,height=300,status=0,menubar=0
+
+NOTE: Does not work with JSMENU's]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -2506,20 +2618,75 @@ Takes precedence over HMENU.minItems]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="overrideId" type="integer (page-id)">
-			<description><![CDATA[If set, then all links in the menu will point to this pageid. Instead the real uid of the page is sent by the parameter "&real_uid=[uid]".
+		<property name="overrideId" type="int">
+			<description><![CDATA[integer (page-id)
+			If set, then all links in the menu will point to this pageid. Instead the real uid of the page is sent by the parameter "&real_uid=[uid]".
 This feature is smart, if you have inserted a menu from somewhere else, perhaps a shared menu, but wants the menuitems to call the same page, which then generates a proper output based on the real_uid.
 Applies to GMENU, TMENU, IMGMENU]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="sectionIndex" type="">
-			<description><![CDATA[(see below)]]></description>
+		<property name="sectionIndex" type="string">
+			<description><![CDATA[This is a property that all menuObj's share. If it's set, then the menu will not consist of links to pages on the "next level" but rather links to the parent page to the menu, but in addition "#"-links to the cObjects rendered on the page. In other words, the menuitems will be links to the content elements (with colPos=0!) on the page. A section index.
+
+.sectionIndex = [boolean]
+
+If you set this, all content elements (from tt_content table) of "Column" = "Normal" and the "Index"-check box clicked are selected. This corresponds to the "Menu/Sitemap" content element when "Section index" is selected as type.
+
+.sectionIndex.type = "all" / "header"
+
+If you set this additional property to "all", then the "Index"-checkbox is not considered and all content elements with colPos=0 is selected.
+
+If this property is "header" then only content elements with a visible header-layout (and a non-empty 'header'-field!) is selected. In other words, if the header layout of an element is set to "Hidden" then the page will not appear in the menu.
+
+The data-record /Behind the scene:
+
+When the menu-records are selected it works like this: The parent page record is used as the "base" for the menu-record. That means that any "no_cache" or "target"-properties of the parent page is used for the whole menu.
+
+But of course some fields from the tt_content records are transfered: This is how it mapped:
+
+$temp[$row[uid]]=$basePageRow;
+
+$temp[$row[uid]]["title"]=$row["header"];
+
+$temp[$row[uid]]["subtitle"]=$row["subheader"];
+
+$temp[$row[uid]]["starttime"]=$row["starttime"];
+
+$temp[$row[uid]]["endtime"]=$row["endtime"];
+
+$temp[$row[uid]]["fe_group"]=$row["fe_group"];
+
+$temp[$row[uid]]["media"]=$row["media"];
+
+$temp[$row[uid]]["header_layout"]=$row["header_layout"];
+
+$temp[$row[uid]]["bodytext"]=$row["bodytext"];
+
+$temp[$row[uid]]["image"]=$row["image"];
+
+$temp[$row[uid]]["sectionIndex_uid"]=$row["uid"];
+
+Basically this shows that
+
+- the field "header" and "subheader" from tt_content are mapped to "title" and "subtitle" in the pages-record. Thus you shouldn't need to change your standard menu-objects to fit this thing...
+
+- the fields "starttime", "endtime", "fe_group", "media" from tt_content are mapped to the same fields in a pages-record.
+
+- the fields "header_layout", "bodytext" and "image" are mapped to non-existing fields in the page-record
+
+- a new field, "sectionIndex_uid" is introduced in the page-record which is detected by the function t3lib_tstemplate->linkData(). If this field is present in a pagerecord, the linkData()-function will prepend a hash-mark and the number of the field.
+
+NOTE:
+
+You cannot create submenus to sectionIndex-menus. That doesn't make any sense as these elements are not pages and thereby have no "childs".
+]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="showAccessRestrictedPages" type="integer (page id) / keyword “NONE”">
-			<description><![CDATA[If set, pages in the menu will include pages with frontend user group access enabled.  However the page is of course not accessible and therefore the URL in the menu will be linked to the page with the ID of this value. On that page you could put a login form or other message.
+		<property name="showAccessRestrictedPages" type="string">
+			<description><![CDATA[integer (page id) / keyword “NONE”
+			If set, pages in the menu will include pages with frontend user group access enabled.  However the page is of course not accessible and therefore the URL in the menu will be linked to the page with the ID of this value. On that page you could put a login form or other message.
 If the value is “NONE” the link will not be changed and the site will perform page-not-found handling when clicked (which can be used to capture the event and act accordingly of course).
 
 Properties:
@@ -2566,14 +2733,14 @@ Applies to GMENU, TMENU, GMENU_LAYERS, TMENU_LAYERS and GMENU_FOLDOUT on >= 2nd 
 ]]></default>
 		</property>
 	</type>
-	<type id="HMENU.X(mObj).GMENU">
-		<property name="IProcFunc" type="function-name">
+	<type id="GMENU">
+		<property name="IProcFunc" type="string">
 			<description><![CDATA[The internal array “I” is passed to this function and expected returned as well. Subsequent to this function call the menu item is compiled by implode()'ing the array $I[parts] in the passed array. Thus you may modify this if you need to.
 See example on the testsite and in media/scripts/example_itemArrayProcFunc.php]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="RO" type="Boolean">
+		<property name="RO" type="boolean">
 			<description><![CDATA[RollOver configuration enabled / disabled. 
 If this is true, RO becomes a GIFBUILDER-object defining the layout of the menuitem when the mouse rolls over it]]></description>
 			<default><![CDATA[0]]></default>
@@ -3412,29 +3579,60 @@ This is useful if you want to insert an identification code in the HTML in order
 ]]></default>
 		</property>
 	</type>
-	<type id="HMENU.X(mObj_itemStates)">
-		<property name="ACT" type="Boolean / (config)">
-			<description><![CDATA[Enable/Configuration for menu items which are found in the rootLine]]></description>
+	<type id="mObj_itemState">
+		<property name="ACT" type="boolean">
+			<description><![CDATA[Boolean / (config) 
+			Enable/Configuration for menu items which are found in the rootLine]]></description>
 			<default><![CDATA[0]]></default>
 		</property>
-		<property name="ACTIFSUB" type="Boolean / (config)">
-			<description><![CDATA[Enable/Configuration for menu items which are found in the rootLine and has subpages]]></description>
+		<property name="ACTRO" type="boolean">
+			<description><![CDATA[Boolean / (config) 
+			Enable/Configuration for menu items which are found in the rootLine]]></description>
 			<default><![CDATA[0]]></default>
 		</property>
-		<property name="CUR" type="Boolean / (config)">
-			<description><![CDATA[Enable/Configuration for a menu item if the item is the current page.]]></description>
+		<property name="ACTIFSUB" type="boolean">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for menu items which are found in the rootLine and has subpages]]></description>
 			<default><![CDATA[0]]></default>
 		</property>
-		<property name="CURIFSUB" type="Boolean / (config)">
-			<description><![CDATA[Enable/Configuration for a menu item if the item is the current page and has subpages.]]></description>
+		<property name="ACTIFSUBRO" type="boolean">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for menu items which are found in the rootLine and has subpages]]></description>
 			<default><![CDATA[0]]></default>
 		</property>
-		<property name="IFSUB" type="Boolean / (config)">
-			<description><![CDATA[Enable/Configuration for menu items which has subpages]]></description>
+		<property name="CUR" type="boolean">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for a menu item if the item is the current page.]]></description>
 			<default><![CDATA[0]]></default>
 		</property>
-		<property name="NO" type="Boolean / (config)">
-			<description><![CDATA[The default “Normal” state rendering of Item. This is required for all menus.
+		<property name="CURRO" type="boolean">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for a menu item if the item is the current page.]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="CURIFSUB" type="boolean">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for a menu item if the item is the current page and has subpages.]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="CURIFSUBRO" type="boolean">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for a menu item if the item is the current page and has subpages.]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="IFSUB" type="boolean">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for menu items which has subpages]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="IFSUBRO" type="boolean">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for menu items which has subpages]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="NO" type="boolean">
+			<description><![CDATA[Boolean / (config)
+			The default “Normal” state rendering of Item. This is required for all menus.
 If you specify properties for the “NO” property you do not have to set it “1”. Otherwise with no properties setting “NO=1” will render the menu anyways (for TMENU this may make sense).
 
 The simplest menu TYPO3 can generate is then:
@@ -3446,83 +3644,49 @@ page.20.1.NO = 1
 That will be pure <a> tags wrapped around page titles.]]></description>
 			<default><![CDATA[1]]></default>
 		</property>
-		<property name="SPC" type="Boolean / (config)">
-			<description><![CDATA[Enable/Configuration for 'Spacer' pages.
+		<property name="SPC" type="boolean">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for 'Spacer' pages.
 Spacers are pages of the doktype "Spacer". These are not viewable pages but "placeholders" which can be used to divide menuitems.
 
 Note: Rollovers doesn't work with spacers, if you use GMENU!]]></description>
 			<default><![CDATA[0]]></default>
 		</property>
-		<property name="USERDEF1" type="Boolean / (config)">
-			<description><![CDATA[Userdefined, see .itemArrayProcFunc for details on how to use this.
+		<property name="USERDEF1" type="boolean">
+			<description><![CDATA[Boolean / (config)
+			Userdefined, see .itemArrayProcFunc for details on how to use this.
 You can set the ITEM_STATE values USERDEF1 and USERDEF2 (+...RO) from a script/userfunction processing the menu item array. See HMENU/special=userdefined or the property .itemArrayProcFunc of the menu objects.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="USERDEF2" type="Boolean / (config)">
-			<description><![CDATA[(See above)]]></description>
+		<property name="USERDEF1RO" type="boolean">
+			<description><![CDATA[Boolean / (config)
+			Userdefined, see .itemArrayProcFunc for details on how to use this.
+You can set the ITEM_STATE values USERDEF1 and USERDEF2 (+...RO) from a script/userfunction processing the menu item array. See HMENU/special=userdefined or the property .itemArrayProcFunc of the menu objects.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="USR" type="Boolean / (config)">
-			<description><![CDATA[Enable/Configuration for menu items which are access restricted pages that a user has access to.]]></description>
+		<property name="USERDEF2" type="boolean">
+			<description><![CDATA[Boolean / (config)
+			(See above)]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="USERDEF2RO" type="boolean">
+			<description><![CDATA[Boolean / (config)
+			(See above)]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="USR" type="boolean">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for menu items which are access restricted pages that a user has access to.]]></description>
 			<default><![CDATA[0]]></default>
 		</property>
-	</type>
-	<type id="HMENU.special">
-		<property name="browse" type="This kind of menu is built of items given by a list from the property &quot;.item&quot;. Each element in the list (sep. by &quot;|&quot;) is either a reserved itemname (see list) with a predefined function or a userdefined name which you can assign a link to any page. Note that the current page cannot be the root-page of a site.">
-			<description><![CDATA[
-]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="directory" type="This will generate a menu of all pages with pid = 35 and pid = 56.">
-			<description><![CDATA[
-]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="keywords" type="Makes a menu of pages with one or more keywords also found on the current page.">
-			<description><![CDATA[
-]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="language" type="Creates a language selector menu. Typically this is made as a menu with flags for each language a page is translated to and when the user clicks any element the same page id is hit but with a change to the “&amp;L” parameter in the URL.">
-			<description><![CDATA[
-]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="list" type="This will generate a menu with the two pages (uid=35 and uid=36) listed:">
-			<description><![CDATA[
-]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="rootline" type="Creates a menu with pages from the &quot;rootline&quot; (see earlier in this reference)">
-			<description><![CDATA[
-]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="updated" type="This will generate a menu of the most recently updated pages from the branches in the tree starting with the uid's (uid=35 and uid=36) listed. Furthermore the field &quot;tstamp&quot; is used (default is SYS_LASTCHANGED) and the treedepth is 2 levels. Also there will be shown a maximum of 8 pages and they must have been updated within the last three days (3600*24*3):">
-			<description><![CDATA[
-]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="userdefined" type="Lets you write your own little PHP-script that generates the array of menuitems.">
-			<description><![CDATA[
-]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="userfunction" type="Calls a user function/method in class which should (as with “userdefined” above) return an array with page records for the menu.">
-			<description><![CDATA[
-]]></description>
-			<default><![CDATA[
-]]></default>
+		<property name="USRRO" type="boolean">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for menu items which are access restricted pages that a user has access to.]]></description>
+			<default><![CDATA[0]]></default>
 		</property>
 	</type>
 </tsRef>
