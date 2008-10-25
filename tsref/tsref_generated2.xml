@@ -94,7 +94,7 @@ Default is to REMOVE all tags, which are not specifically assigned to be allowed
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="tags.[tagname]" type="string">
+		<property name="tags.[tagname]" type="HTMLparser_tags">
 			<description><![CDATA[Either set this property to 0 or 1 to allow or deny the tag. If you enter ->HTMLparser_tags properties, those will automatically overrule this option, thus it's not needed then.
 [tagname] in lowercase.]]></description>
 			<default><![CDATA[
@@ -121,72 +121,8 @@ If set, the comparison in .removeIfEquals and .list will be case-sensitive. At t
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="fixAttrib.[attribute].default" type="string">
+		<property name="fixAttrib.[attribute]" type="HTMLparser_tags_fixAttrib">
 			<description><![CDATA[If no attribute exists by this name, this value is set as default value (if this value is not blank)]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="fixAttrib.[attribute].list" type="list of values, trimmed">
-			<description><![CDATA[Attribute value must be in this list. If not, the value is set to the first element.]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="fixAttrib.[attribute].prefixLocalAnchors" type="integer">
-			<description><![CDATA[If the first char is a “#” character (anchor of fx. <a> tags) this will prefix either a relative or absolute path.
-If the value is “1” you will get the absolute path (t3lib_div::getIndpEnv('TYPO3_REQUEST_URL'))
-If the value is “2” you will get the relative path (stripping of t3lib_div::getIndpEnv('TYPO3_SITE_URL'))
-
-Example:
-
-...fixAttrib.href.prefixLocalAnchors = 1]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="fixAttrib.[attribute].prefixRelPathWith" type="string">
-			<description><![CDATA[If the value of the attribute seems to be a relative URL (no scheme like “http” and no “/” as first char) then that value of this property will be prefixed the attribute.
-
-Example:
-
-...fixAttrib.src.prefixRelPathWith = http://192.168.230.3/typo3/32/dummy/]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="fixAttrib.[attribute].range" type="[low],[high]">
-			<description><![CDATA[Setting integer range. ]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="fixAttrib.[attribute].removeIfEquals" type="string">
-			<description><![CDATA[If the attribute value matches the value set here, then it is removed.]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="fixAttrib.[attribute].removeIfFalse" type="boolean/”blank” string">
-			<description><![CDATA[If set, then the attribute is removed if it is "false". If this value is set to "blank" then the value must be a blank string (that means a "zero" value will not be removed)]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="fixAttrib.[attribute].set" type="string">
-			<description><![CDATA[Force the attribute value to this value.]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="fixAttrib.[attribute].trim" type="boolean">
-			<description><![CDATA[If any of these keys are set, the value is passed through the respective PHP-functions.]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="fixAttrib.[attribute].unset" type="boolean">
-			<description><![CDATA[ If set, the attribute is unset.]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="fixAttrib.[attribute].userFunc" type="function reference">
-			<description><![CDATA[User function for processing of the attribute.
-
-Example:
-
-...fixAttrib.href.userFunc = tx_realurl->test_urlProc]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -217,6 +153,78 @@ Is the value "global" then true nesting in relation to other tags marked for "gl
 ]]></default>
 		</property>
 	</type>
+	<type id="HTMLparser_tags_fixAttrib">
+		<property name="default" type="string">
+			<description><![CDATA[If no attribute exists by this name, this value is set as default value (if this value is not blank)]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="list" type="stringList">
+			<description><![CDATA[Attribute value must be in this list. If not, the value is set to the first element.]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="prefixLocalAnchors" type="integer">
+			<description><![CDATA[If the first char is a “#” character (anchor of fx. <a> tags) this will prefix either a relative or absolute path.
+If the value is “1” you will get the absolute path (t3lib_div::getIndpEnv('TYPO3_REQUEST_URL'))
+If the value is “2” you will get the relative path (stripping of t3lib_div::getIndpEnv('TYPO3_SITE_URL'))
+
+Example:
+
+...fixAttrib.href.prefixLocalAnchors = 1]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="prefixRelPathWith" type="string">
+			<description><![CDATA[If the value of the attribute seems to be a relative URL (no scheme like “http” and no “/” as first char) then that value of this property will be prefixed the attribute.
+
+Example:
+
+...fixAttrib.src.prefixRelPathWith = http://192.168.230.3/typo3/32/dummy/]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="range" type="intList">
+			<description><![CDATA[Setting integer range. ]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="removeIfEquals" type="string">
+			<description><![CDATA[If the attribute value matches the value set here, then it is removed.]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="removeIfFalse" type="stingList">
+			<description><![CDATA[boolean/”blank” string
+If set, then the attribute is removed if it is "false". If this value is set to "blank" then the value must be a blank string (that means a "zero" value will not be removed)]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="set" type="string">
+			<description><![CDATA[Force the attribute value to this value.]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="trim" type="boolean">
+			<description><![CDATA[If any of these keys are set, the value is passed through the respective PHP-functions.]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="unset" type="boolean">
+			<description><![CDATA[ If set, the attribute is unset.]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="userFunc" type="string">
+			<description><![CDATA[User function for processing of the attribute.
+
+Example:
+
+...fixAttrib.href.userFunc = tx_realurl->test_urlProc]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+	</type>
 	<type id="IMAGE">
 		<property name="altText" type="stdWrap">
 			<description><![CDATA[If no titltext is specified, it will use the alttext insteadIf no alttext is specified, it will use an empty alttext
@@ -240,8 +248,13 @@ Is the value "global" then true nesting in relation to other tags marked for "gl
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="imageLinkWrap" type="boolean">
-			<description><![CDATA[NOTE: ONLY active if linkWrap is NOT set and file is NOT GIFBUILDER (as it works with the original imagefile)]]></description>
+		<property name="imageLinkWrap" type="imageLinkWrap">
+			<description><![CDATA[boolean / imageLinkWrap
+
+CAUTION: only active if set to 1:
+imageLinkWrap = 1
+
+Additional Note: ONLY active if linkWrap is NOT set and file is NOT GIFBUILDER (as it works with the original imagefile)]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -309,6 +322,36 @@ If this property is set, the link is NOT blurred with "onFocus".]]></description
 		</property>
 	</type>
 	<type id="IMGTEXT" extends="cObjArray">
+		<property name="1" type="IMAGE">
+			<description><![CDATA[Rendering of the images
+The register "IMAGE_NUM" is set with the number of image being rendered for each rendering of a image-object. Starting with zero.
+The image-object should not be of type GIFBUILDER!
+Important:
+"file.import.current = 1" fetches the name of the images! 
+</description>]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="2" type="IMAGE">
+			<description><![CDATA[Rendering of the images
+The register "IMAGE_NUM" is set with the number of image being rendered for each rendering of a image-object. Starting with zero.
+The image-object should not be of type GIFBUILDER!
+Important:
+"file.import.current = 1" fetches the name of the images! 
+</description>]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="3" type="IMAGE">
+			<description><![CDATA[Rendering of the images
+The register "IMAGE_NUM" is set with the number of image being rendered for each rendering of a image-object. Starting with zero.
+The image-object should not be of type GIFBUILDER!
+Important:
+"file.import.current = 1" fetches the name of the images! 
+</description>]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
 		<property name="altText" type="stdWrap">
 			<description><![CDATA[Default altText/titleText if no alternatives are provided by the ->IMAGE cObjects 
 
@@ -604,7 +647,11 @@ page.27 {
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="[yourRegisterVar2]" type="stdWrap">
+		<property name="[myRegisterVar2]" type="stdWrap">
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="[myRegisterVar3]" type="stdWrap">
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -680,6 +727,21 @@ An empty string will remove the parameter from the embed-tag]]></description>
 		</property>
 	</type>
 	<type id="OTABLE" extends="cObjArray">
+		<property name="1" type="cObj">
+			<description><![CDATA[the object which should be rendered at the specified position. You have to set this to a contenttype (IMAGE, TEXT,...)]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="2" type="cObj">
+			<description><![CDATA[the object which should be rendered at the specified position. You have to set this to a contenttype (IMAGE, TEXT,...)]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="3" type="cObj">
+			<description><![CDATA[the object which should be rendered at the specified position. You have to set this to a contenttype (IMAGE, TEXT,...)]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
 		<property name="offset" type="intList">
 			<description><![CDATA[Offset from upper left corner
 
@@ -1102,6 +1164,51 @@ type=99 reserved for plaintext display ]]></description>
 		<property name="_GIFBUILDER" type="TLO_GIFBUILDER"/>
 	</type>
 	<type id="PAGE" extends="cObjArray">
+		<property name="10" type="cObj">
+			<description><![CDATA[the object which should be rendered in the page. You have to set this to a contenttype (IMAGE, TEXT, HTML...)
+You can specify as much elements in this array as you want.
+
+Example:
+
+page.10 = TEXT
+page.10.value = Here goes the header
+page.20 = TEXT
+page.20.value = Hello World!
+page.30 = TEXT
+page.30.value = Here goes the footer]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="20" type="cObj">
+			<description><![CDATA[the object which should be rendered in the page. You have to set this to a contenttype (IMAGE, TEXT, HTML...)
+You can specify as much elements in this array as you want.
+
+Example:
+
+page.10 = TEXT
+page.10.value = Here goes the header
+page.20 = TEXT
+page.20.value = Hello World!
+page.30 = TEXT
+page.30.value = Here goes the footer]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="30" type="cObj">
+			<description><![CDATA[the object which should be rendered in the page. You have to set this to a contenttype (IMAGE, TEXT, HTML...)
+You can specify as much elements in this array as you want.
+
+Example:
+
+page.10 = TEXT
+page.10.value = Here goes the header
+page.20 = TEXT
+page.20.value = Hello World!
+page.30 = TEXT
+page.30.value = Here goes the footer]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
 		<property name="CSS_inlineStyle" type="string">
 			<description><![CDATA[This value is just passed on as inline css (in-document css encapsulated in <style>-tags)]]></description>
 			<default><![CDATA[
@@ -1331,7 +1438,7 @@ img.addParams.border = 0]]></description>
 			<default><![CDATA[1]]></default>
 		</property>
 	</type>
-	<type id="constants">
+	<type id="CONSTANTS">
 		<property name="[myConstant]" type="string">
 			<description><![CDATA[Constants. 
 
@@ -2032,7 +2139,7 @@ short {
 NOTE: works only with $GLOBALS["TSFE"]->no_cache==1]]></description>
 			<default><![CDATA[<font color="red">|</font>]]></default>
 		</property>
-		<property name="tags" type="cObjArray">
+		<property name="tags" type="tags">
 			<description><![CDATA[Here you can define custom tags that will parse the content to something.]]></description>
 			<default><![CDATA[
 ]]></default>
