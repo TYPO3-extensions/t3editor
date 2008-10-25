@@ -401,7 +401,7 @@ var TsParser = function(tsRef,extTsObjTree){
     if(treeNode1.parent != null) {
       treeNode1.parent.childNodes[lastNodeName] = treeNode2;
     } else {
-      tsTree[lastNodeName] = treeNode2;
+      tsTree.childNodes[lastNodeName] = treeNode2;
     }
   }
   
@@ -437,7 +437,7 @@ var TsParser = function(tsRef,extTsObjTree){
       treeNode1.parent.childNodes[lastNodeName] = this.clone(treeNode2);
       //treeNode1.parent.childNodes[lastNodeName].extTsObjTree = extTsObjTree;
     } else {
-      tsTree[lastNodeName] = this.clone(treeNode2);
+      tsTree.childNodes[lastNodeName] = this.clone(treeNode2);
       //tsTree[lastNodeName].extTsObjTree = extTsObjTree;
     }
     
