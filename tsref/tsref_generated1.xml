@@ -2527,10 +2527,151 @@ For these options to make sense, they should only be used when “config.sys_lan
 ]]></default>
 		</property>
 	</type>
+	<type id="directory" extends="HMENU_SPECIAL"/>
+	<type id="list" extends="HMENU_SPECIAL"/>
+	<type id="updated" extends="HMENU_SPECIAL">
+		<property name="mode" type="string">
+			<description><![CDATA[Which field in the pages-table to use. Default is "SYS_LASTCHANGED" (which is updated when a page is generated to the youngest tstamp of the records on the page), "manual" or “lastUpdated” will use the field "lastUpdated" (set manually in the page-record) and "tstamp" will use the "tstamp"-field of the pagerecord, which is set automatically when the record is changed. "crdate" will use "crdate"-field of the pagerecord. “starttime” will use the starttime field.
+
+Fields with zero value is not selected anyway.]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="depth" type="string">
+			<description><![CDATA[By default (if the value is not an integer) the depth is 20 levels. The range is 1-20. A depth of 1 means only the start id, depth of 2 means start-id + first level. NOTE: depth is relative to beginAtLevel.
+			]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="beginAtLevel" type="int">
+			<description><![CDATA[Determines starting level for the pagetrees generated based on .value and .depth. Zero is default and includes the start id. 1=starts with the first row of subpages, 2=starts with the second row of subpages. Depth is relative to this starting point.
+			]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="maxAge" type="string">
+			<description><![CDATA[Seconds+calc.  
+			Pages with update-dates older than currenttime minus this number of seconds will not be shown in the menu no matter what. Default is "not used". You may use +-*/ for calculations.
+			]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="limit" type="int">
+			<description><![CDATA[Max number of items in the menu. Default is 10, max is 100.
+			]]></description>
+			<default><![CDATA[10
+]]></default>
+		</property>
+		<property name="excludeNoSearchPages" type="boolean">
+			<description><![CDATA[If set, pages marked "No search" is not included into special-menus.
+Support for Mount Pages: Yes.
+			]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+	</type>
+	<type id="rootline" extends="HMENU_SPECIAL">
+		<property name="range" type="string">
+			<description><![CDATA[rootline creates a menu with pages from the "rootline" (see earlier in this reference)
+
+.range = [begin-level] | [end-level] (same way as you reference the .entryLevel for HMENU)
+
+This...
+
+page.2 = HMENU
+page.2.special = rootline
+page.2.special.range = 1|-2
+page.2.special.targets.3 = page
+page.2.1 = TMENU
+page.2.1.target = _top
+page.2.1.wrap = <HR> | <HR>
+page.2.1.NO {
+  linkWrap = | >
+}
+... creates a menu like this:
+
+Page level 1 > Page level 2 > Page level 3 > Page level 4 >
+
+(The menu starts at level 1 and does NOT link to the current page (-2 is the level before). Further all pages on level 3 will have "page" as target and all other "_top")
+			]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="targets" type="string">
+			<description><![CDATA[.targets.[0-x]  targets
+			
+			This...
+
+page.2 = HMENU
+page.2.special = rootline
+page.2.special.range = 1|-2
+page.2.special.targets.3 = page
+page.2.1 = TMENU
+page.2.1.target = _top
+page.2.1.wrap = <HR> | <HR>
+page.2.1.NO {
+  linkWrap = | >
+}
+
+... creates a menu like this:
+
+Page level 1 > Page level 2 > Page level 3 > Page level 4 >
+
+(The menu starts at level 1 and does NOT link to the current page (-2 is the level before). Further all pages on level 3 will have "page" as target and all other "_top")
+			
+			]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+	</type>
+	<type id="browse" extends="HMENU_SPECIAL">
+		<property name="target_2" type="string">
+			<description><![CDATA[]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="target_2" type="string">
+			<description><![CDATA[]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="target_2" type="string">
+			<description><![CDATA[]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+	</type>
+	<type id="directory" extends="HMENU_SPECIAL">
+		<property name="target_2" type="string">
+			<description><![CDATA[]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+	</type>
+	<type id="directory" extends="HMENU_SPECIAL">
+		<property name="target_2" type="string">
+			<description><![CDATA[]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+	</type>
+	<type id="directory" extends="HMENU_SPECIAL">
+		<property name="target_2" type="string">
+			<description><![CDATA[]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+	</type>
+	<type id="directory" extends="HMENU_SPECIAL">
+		<property name="target_2" type="string">
+			<description><![CDATA[]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+	</type>
 	<type id="mObj">
 		<property name="addParams" type="string">
 			<description><![CDATA[Additional parameter for the menu-links. 
-
 Example:
 "&some_var=some%20value"
 Must be rawurlencoded.
@@ -2863,7 +3004,7 @@ Example:
 ]]></default>
 		</property>
 	</type>
-	<type id="HMENU.X(mObj).GMENU.X(itemState)">
+	<type id="HMENU.X(mObj).GMENU_LAYERS, HMENU.X(mObj).TMENU_LAYERS">
 		<property name="ATagParams" type="string">
 			<description><![CDATA[Additional parameters]]></description>
 			<default><![CDATA[
@@ -3019,7 +3160,7 @@ Note: Using <TBODY> in this tables seems to break Netscape 4+]]></description>
 ]]></default>
 		</property>
 	</type>
-	<type id="HMENU.X(mObj).GMENU_LAYERS, HMENU.X(mObj).TMENU_LAYERS">
+	<type>
 		<property name="blankStrEqFalse" type="boolean">
 			<description><![CDATA[If set, then the properties topOffset,leftOffset, xPosOffset, yPosOffset are considered “blank” if they are really blank strings - not just “zero”. You should enable this if you wish to be able to work with zero offsets. This is typically the case if you use relative positioning.]]></description>
 			<default><![CDATA[
