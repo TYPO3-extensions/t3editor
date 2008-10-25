@@ -2625,60 +2625,176 @@ Page level 1 > Page level 2 > Page level 3 > Page level 4 >
 		</property>
 	</type>
 	<type id="browse" extends="HMENU_SPECIAL">
-		<property name="target_2" type="string">
-			<description><![CDATA[]]></description>
+		<property name="items" type="string">
+			<description><![CDATA[.items  ( "|" separated list of "itemnames")
+			This kind of menu is built of items given by a list from the property ".item". Each element in the list (sep. by "|") is either a reserved itemname (see list) with a predefined function or a userdefined name which you can assign a link to any page. Note that the current page cannot be the root-page of a site.
+			]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="target_2" type="string">
-			<description><![CDATA[]]></description>
+		<property name="items.prevnextToSection" type="boolean">
+			<description><![CDATA[items.prevnextToSection (boolean) - if set, the "prev" and "next" navigation will jump to the next section when it reaches the end of pages in the current section.
+			]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="target_2" type="string">
-			<description><![CDATA[]]></description>
+		<property name="next" type="HMENU_SPECIAL_browseItem">
+			<description><![CDATA[next / prev : links to next page / previous page. Next and previous pages are from the same "pid" as the current page id (or "value") - that is the next item in a menu with the current page. Also referred to as current level.
+
+If ".prevnextToSection" is set then next/prev will link to the first page of next section / last page of previous section.
+			]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="prev" type="HMENU_SPECIAL_browseItem">
+			<description><![CDATA[next / prev : links to next page / previous page. Next and previous pages are from the same "pid" as the current page id (or "value") - that is the next item in a menu with the current page. Also referred to as current level.
+
+If ".prevnextToSection" is set then next/prev will link to the first page of next section / last page of previous section.
+			]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="nextsection" type="HMENU_SPECIAL_browseItem">
+			<description><![CDATA[nextsection / prevsection : links to next section / previous section. A section is defined as the subpages of a page on the same level as the parent (pid) page of the current page. Will not work if parent page of current page is the root page of the site.
+			]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="prevsection" type="HMENU_SPECIAL_browseItem">
+			<description><![CDATA[nextsection / prevsection : links to next section / previous section. A section is defined as the subpages of a page on the same level as the parent (pid) page of the current page. Will not work if parent page of current page is the root page of the site.
+			]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="nextsection_last" type="HMENU_SPECIAL_browseItem">
+			<description><![CDATA[Where nextsection/prevsection links to the first page in a section, these links to the last pages. If there is only one page in the section that will be both first and last. Will not work if parent page of current page is the root page of the site.
+			]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="prevsection_last" type="HMENU_SPECIAL_browseItem">
+			<description><![CDATA[Where nextsection/prevsection links to the first page in a section, these links to the last pages. If there is only one page in the section that will be both first and last. Will not work if parent page of current page is the root page of the site.
+			]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="first" type="HMENU_SPECIAL_browseItem">
+			<description><![CDATA[First / Last page on current level. If there is only one page on the current level that page will be both first and last.
+			]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="last" type="HMENU_SPECIAL_browseItem">
+			<description><![CDATA[First / Last page on current level. If there is only one page on the current level that page will be both first and last.
+			]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="up" type="HMENU_SPECIAL_browseItem">
+			<description><![CDATA[Links to the parent (pid) page of the current page. (up 1 level) Will always be available
+			]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="index" type="HMENU_SPECIAL_browseItem">
+			<description><![CDATA[Links to the parent of the parent page of the current page (up 2 levels). May not be available if that page is out of the rootline.
+			]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
 	</type>
-	<type id="directory" extends="HMENU_SPECIAL">
-		<property name="target_2" type="string">
-			<description><![CDATA[]]></description>
+	<type id="HMENU_SPECIAL_browseItem">
+		<property name="target" type="string">
+			<description><![CDATA[optional/alternative target of the item]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="uid" type="int">
+			<description><![CDATA[.  (uid of page) - optional/alternative page-uid to link to
+]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="fields" type="string">
+			<description><![CDATA[.[itemnames].fields.[fieldname]  (string)
+ override field "fieldname" in pagerecord.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
 	</type>
-	<type id="directory" extends="HMENU_SPECIAL">
-		<property name="target_2" type="string">
-			<description><![CDATA[]]></description>
+	<type id="keywords" extends="HMENU_SPECIAL">
+		<property name="mode" type="string">
+			<description><![CDATA[Which field in the pages-table to use for sorting. Default is "SYS_LASTCHANGED" (which is updated when a page is generated to the youngest tstamp of the records on the page), "manual" or “lastUpdated” will use the field "lastUpdated" (set manually in the page-record) and "tstamp" will use the "tstamp"-field of the pagerecord, which is set automatically when the record is changed. "crdate" will use "crdate"-field of the pagerecord. “starttime” will use the starttime field.
+			]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="depth" type="string">
+			<description><![CDATA[By default (if the value is not an integer) the depth is 20 levels. The range is 1-20. A depth of 1 means only the start id, depth of 2 means start-id + first level. NOTE: depth is relative to beginAtLevel.
+			]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="beginAtLevel" type="int">
+			<description><![CDATA[Determines starting level for the pagetrees generated based on .value and .depth. Zero is default and includes the start id. 1=starts with the first row of subpages, 2=starts with the second row of subpages. Depth is relative to this starting point.
+			]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="limit" type="int">
+			<description><![CDATA[Max number of items in the menu. Default is 10, max is 100.
+			]]></description>
+			<default><![CDATA[10
+]]></default>
+		</property>
+		<property name="excludeNoSearchPages" type="boolean">
+			<description><![CDATA[If set, pages marked "No search" is not included into special-menus.
+Support for Mount Pages: Yes.
+			]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="entryLevel" type="string">
+			<description><![CDATA[.entryLevel = where in the rootline the search begins. Standard rootline syntax (-x to x)]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="setKeywords" type="stdWrap">
+			<description><![CDATA[.setKeywords (/stdWrap) = lets you define the keywords manually by defining them as a commaseparated list. If this property is defined, it overrides the default, which is the keywords of the current page.
+			]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="keywordsField" type="string">
+			<description><![CDATA[.keywordsField = defines the field in the pages-table in which to search for the keywords. Default is the fieldname “keyword”. No check is done to see if the field you enter here exists, so enter an existing field, OK?!]]></description>
+			<default><![CDATA[“keyword”
+]]></default>
+		</property>
+		<property name="keywordsField.sourceField" type="string">
+			<description><![CDATA[.keywordsField.sourceField = defines the field from the current page from which to take the keywords being matched. The default is “keyword”. (Notice that “.keywordsField” is only setting the page-record field to search in !)]]></description>
+			<default><![CDATA[“keyword”
+]]></default>
+		</property>
+	</type>
+	<type id="language" extends="HMENU_SPECIAL"/>
+	<type id="userdefined" extends="HMENU_SPECIAL">
+		<property name="file" type="string">
+			<description><![CDATA[.file  [resource]  =  filename of the php-file to include. (Just like cObject PHP_SCRIPT)
+			]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
 	</type>
-	<type id="directory" extends="HMENU_SPECIAL">
-		<property name="target_2" type="string">
-			<description><![CDATA[]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-	</type>
-	<type id="directory" extends="HMENU_SPECIAL">
-		<property name="target_2" type="string">
-			<description><![CDATA[]]></description>
+	<type id="userfunction" extends="HMENU_SPECIAL">
+		<property name="userFunc" type="string">
+			<description><![CDATA[.userFunc = function-name
+			Calls a user function/method in class which should (as with “userdefined” above) return an array with page records for the menu.
+]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
 	</type>
 	<type id="mObj">
-		<property name="addParams" type="string">
-			<description><![CDATA[Additional parameter for the menu-links. 
-Example:
-"&some_var=some%20value"
-Must be rawurlencoded.
-Applies to GMENU, TMENU, IMGMENU]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
 		<property name="alternativeSortingField" type="string">
 			<description><![CDATA[Normally the menuitems are sorted by the fields "sorting" in the pages- and tt_content-table. Here you can enter a list of fields that is used in the SQL- "ORDER BY" statement instead.
 
@@ -2700,12 +2816,6 @@ This results in a menu, where the first two items are skipped starting with item
   begin = 3  
 
 Takes precedence over HMENU.begin]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="debugItemConf" type="string">
-			<description><![CDATA[Outputs (by the debug()-function) the configuration arrays for each menuitem. Useful to debug optionSplit things and such...
-Applies to GMENU, TMENU, IMGMENU]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -2733,18 +2843,6 @@ You can override element states like SPC, IFSUB, ACT, CUR or USR by setting the 
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="JSWindow" type="boolean">
-			<description><![CDATA[If set, the links of the menu-items will open by JavaScript in a pop-up window. 
-
-.newWindow boolean, that lets every menuitem open in its own window opposite to opening in the same window for each click.
-
-.params is the list of parameters sent to the JavaScript open-window function, eg: 
-width=200,height=300,status=0,menubar=0
-
-NOTE: Does not work with JSMENU's]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
 		<property name="maxItems" type="int">
 			<description><![CDATA[The maximum items in the menu. More items will be ignored.
 
@@ -2756,14 +2854,6 @@ Takes precedence over HMENU.maxItems]]></description>
 			<description><![CDATA[The minimum items in the menu. If the number of pages does not reach this level, a dummy-page with the title "..." and uid=[currentpage_id] is inserted.
 
 Takes precedence over HMENU.minItems]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="overrideId" type="int">
-			<description><![CDATA[integer (page-id)
-			If set, then all links in the menu will point to this pageid. Instead the real uid of the page is sent by the parameter "&real_uid=[uid]".
-This feature is smart, if you have inserted a menu from somewhere else, perhaps a shared menu, but wants the menuitems to call the same page, which then generates a proper output based on the real_uid.
-Applies to GMENU, TMENU, IMGMENU]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -2875,6 +2965,15 @@ Applies to GMENU, TMENU, GMENU_LAYERS, TMENU_LAYERS and GMENU_FOLDOUT on >= 2nd 
 		</property>
 	</type>
 	<type id="GMENU">
+		<property name="addParams" type="string">
+			<description><![CDATA[Additional parameter for the menu-links. 
+Example:
+"&some_var=some%20value"
+Must be rawurlencoded.
+Applies to GMENU, TMENU, IMGMENU]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
 		<property name="IProcFunc" type="string">
 			<description><![CDATA[The internal array “I” is passed to this function and expected returned as well. Subsequent to this function call the menu item is compiled by implode()'ing the array $I[parts] in the passed array. Thus you may modify this if you need to.
 See example on the testsite and in media/scripts/example_itemArrayProcFunc.php]]></description>
@@ -2921,6 +3020,12 @@ Look at the implementation in static_template "styles.gmenu.bug"]]></description
 			<default><![CDATA[
 ]]></default>
 		</property>
+		<property name="debugItemConf" type="string">
+			<description><![CDATA[Outputs (by the debug()-function) the configuration arrays for each menuitem. Useful to debug optionSplit things and such...
+Applies to GMENU, TMENU, IMGMENU]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
 		<property name="disableAltText" type="boolean">
 			<description><![CDATA[If set, the alt-parameter of the images are not set. You can do it manually by “imgParams” (see below)]]></description>
 			<default><![CDATA[
@@ -2948,6 +3053,18 @@ Will overrule any setting for ".useLargestItemY"]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
+		<property name="JSWindow" type="boolean">
+			<description><![CDATA[If set, the links of the menu-items will open by JavaScript in a pop-up window. 
+
+.newWindow boolean, that lets every menuitem open in its own window opposite to opening in the same window for each click.
+
+.params is the list of parameters sent to the JavaScript open-window function, eg: 
+width=200,height=300,status=0,menubar=0
+
+NOTE: Does not work with JSMENU's]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
 		<property name="max" type="x,y (calcInt)">
 			<description><![CDATA[Forces the menu as a whole to these maximum dimensions]]></description>
 			<default><![CDATA[
@@ -2961,6 +3078,14 @@ Will overrule any setting for ".useLargestItemY"]]></description>
 		<property name="noBlur" type="Boolean">
 			<description><![CDATA[Normally graphical links are "blurred" if the browser is MSIE. Blurring removes the ugly box around a clicked link. 
 If this property is set, the link is NOT blurred (browser-default) with "onFocus".]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="overrideId" type="int">
+			<description><![CDATA[integer (page-id)
+			If set, then all links in the menu will point to this pageid. Instead the real uid of the page is sent by the parameter "&real_uid=[uid]".
+This feature is smart, if you have inserted a menu from somewhere else, perhaps a shared menu, but wants the menuitems to call the same page, which then generates a proper output based on the real_uid.
+Applies to GMENU, TMENU, IMGMENU]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -2987,6 +3112,38 @@ Example:
 		<property name="target" type="target">
 			<description><![CDATA[Target of the menulinks]]></description>
 			<default><![CDATA[self]]></default>
+		</property>
+		<property name="submenuObjSuffixes" type="string">
+			<description><![CDATA[Defines a suffix for alternative sub-level menu objects. Useful to create special submenus depending on their parent menu element. See example below.
+
+Example:
+This example will generate a menu where the menu objects for the second level will differ depending on the number of the first level item for which the submenu is rendered. The second level objects used are “2” (the default), “2a” and “2b” (the alternatives). Which of them is used is defined by “1.submenuObjSuffixes” which has the configuration “a |*| |*| b”. This configuration means that the first menu element will use configuration “2a” and the last will use “2b” while anything in between will use “2” (no suffix applied)
+
+page.200 = HMENU
+page.200 {
+  1 = TMENU
+  1.wrap = <div style="width:200px; border: 1px solid;">|</div>
+  1.expAll = 1
+  1.submenuObjSuffixes = a |*|  |*| b
+  1.NO.allWrap = <b>|</b><br/>
+
+  2 = TMENU
+  2.NO.allWrap = <div style="background:red;">|</div>
+
+  2a = TMENU
+  2a.NO.allWrap = <div style="background:yellow;">|</div>
+
+  2b = TMENU
+  2b.NO.allWrap = <div style="background:green;">|</div>
+}
+
+The result can be seen in the image below (applied on the testsite package):
+
+
+
+Applies to GMENU, TMENU, GMENU_LAYERS, TMENU_LAYERS and GMENU_FOLDOUT on >= 2nd level in a menu.]]></description>
+			<default><![CDATA[
+]]></default>
 		</property>
 		<property name="useLargestItemX" type="boolean">
 			<description><![CDATA[If set, then the width of all menuitems will be equal to the largest of them all.]]></description>
@@ -3047,8 +3204,52 @@ For details, see typolink->additionalParams]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
+		<property name="JSWindow" type="boolean">
+			<description><![CDATA[If set, the links of the menu-items will open by JavaScript in a pop-up window. 
+
+.newWindow boolean, that lets every menuitem open in its own window opposite to opening in the same window for each click.
+
+.params is the list of parameters sent to the JavaScript open-window function, eg: 
+width=200,height=300,status=0,menubar=0
+
+NOTE: Does not work with JSMENU's]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
 		<property name="noLink" type="boolean">
 			<description><![CDATA[If set, the item is NOT linked!]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="submenuObjSuffixes" type="string">
+			<description><![CDATA[Defines a suffix for alternative sub-level menu objects. Useful to create special submenus depending on their parent menu element. See example below.
+
+Example:
+This example will generate a menu where the menu objects for the second level will differ depending on the number of the first level item for which the submenu is rendered. The second level objects used are “2” (the default), “2a” and “2b” (the alternatives). Which of them is used is defined by “1.submenuObjSuffixes” which has the configuration “a |*| |*| b”. This configuration means that the first menu element will use configuration “2a” and the last will use “2b” while anything in between will use “2” (no suffix applied)
+
+page.200 = HMENU
+page.200 {
+  1 = TMENU
+  1.wrap = <div style="width:200px; border: 1px solid;">|</div>
+  1.expAll = 1
+  1.submenuObjSuffixes = a |*|  |*| b
+  1.NO.allWrap = <b>|</b><br/>
+
+  2 = TMENU
+  2.NO.allWrap = <div style="background:red;">|</div>
+
+  2a = TMENU
+  2a.NO.allWrap = <div style="background:yellow;">|</div>
+
+  2b = TMENU
+  2b.NO.allWrap = <div style="background:green;">|</div>
+}
+
+The result can be seen in the image below (applied on the testsite package):
+
+
+
+Applies to GMENU, TMENU, GMENU_LAYERS, TMENU_LAYERS and GMENU_FOLDOUT on >= 2nd level in a menu.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -3131,6 +3332,18 @@ Note: Using <TBODY> in this tables seems to break Netscape 4+]]></description>
 			<description><![CDATA[The timeout in the animation, these are milliseconds.]]></description>
 			<default><![CDATA[40]]></default>
 		</property>
+		<property name="JSWindow" type="boolean">
+			<description><![CDATA[If set, the links of the menu-items will open by JavaScript in a pop-up window. 
+
+.newWindow boolean, that lets every menuitem open in its own window opposite to opening in the same window for each click.
+
+.params is the list of parameters sent to the JavaScript open-window function, eg: 
+width=200,height=300,status=0,menubar=0
+
+NOTE: Does not work with JSMENU's]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
 		<property name="menuBackColor" type="HTML-color">
 			<description><![CDATA[Background color behind menu. If not set, transparent (which will not work very well in case .foldSpeed is set to something else than 1. But see for yourself)]]></description>
 			<default><![CDATA[
@@ -3154,13 +3367,45 @@ Note: Using <TBODY> in this tables seems to break Netscape 4+]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
+		<property name="submenuObjSuffixes" type="string">
+			<description><![CDATA[Defines a suffix for alternative sub-level menu objects. Useful to create special submenus depending on their parent menu element. See example below.
+
+Example:
+This example will generate a menu where the menu objects for the second level will differ depending on the number of the first level item for which the submenu is rendered. The second level objects used are “2” (the default), “2a” and “2b” (the alternatives). Which of them is used is defined by “1.submenuObjSuffixes” which has the configuration “a |*| |*| b”. This configuration means that the first menu element will use configuration “2a” and the last will use “2b” while anything in between will use “2” (no suffix applied)
+
+page.200 = HMENU
+page.200 {
+  1 = TMENU
+  1.wrap = <div style="width:200px; border: 1px solid;">|</div>
+  1.expAll = 1
+  1.submenuObjSuffixes = a |*|  |*| b
+  1.NO.allWrap = <b>|</b><br/>
+
+  2 = TMENU
+  2.NO.allWrap = <div style="background:red;">|</div>
+
+  2a = TMENU
+  2a.NO.allWrap = <div style="background:yellow;">|</div>
+
+  2b = TMENU
+  2b.NO.allWrap = <div style="background:green;">|</div>
+}
+
+The result can be seen in the image below (applied on the testsite package):
+
+
+
+Applies to GMENU, TMENU, GMENU_LAYERS, TMENU_LAYERS and GMENU_FOLDOUT on >= 2nd level in a menu.]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
 		<property name="subMenuOffset" type="x,y">
 			<description><![CDATA[Offset of the submenu for each menuitem. This is important because if you don't set this value the items will appear ontop of their “parent”]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
 	</type>
-	<type>
+	<type id="HMENU.X(mObj).GMENU_LAYERS, HMENU.X(mObj).TMENU_LAYERS">
 		<property name="blankStrEqFalse" type="boolean">
 			<description><![CDATA[If set, then the properties topOffset,leftOffset, xPosOffset, yPosOffset are considered “blank” if they are really blank strings - not just “zero”. You should enable this if you wish to be able to work with zero offsets. This is typically the case if you use relative positioning.]]></description>
 			<default><![CDATA[
@@ -3223,6 +3468,18 @@ If set, the freezed element will always stay, even if the submenu is hidden.]]><
 		</property>
 		<property name="hideMenuWhenNotOver" type="int+">
 			<description><![CDATA[If set (> 1) then the menu will hide it self whenever a user moves the cursor away from the menu. The value of this parameter determines the width (pixels) of the zone around the element until the mousepointer is considered to be far enough away to hide the layer.]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="JSWindow" type="boolean">
+			<description><![CDATA[If set, the links of the menu-items will open by JavaScript in a pop-up window. 
+
+.newWindow boolean, that lets every menuitem open in its own window opposite to opening in the same window for each click.
+
+.params is the list of parameters sent to the JavaScript open-window function, eg: 
+width=200,height=300,status=0,menubar=0
+
+NOTE: Does not work with JSMENU's]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -3314,7 +3571,16 @@ Used with either lockPosition=x or xPosOffset defined.]]></description>
 ]]></default>
 		</property>
 	</type>
-	<type id="HMENU.X(mObj).IMGMENU">
+	<type id="IMGMENU">
+		<property name="addParams" type="string">
+			<description><![CDATA[Additional parameter for the menu-links. 
+Example:
+"&some_var=some%20value"
+Must be rawurlencoded.
+Applies to GMENU, TMENU, IMGMENU]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
 		<property name="[Common Item States, see above]" type="IMGMENUITEM">
 			<description><![CDATA[This is the TMENUITEM-options for each category of menuitem that can be generated.
 
@@ -3336,6 +3602,12 @@ ImgMap is automatically used on the links! (that is the ".imgMap" property of th
 			<default><![CDATA[
 ]]></default>
 		</property>
+		<property name="debugItemConf" type="string">
+			<description><![CDATA[Outputs (by the debug()-function) the configuration arrays for each menuitem. Useful to debug optionSplit things and such...
+Applies to GMENU, TMENU, IMGMENU]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
 		<property name="debugRenumberedObject" type="boolean">
 			<description><![CDATA[if set, the final GIFBUILDER object configuration is output in order for you to debug your configuration]]></description>
 			<default><![CDATA[
@@ -3351,6 +3623,18 @@ ImgMap is automatically used on the links! (that is the ".imgMap" property of th
 			<default><![CDATA[
 ]]></default>
 		</property>
+		<property name="JSWindow" type="boolean">
+			<description><![CDATA[If set, the links of the menu-items will open by JavaScript in a pop-up window. 
+
+.newWindow boolean, that lets every menuitem open in its own window opposite to opening in the same window for each click.
+
+.params is the list of parameters sent to the JavaScript open-window function, eg: 
+width=200,height=300,status=0,menubar=0
+
+NOTE: Does not work with JSMENU's]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
 		<property name="main" type="GIFBUILDER">
 			<description><![CDATA[Main configuration of the image-map! This defines the "underlay"!]]></description>
 			<default><![CDATA[
@@ -3359,6 +3643,14 @@ ImgMap is automatically used on the links! (that is the ".imgMap" property of th
 		<property name="noBlur" type="Boolean">
 			<description><![CDATA[Normally graphical links are "blurred" if the browser is MSIE. Blurring removes the ugly box around a clicked link. 
 If this property is set, the link is NOT blurred (browser-default) with "onFocus".]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="overrideId" type="int">
+			<description><![CDATA[integer (page-id)
+			If set, then all links in the menu will point to this pageid. Instead the real uid of the page is sent by the parameter "&real_uid=[uid]".
+This feature is smart, if you have inserted a menu from somewhere else, perhaps a shared menu, but wants the menuitems to call the same page, which then generates a proper output based on the real_uid.
+Applies to GMENU, TMENU, IMGMENU]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -3512,7 +3804,16 @@ If this flag is set, however, no menuitems in the selector box will ever link to
 ]]></default>
 		</property>
 	</type>
-	<type id="HMENU.X(mObj).TMENU">
+	<type id="TMENU">
+		<property name="addParams" type="string">
+			<description><![CDATA[Additional parameter for the menu-links. 
+Example:
+"&some_var=some%20value"
+Must be rawurlencoded.
+Applies to GMENU, TMENU, IMGMENU]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
 		<property name="IProcFunc" type="function-name">
 			<description><![CDATA[The internal array “I” is passed to this function and expected returned as well. Subsequent to this function call the menu item is compiled by implode()'ing the array $I[parts] in the passed array. Thus you may modify this if you need to.
 See example on the testsite and in media/scripts/example_itemArrayProcFunc.php]]></description>
@@ -3537,6 +3838,12 @@ The ->OptionSplit function is run on the whole GIFBUILDER-configuration before t
 			<default><![CDATA[
 ]]></default>
 		</property>
+		<property name="debugItemConf" type="string">
+			<description><![CDATA[Outputs (by the debug()-function) the configuration arrays for each menuitem. Useful to debug optionSplit things and such...
+Applies to GMENU, TMENU, IMGMENU]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
 		<property name="expAll" type="boolean">
 			<description><![CDATA[If this is true, the menu will always show the menu on the level underneath the menuitem. This corresponds to a situation where a user has clicked a menuitem and the menu folds out the next level. This can enable that to happen on all items as default.]]></description>
 			<default><![CDATA[
@@ -3547,9 +3854,29 @@ The ->OptionSplit function is run on the whole GIFBUILDER-configuration before t
 			<default><![CDATA[
 ]]></default>
 		</property>
+		<property name="JSWindow" type="boolean">
+			<description><![CDATA[If set, the links of the menu-items will open by JavaScript in a pop-up window. 
+
+.newWindow boolean, that lets every menuitem open in its own window opposite to opening in the same window for each click.
+
+.params is the list of parameters sent to the JavaScript open-window function, eg: 
+width=200,height=300,status=0,menubar=0
+
+NOTE: Does not work with JSMENU's]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
 		<property name="noBlur" type="boolean">
 			<description><![CDATA[Normally links are "blurred" if the browser is MSIE. Blurring removes the ugly box around a clicked link. 
 If this property is set, the link is NOT blurred (browser-default) with "onFocus".]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="overrideId" type="int">
+			<description><![CDATA[integer (page-id)
+			If set, then all links in the menu will point to this pageid. Instead the real uid of the page is sent by the parameter "&real_uid=[uid]".
+This feature is smart, if you have inserted a menu from somewhere else, perhaps a shared menu, but wants the menuitems to call the same page, which then generates a proper output based on the real_uid.
+Applies to GMENU, TMENU, IMGMENU]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -3557,6 +3884,38 @@ If this property is set, the link is NOT blurred (browser-default) with "onFocus
 			<description><![CDATA[Wraps the whole item using stdWrap
 
 Example: see GMENU.stdWrap]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="submenuObjSuffixes" type="string">
+			<description><![CDATA[Defines a suffix for alternative sub-level menu objects. Useful to create special submenus depending on their parent menu element. See example below.
+
+Example:
+This example will generate a menu where the menu objects for the second level will differ depending on the number of the first level item for which the submenu is rendered. The second level objects used are “2” (the default), “2a” and “2b” (the alternatives). Which of them is used is defined by “1.submenuObjSuffixes” which has the configuration “a |*| |*| b”. This configuration means that the first menu element will use configuration “2a” and the last will use “2b” while anything in between will use “2” (no suffix applied)
+
+page.200 = HMENU
+page.200 {
+  1 = TMENU
+  1.wrap = <div style="width:200px; border: 1px solid;">|</div>
+  1.expAll = 1
+  1.submenuObjSuffixes = a |*|  |*| b
+  1.NO.allWrap = <b>|</b><br/>
+
+  2 = TMENU
+  2.NO.allWrap = <div style="background:red;">|</div>
+
+  2a = TMENU
+  2a.NO.allWrap = <div style="background:yellow;">|</div>
+
+  2b = TMENU
+  2b.NO.allWrap = <div style="background:green;">|</div>
+}
+
+The result can be seen in the image below (applied on the testsite package):
+
+
+
+Applies to GMENU, TMENU, GMENU_LAYERS, TMENU_LAYERS and GMENU_FOLDOUT on >= 2nd level in a menu.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
