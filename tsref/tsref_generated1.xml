@@ -2965,6 +2965,114 @@ Applies to GMENU, TMENU, GMENU_LAYERS, TMENU_LAYERS and GMENU_FOLDOUT on >= 2nd 
 		</property>
 	</type>
 	<type id="GMENU">
+		<property name="ACT" type="GMENU_itemState">
+			<description><![CDATA[Boolean / (config) 
+			Enable/Configuration for menu items which are found in the rootLine]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="ACTRO" type="GMENU_itemState">
+			<description><![CDATA[Boolean / (config) 
+			Enable/Configuration for menu items which are found in the rootLine]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="ACTIFSUB" type="GMENU_itemState">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for menu items which are found in the rootLine and has subpages]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="ACTIFSUBRO" type="GMENU_itemState">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for menu items which are found in the rootLine and has subpages]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="CUR" type="GMENU_itemState">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for a menu item if the item is the current page.]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="CURRO" type="GMENU_itemState">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for a menu item if the item is the current page.]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="CURIFSUB" type="GMENU_itemState">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for a menu item if the item is the current page and has subpages.]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="CURIFSUBRO" type="GMENU_itemState">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for a menu item if the item is the current page and has subpages.]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="IFSUB" type="GMENU_itemState">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for menu items which has subpages]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="IFSUBRO" type="GMENU_itemState">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for menu items which has subpages]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="NO" type="GMENU_itemState">
+			<description><![CDATA[Boolean / (config)
+			The default “Normal” state rendering of Item. This is required for all menus.
+If you specify properties for the “NO” property you do not have to set it “1”. Otherwise with no properties setting “NO=1” will render the menu anyways (for TMENU this may make sense).
+
+The simplest menu TYPO3 can generate is then:
+
+page.20 = HMENU
+page.20.1 = TMENU
+page.20.1.NO = 1
+
+That will be pure <a> tags wrapped around page titles.]]></description>
+			<default><![CDATA[1]]></default>
+		</property>
+		<property name="SPC" type="GMENU_itemState">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for 'Spacer' pages.
+Spacers are pages of the doktype "Spacer". These are not viewable pages but "placeholders" which can be used to divide menuitems.
+
+Note: Rollovers doesn't work with spacers, if you use GMENU!]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="USERDEF1" type="GMENU_itemState">
+			<description><![CDATA[Boolean / (config)
+			Userdefined, see .itemArrayProcFunc for details on how to use this.
+You can set the ITEM_STATE values USERDEF1 and USERDEF2 (+...RO) from a script/userfunction processing the menu item array. See HMENU/special=userdefined or the property .itemArrayProcFunc of the menu objects.]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="USERDEF1RO" type="GMENU_itemState">
+			<description><![CDATA[Boolean / (config)
+			Userdefined, see .itemArrayProcFunc for details on how to use this.
+You can set the ITEM_STATE values USERDEF1 and USERDEF2 (+...RO) from a script/userfunction processing the menu item array. See HMENU/special=userdefined or the property .itemArrayProcFunc of the menu objects.]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="USERDEF2" type="GMENU_itemState">
+			<description><![CDATA[Boolean / (config)
+			(See above)]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="USERDEF2RO" type="GMENU_itemState">
+			<description><![CDATA[Boolean / (config)
+			(See above)]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="USR" type="GMENU_itemState">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for menu items which are access restricted pages that a user has access to.]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="USRRO" type="GMENU_itemState">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for menu items which are access restricted pages that a user has access to.]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
 		<property name="addParams" type="string">
 			<description><![CDATA[Additional parameter for the menu-links. 
 Example:
@@ -3161,7 +3269,7 @@ Applies to GMENU, TMENU, GMENU_LAYERS, TMENU_LAYERS and GMENU_FOLDOUT on >= 2nd 
 ]]></default>
 		</property>
 	</type>
-	<type id="HMENU.X(mObj).GMENU_LAYERS, HMENU.X(mObj).TMENU_LAYERS">
+	<type id="GMENU_itemState" extends="GIFBUILDER">
 		<property name="ATagParams" type="string">
 			<description><![CDATA[Additional parameters]]></description>
 			<default><![CDATA[
@@ -3204,52 +3312,8 @@ For details, see typolink->additionalParams]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="JSWindow" type="boolean">
-			<description><![CDATA[If set, the links of the menu-items will open by JavaScript in a pop-up window. 
-
-.newWindow boolean, that lets every menuitem open in its own window opposite to opening in the same window for each click.
-
-.params is the list of parameters sent to the JavaScript open-window function, eg: 
-width=200,height=300,status=0,menubar=0
-
-NOTE: Does not work with JSMENU's]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
 		<property name="noLink" type="boolean">
 			<description><![CDATA[If set, the item is NOT linked!]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="submenuObjSuffixes" type="string">
-			<description><![CDATA[Defines a suffix for alternative sub-level menu objects. Useful to create special submenus depending on their parent menu element. See example below.
-
-Example:
-This example will generate a menu where the menu objects for the second level will differ depending on the number of the first level item for which the submenu is rendered. The second level objects used are “2” (the default), “2a” and “2b” (the alternatives). Which of them is used is defined by “1.submenuObjSuffixes” which has the configuration “a |*| |*| b”. This configuration means that the first menu element will use configuration “2a” and the last will use “2b” while anything in between will use “2” (no suffix applied)
-
-page.200 = HMENU
-page.200 {
-  1 = TMENU
-  1.wrap = <div style="width:200px; border: 1px solid;">|</div>
-  1.expAll = 1
-  1.submenuObjSuffixes = a |*|  |*| b
-  1.NO.allWrap = <b>|</b><br/>
-
-  2 = TMENU
-  2.NO.allWrap = <div style="background:red;">|</div>
-
-  2a = TMENU
-  2a.NO.allWrap = <div style="background:yellow;">|</div>
-
-  2b = TMENU
-  2b.NO.allWrap = <div style="background:green;">|</div>
-}
-
-The result can be seen in the image below (applied on the testsite package):
-
-
-
-Applies to GMENU, TMENU, GMENU_LAYERS, TMENU_LAYERS and GMENU_FOLDOUT on >= 2nd level in a menu.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -3264,7 +3328,7 @@ Applies to GMENU, TMENU, GMENU_LAYERS, TMENU_LAYERS and GMENU_FOLDOUT on >= 2nd 
 ]]></default>
 		</property>
 	</type>
-	<type id="HMENU.X(mObj).GMENU_FOLDOUT">
+	<type id="GMENU_FOLDOUT" extends="GMENU">
 		<property name="adjustItemsH" type="int">
 			<description><![CDATA[Adjusts the height calculation of the menulayers of the first level (called Top)
 
@@ -3281,8 +3345,9 @@ See above]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="arrowImgParams" type="&lt;img&gt; params">
-			<description><![CDATA[Parameters to the arrow-image.
+		<property name="arrowImgParams" type="string">
+			<description><![CDATA[&lt;img&gt; params
+			Parameters to the arrow-image.
 
 Example:
 hspace=5 vspace=7]]></description>
@@ -3296,13 +3361,14 @@ The image is inserted just before the menuitem. If you want to change the positi
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="bottomContent" type="cObject">
+		<property name="bottomContent" type="cObj">
 			<description><![CDATA[Content for the bottom layer that covers the end of the menu. ]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="bottomHeight" type="int, pixels">
-			<description><![CDATA[Sets the height of the bottom layer. Is important if the bottomlayer  contains either content or a background color: Else the layer will be clipped.]]></description>
+		<property name="bottomHeight" type="int">
+			<description><![CDATA[pixels 
+			Sets the height of the bottom layer. Is important if the bottomlayer  contains either content or a background color: Else the layer will be clipped.]]></description>
 			<default><![CDATA[100]]></default>
 		</property>
 		<property name="displayActiveOnLoad" type="boolean">
@@ -3324,8 +3390,9 @@ Doing this ensures that the layers renders equally in the supported browsers. Ho
 Note: Using <TBODY> in this tables seems to break Netscape 4+]]></description>
 			<default><![CDATA[0]]></default>
 		</property>
-		<property name="foldSpeed" type="int, range 1-100">
-			<description><![CDATA[How many steps in an animation? Choose 1 for no animation.]]></description>
+		<property name="foldSpeed" type="int">
+			<description><![CDATA[int, range 1-100
+			How many steps in an animation? Choose 1 for no animation.]]></description>
 			<default><![CDATA[1]]></default>
 		</property>
 		<property name="foldTimer" type="int">
@@ -3344,8 +3411,9 @@ NOTE: Does not work with JSMENU's]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="menuBackColor" type="HTML-color">
-			<description><![CDATA[Background color behind menu. If not set, transparent (which will not work very well in case .foldSpeed is set to something else than 1. But see for yourself)]]></description>
+		<property name="menuBackColor" type="string">
+			<description><![CDATA[HTML-color
+			Background color behind menu. If not set, transparent (which will not work very well in case .foldSpeed is set to something else than 1. But see for yourself)]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -3353,13 +3421,15 @@ NOTE: Does not work with JSMENU's]]></description>
 			<description><![CDATA[Height of the whole menulayer. Seems to be not so important.]]></description>
 			<default><![CDATA[400]]></default>
 		</property>
-		<property name="menuOffset" type="x,y">
-			<description><![CDATA[Offset of the menu main layer on the page. From upperleft corner]]></description>
+		<property name="menuOffset" type="string">
+			<description><![CDATA[x,y
+			Offset of the menu main layer on the page. From upperleft corner]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="menuWidth" type="int, pixels">
-			<description><![CDATA[Width of the whole menu main layer. Important to set, especially for the bottomlayer as it is clipped by this value. Always try to set this to the width in pixels of the menu]]></description>
+		<property name="menuWidth" type="int">
+			<description><![CDATA[pixels
+			Width of the whole menu main layer. Important to set, especially for the bottomlayer as it is clipped by this value. Always try to set this to the width in pixels of the menu]]></description>
 			<default><![CDATA[170]]></default>
 		</property>
 		<property name="stayFolded" type="boolean">
@@ -3399,20 +3469,22 @@ Applies to GMENU, TMENU, GMENU_LAYERS, TMENU_LAYERS and GMENU_FOLDOUT on >= 2nd 
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="subMenuOffset" type="x,y">
-			<description><![CDATA[Offset of the submenu for each menuitem. This is important because if you don't set this value the items will appear ontop of their “parent”]]></description>
+		<property name="subMenuOffset" type="string">
+			<description><![CDATA[x,y
+			Offset of the submenu for each menuitem. This is important because if you don't set this value the items will appear ontop of their “parent”]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
 	</type>
-	<type id="HMENU.X(mObj).GMENU_LAYERS, HMENU.X(mObj).TMENU_LAYERS">
+	<type id="MENU_LAYERS">
 		<property name="blankStrEqFalse" type="boolean">
 			<description><![CDATA[If set, then the properties topOffset,leftOffset, xPosOffset, yPosOffset are considered “blank” if they are really blank strings - not just “zero”. You should enable this if you wish to be able to work with zero offsets. This is typically the case if you use relative positioning.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="bordersWithin" type="l,t,r,b,l,t">
-			<description><![CDATA[Keep borders of the layer within these limits in pixels. Zero is 'not set'
+		<property name="bordersWithin" type="string">
+			<description><![CDATA[l,t,r,b,l,t
+			Keep borders of the layer within these limits in pixels. Zero is 'not set'
 (Syntax: List of integers, evaluated clockwise: Left, Top, Right, Bottom, Left, Top)]]></description>
 			<default><![CDATA[
 ]]></default>
@@ -3571,7 +3643,117 @@ Used with either lockPosition=x or xPosOffset defined.]]></description>
 ]]></default>
 		</property>
 	</type>
+	<type id="TMENU_LAYERS" extends="TMENU,MENU_LAYERS"/>
+	<type id="GMENU_LAYERS" extends="GMENU,MENU_LAYERS"/>
 	<type id="IMGMENU">
+		<property name="ACT" type="IMGMENUITEM">
+			<description><![CDATA[Boolean / (config) 
+			Enable/Configuration for menu items which are found in the rootLine]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="ACTRO" type="IMGMENUITEM">
+			<description><![CDATA[Boolean / (config) 
+			Enable/Configuration for menu items which are found in the rootLine]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="ACTIFSUB" type="IMGMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for menu items which are found in the rootLine and has subpages]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="ACTIFSUBRO" type="IMGMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for menu items which are found in the rootLine and has subpages]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="CUR" type="IMGMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for a menu item if the item is the current page.]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="CURRO" type="IMGMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for a menu item if the item is the current page.]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="CURIFSUB" type="IMGMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for a menu item if the item is the current page and has subpages.]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="CURIFSUBRO" type="IMGMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for a menu item if the item is the current page and has subpages.]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="IFSUB" type="IMGMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for menu items which has subpages]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="IFSUBRO" type="IMGMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for menu items which has subpages]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="NO" type="IMGMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			The default “Normal” state rendering of Item. This is required for all menus.
+If you specify properties for the “NO” property you do not have to set it “1”. Otherwise with no properties setting “NO=1” will render the menu anyways (for TMENU this may make sense).
+
+The simplest menu TYPO3 can generate is then:
+
+page.20 = HMENU
+page.20.1 = TMENU
+page.20.1.NO = 1
+
+That will be pure <a> tags wrapped around page titles.]]></description>
+			<default><![CDATA[1]]></default>
+		</property>
+		<property name="SPC" type="IMGMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for 'Spacer' pages.
+Spacers are pages of the doktype "Spacer". These are not viewable pages but "placeholders" which can be used to divide menuitems.
+
+Note: Rollovers doesn't work with spacers, if you use GMENU!]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="USERDEF1" type="IMGMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Userdefined, see .itemArrayProcFunc for details on how to use this.
+You can set the ITEM_STATE values USERDEF1 and USERDEF2 (+...RO) from a script/userfunction processing the menu item array. See HMENU/special=userdefined or the property .itemArrayProcFunc of the menu objects.]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="USERDEF1RO" type="IMGMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Userdefined, see .itemArrayProcFunc for details on how to use this.
+You can set the ITEM_STATE values USERDEF1 and USERDEF2 (+...RO) from a script/userfunction processing the menu item array. See HMENU/special=userdefined or the property .itemArrayProcFunc of the menu objects.]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="USERDEF2" type="IMGMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			(See above)]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="USERDEF2RO" type="IMGMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			(See above)]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="USR" type="IMGMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for menu items which are access restricted pages that a user has access to.]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="USRRO" type="IMGMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for menu items which are access restricted pages that a user has access to.]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
 		<property name="addParams" type="string">
 			<description><![CDATA[Additional parameter for the menu-links. 
 Example:
@@ -3597,8 +3779,9 @@ ImgMap is automatically used on the links! (that is the ".imgMap" property of th
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="dWorkArea" type="offset + calc">
-			<description><![CDATA[Main offset of the GIFBUILDER-items (also called the "distribution")]]></description>
+		<property name="dWorkArea" type="string">
+			<description><![CDATA[offset + calc
+			Main offset of the GIFBUILDER-items (also called the "distribution")]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -3618,8 +3801,9 @@ Applies to GMENU, TMENU, IMGMENU]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="imgMapExtras" type="&lt;area...&gt;-tags">
-			<description><![CDATA[Extra <area...>tags for the image-map]]></description>
+		<property name="imgMapExtras" type="string">
+			<description><![CDATA[&lt;area...&gt;-tags
+			Extra <area...>tags for the image-map]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -3640,7 +3824,7 @@ NOTE: Does not work with JSMENU's]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="noBlur" type="Boolean">
+		<property name="noBlur" type="boolean">
 			<description><![CDATA[Normally graphical links are "blurred" if the browser is MSIE. Blurring removes the ugly box around a clicked link. 
 If this property is set, the link is NOT blurred (browser-default) with "onFocus".]]></description>
 			<default><![CDATA[
@@ -3654,14 +3838,15 @@ Applies to GMENU, TMENU, IMGMENU]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="params" type="&lt;img&gt;-params">
-			<description><![CDATA[
+		<property name="params" type="string">
+			<description><![CDATA[&lt;img&gt;-params
 ]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="target" type="target">
-			<description><![CDATA[Target of the menulinks]]></description>
+		<property name="target" type="string">
+			<description><![CDATA[target
+			Target of the menulinks]]></description>
 			<default><![CDATA[self]]></default>
 		</property>
 		<property name="wrap" type="wrap">
@@ -3671,8 +3856,8 @@ Applies to GMENU, TMENU, IMGMENU]]></description>
 ]]></default>
 		</property>
 	</type>
-	<type id="HMENU.X(mObj).IMGMENUITEM">
-		<property name="1,2,3,4..." type="GifBuilderObj">
+	<type id="IMGMENUITEM">
+		<property name="1" type="GifBuilderObj">
 			<description><![CDATA[NOTE:
 The way a imagemap is made is this; All IMGMENUITEMS are included in one big Gifbuilderobj (and renumbered!!). Because of this, Gifbuilderobjects on the next level will not be able to access the data of each menuitem.
 Also the feature of using [##.w] and [##.h] with +calc is currently not supported by IMGMENUITEMs.
@@ -3709,9 +3894,144 @@ In the example below, the text of each menuitem is rendered by letting the title
 			<default><![CDATA[
 ]]></default>
 		</property>
+		<property name="2" type="GifBuilderObj">
+			<description><![CDATA[NOTE:
+The way a imagemap is made is this; All IMGMENUITEMS are included in one big Gifbuilderobj (and renumbered!!). Because of this, Gifbuilderobjects on the next level will not be able to access the data of each menuitem.
+Also the feature of using [##.w] and [##.h] with +calc is currently not supported by IMGMENUITEMs.
+Therefore all IMAGE-objects on the first level is checked; if "file" or "mask" for any IMAGE-objects are set to "GIFBUILDER", the Gifbuilder-object is parsed to see if any TEXT-objects are present and if so, the TEXT-object is "checked" - which means, that the stdWrap-function is called at a time where the $cObj->data-array is set to the actual menuitem.
+In the example below, the text of each menuitem is rendered by letting the title be rendered on a mask instead of directly on the image. Please observe that the "NO.10"-object is present in order for the image-map coordinates to be generated!!
+
+  NO.6 = IMAGE
+  NO.6.file = masked_pencolor*.gif
+  NO.6.mask = GIFBUILDER
+  NO.6.mask {
+    XY = 500, 200
+    backColor = black
+    10 = TEXT
+    10 {
+      text.field = title
+      fontFile = fileadmin/fonts/caflisch.ttf
+      fontSize = 34
+      fontColor = white
+      angle = 15
+      offset = 48,110
+    }
+    20 = EFFECT
+    20.value = blur=80
+  } 
+  NO.10 = TEXT
+  NO.10 {
+    text.field = title
+    fontFile = fileadmin/fonts/caflisch.ttf
+    fontSize = 34
+    angle = 15
+    offset = 48,110
+    hideButCreateMap = 1
+  }]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="3" type="GifBuilderObj">
+			<description><![CDATA[NOTE:
+The way a imagemap is made is this; All IMGMENUITEMS are included in one big Gifbuilderobj (and renumbered!!). Because of this, Gifbuilderobjects on the next level will not be able to access the data of each menuitem.
+Also the feature of using [##.w] and [##.h] with +calc is currently not supported by IMGMENUITEMs.
+Therefore all IMAGE-objects on the first level is checked; if "file" or "mask" for any IMAGE-objects are set to "GIFBUILDER", the Gifbuilder-object is parsed to see if any TEXT-objects are present and if so, the TEXT-object is "checked" - which means, that the stdWrap-function is called at a time where the $cObj->data-array is set to the actual menuitem.
+In the example below, the text of each menuitem is rendered by letting the title be rendered on a mask instead of directly on the image. Please observe that the "NO.10"-object is present in order for the image-map coordinates to be generated!!
+
+  NO.6 = IMAGE
+  NO.6.file = masked_pencolor*.gif
+  NO.6.mask = GIFBUILDER
+  NO.6.mask {
+    XY = 500, 200
+    backColor = black
+    10 = TEXT
+    10 {
+      text.field = title
+      fontFile = fileadmin/fonts/caflisch.ttf
+      fontSize = 34
+      fontColor = white
+      angle = 15
+      offset = 48,110
+    }
+    20 = EFFECT
+    20.value = blur=80
+  } 
+  NO.10 = TEXT
+  NO.10 {
+    text.field = title
+    fontFile = fileadmin/fonts/caflisch.ttf
+    fontSize = 34
+    angle = 15
+    offset = 48,110
+    hideButCreateMap = 1
+  }]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="4" type="GifBuilderObj">
+			<description><![CDATA[NOTE:
+The way a imagemap is made is this; All IMGMENUITEMS are included in one big Gifbuilderobj (and renumbered!!). Because of this, Gifbuilderobjects on the next level will not be able to access the data of each menuitem.
+Also the feature of using [##.w] and [##.h] with +calc is currently not supported by IMGMENUITEMs.
+Therefore all IMAGE-objects on the first level is checked; if "file" or "mask" for any IMAGE-objects are set to "GIFBUILDER", the Gifbuilder-object is parsed to see if any TEXT-objects are present and if so, the TEXT-object is "checked" - which means, that the stdWrap-function is called at a time where the $cObj->data-array is set to the actual menuitem.
+In the example below, the text of each menuitem is rendered by letting the title be rendered on a mask instead of directly on the image. Please observe that the "NO.10"-object is present in order for the image-map coordinates to be generated!!
+
+  NO.6 = IMAGE
+  NO.6.file = masked_pencolor*.gif
+  NO.6.mask = GIFBUILDER
+  NO.6.mask {
+    XY = 500, 200
+    backColor = black
+    10 = TEXT
+    10 {
+      text.field = title
+      fontFile = fileadmin/fonts/caflisch.ttf
+      fontSize = 34
+      fontColor = white
+      angle = 15
+      offset = 48,110
+    }
+    20 = EFFECT
+    20.value = blur=80
+  } 
+  NO.10 = TEXT
+  NO.10 {
+    text.field = title
+    fontFile = fileadmin/fonts/caflisch.ttf
+    fontSize = 34
+    angle = 15
+    offset = 48,110
+    hideButCreateMap = 1
+  }]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="distrib" type="string">
+			<description><![CDATA[.distrib is (x,y,v,h +calc) of the distribution of the menuitems. This provides a way to space each item from the other. The codes "textX" and "textY" can be used for the width (X) and height (Y) dimension of each link.
+This works by adding a WORKAREA-GifBuilderObj between each of the IMGMENUITEM ("subset" of a GIFBUILDER-object) and this workarea defines where the text should be printed. As such the "x,y" defines the offset the next item will have (this should be the width of the previous in many cases!) and "v,h" defines the dimensions of the current item. 
+Consider this example taken from the static_template "template: MM":
+    NO.distrib = textX+10, 0, textX+10, textY+5
+In the future TypoScript may provide better ways to position GIFBUILDER-objects on the image-maps! ]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
 	</type>
-	<type id="HMENU.X(mObj).JSMENU">
-		<property name="1,2,3,4..." type="JSMENUITEM">
+	<type id="JSMENU">
+		<property name="1" type="JSMENUITEM">
+			<description><![CDATA[levels-config]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="2" type="JSMENUITEM">
+			<description><![CDATA[levels-config]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="3" type="JSMENUITEM">
+			<description><![CDATA[levels-config]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="4" type="JSMENUITEM">
 			<description><![CDATA[levels-config]]></description>
 			<default><![CDATA[
 ]]></default>
@@ -3731,8 +4051,9 @@ In the example below, the text of each menuitem is rendered by letting the title
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="levels" type="int, 1-5">
-			<description><![CDATA[How many levels there are]]></description>
+		<property name="levels" type="int">
+			<description><![CDATA[int, 1-5
+			How many levels there are]]></description>
 			<default><![CDATA[1]]></default>
 		</property>
 		<property name="menuName" type="string">
@@ -3741,8 +4062,9 @@ If you have more than one JSMENU on the page, you should set this value for each
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="target" type="target">
-			<description><![CDATA[Decides target of the menu-links]]></description>
+		<property name="target" type="string">
+			<description><![CDATA[target
+			Decides target of the menu-links]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -3757,7 +4079,7 @@ If you have more than one JSMENU on the page, you should set this value for each
 ]]></default>
 		</property>
 	</type>
-	<type id="HMENU.X(mObj).JSMENUITEM">
+	<type id="JSMENUITEM">
 		<property name="additionalParams" type="string">
 			<description><![CDATA[Additional parameters to the <select> box. Eg, you could set the width with a style-parameter like this:
 style="width: 200px;"]]></description>
@@ -3769,12 +4091,13 @@ style="width: 200px;"]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="elements" type="int+">
-			<description><![CDATA[Initial number of elements in the menu.  This is of course overruled by the actual menu item texts.]]></description>
+		<property name="elements" type="int">
+			<description><![CDATA[int+
+			Initial number of elements in the menu.  This is of course overruled by the actual menu item texts.]]></description>
 			<default><![CDATA[5]]></default>
 		</property>
 		<property name="firstLabel" type="string">
-			<description><![CDATA[Firt label in top of the menu (default is blank)]]></description>
+			<description><![CDATA[First label in top of the menu (default is blank)]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -3789,13 +4112,14 @@ If this flag is set, however, no menuitems in the selector box will ever link to
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="showFi rst" type="boolean">
+		<property name="showFirst" type="boolean">
 			<description><![CDATA[if set, the first link will be shown when the menu is updated.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="width" type="int+">
-			<description><![CDATA[Initial width of the boxes set by a number of _ (underscores)]]></description>
+		<property name="width" type="int">
+			<description><![CDATA[int+
+			Initial width of the boxes set by a number of _ (underscores)]]></description>
 			<default><![CDATA[14]]></default>
 		</property>
 		<property name="wrap" type="wrap">
@@ -3805,6 +4129,114 @@ If this flag is set, however, no menuitems in the selector box will ever link to
 		</property>
 	</type>
 	<type id="TMENU">
+		<property name="ACT" type="TMENUITEM">
+			<description><![CDATA[Boolean / (config) 
+			Enable/Configuration for menu items which are found in the rootLine]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="ACTRO" type="TMENUITEM">
+			<description><![CDATA[Boolean / (config) 
+			Enable/Configuration for menu items which are found in the rootLine]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="ACTIFSUB" type="TMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for menu items which are found in the rootLine and has subpages]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="ACTIFSUBRO" type="TMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for menu items which are found in the rootLine and has subpages]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="CUR" type="TMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for a menu item if the item is the current page.]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="CURRO" type="TMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for a menu item if the item is the current page.]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="CURIFSUB" type="TMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for a menu item if the item is the current page and has subpages.]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="CURIFSUBRO" type="TMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for a menu item if the item is the current page and has subpages.]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="IFSUB" type="TMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for menu items which has subpages]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="IFSUBRO" type="TMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for menu items which has subpages]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="NO" type="TMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			The default “Normal” state rendering of Item. This is required for all menus.
+If you specify properties for the “NO” property you do not have to set it “1”. Otherwise with no properties setting “NO=1” will render the menu anyways (for TMENU this may make sense).
+
+The simplest menu TYPO3 can generate is then:
+
+page.20 = HMENU
+page.20.1 = TMENU
+page.20.1.NO = 1
+
+That will be pure <a> tags wrapped around page titles.]]></description>
+			<default><![CDATA[1]]></default>
+		</property>
+		<property name="SPC" type="TMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for 'Spacer' pages.
+Spacers are pages of the doktype "Spacer". These are not viewable pages but "placeholders" which can be used to divide menuitems.
+
+Note: Rollovers doesn't work with spacers, if you use GMENU!]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="USERDEF1" type="TMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Userdefined, see .itemArrayProcFunc for details on how to use this.
+You can set the ITEM_STATE values USERDEF1 and USERDEF2 (+...RO) from a script/userfunction processing the menu item array. See HMENU/special=userdefined or the property .itemArrayProcFunc of the menu objects.]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="USERDEF1RO" type="TMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Userdefined, see .itemArrayProcFunc for details on how to use this.
+You can set the ITEM_STATE values USERDEF1 and USERDEF2 (+...RO) from a script/userfunction processing the menu item array. See HMENU/special=userdefined or the property .itemArrayProcFunc of the menu objects.]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="USERDEF2" type="TMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			(See above)]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="USERDEF2RO" type="TMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			(See above)]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="USR" type="TMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for menu items which are access restricted pages that a user has access to.]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
+		<property name="USRRO" type="TMENUITEM">
+			<description><![CDATA[Boolean / (config)
+			Enable/Configuration for menu items which are access restricted pages that a user has access to.]]></description>
+			<default><![CDATA[0]]></default>
+		</property>
 		<property name="addParams" type="string">
 			<description><![CDATA[Additional parameter for the menu-links. 
 Example:
@@ -3814,8 +4246,9 @@ Applies to GMENU, TMENU, IMGMENU]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="IProcFunc" type="function-name">
-			<description><![CDATA[The internal array “I” is passed to this function and expected returned as well. Subsequent to this function call the menu item is compiled by implode()'ing the array $I[parts] in the passed array. Thus you may modify this if you need to.
+		<property name="IProcFunc" type="string">
+			<description><![CDATA[function-name
+			The internal array “I” is passed to this function and expected returned as well. Subsequent to this function call the menu item is compiled by implode()'ing the array $I[parts] in the passed array. Thus you may modify this if you need to.
 See example on the testsite and in media/scripts/example_itemArrayProcFunc.php]]></description>
 			<default><![CDATA[
 ]]></default>
@@ -3919,8 +4352,9 @@ Applies to GMENU, TMENU, GMENU_LAYERS, TMENU_LAYERS and GMENU_FOLDOUT on >= 2nd 
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="target" type="target">
-			<description><![CDATA[Target of the menulinks]]></description>
+		<property name="target" type="string">
+			<description><![CDATA[target
+			Target of the menulinks]]></description>
 			<default><![CDATA[self]]></default>
 		</property>
 		<property name="wrap" type="wrap">
@@ -3929,22 +4363,23 @@ Applies to GMENU, TMENU, GMENU_LAYERS, TMENU_LAYERS and GMENU_FOLDOUT on >= 2nd 
 ]]></default>
 		</property>
 	</type>
-	<type id="HMENU.X(mObj).TMENUITEM">
+	<type id="TMENUITEM">
 		<property name="ATagBeforeWrap" type="boolean">
 			<description><![CDATA[
 ]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="ATagParams" type="&lt;A&gt;-params /stdWrap">
-			<description><![CDATA[Additional parameters
+		<property name="ATagParams" type="stdWrap">
+			<description><![CDATA[&lt;A&gt;-params /stdWrap
+			Additional parameters
 
 Example:
 class=”board”]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="ATagTitle" type="string /stdWrap">
+		<property name="ATagTitle" type="stdWrap">
 			<description><![CDATA[Allows you to specify the "title" attribute of the <a> tag around the menu item.
 
 Example:
@@ -3982,35 +4417,70 @@ This example will start out with the table cells in #eeeeee and change them to #
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="additionalParams" type="string /stdWrap">
+		<property name="additionalParams" type="stdWrap">
 			<description><![CDATA[Define parameters that are added to the end of the URL. This must be code ready to insert after the last parameter.
 
 For details, see typolink->additionalParams]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="after..." type="[mixed]">
-			<description><![CDATA[The series of “before...” properties are duplicated to “after...” properties as well. The only difference is that the output generated by the .after.... properties are placed after the link and not before.]]></description>
+		<property name="after" type="stdWrap">
+			<description><![CDATA[HTML /stdWrap
+			The series of “before...” properties are duplicated to “after...” properties as well. The only difference is that the output generated by the .after.... properties are placed after the link and not before.
+]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
+		<property name="afterImg" type="imgResource">The series of “before...” properties are duplicated to “after...” properties as well. The only difference is that the output generated by the .after.... properties are placed after the link and not before.
+			<description><![CDATA[
+]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="afterImgLink" type="boolean">
+			<description><![CDATA[If set, this image is linked with the same <A> tag as the text
+			The series of “before...” properties are duplicated to “after...” properties as well. The only difference is that the output generated by the .after.... properties are placed after the link and not before.]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="afterImgTagParams" type="string">
+			<description><![CDATA[&lt;img&gt;-params
+			The series of “before...” properties are duplicated to “after...” properties as well. The only difference is that the output generated by the .after.... properties are placed after the link and not before.
+]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="afterROImg" type="imgResource">
+			<description><![CDATA[If set, ".afterImg" and ".afterROImg" is expected to create a rollOver-pair.
+			The series of “before...” properties are duplicated to “after...” properties as well. The only difference is that the output generated by the .after.... properties are placed after the link and not before. ]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>
+		<property name="afterWrap" type="wrap">
+			<description><![CDATA[wrap around the ".after"-code
+			The series of “before...” properties are duplicated to “after...” properties as well. The only difference is that the output generated by the .after.... properties are placed after the link and not before.]]></description>
+			<default><![CDATA[
+]]></default>
+		</property>		
 		<property name="allStdWrap" type="stdWrap">
 			<description><![CDATA[stdWrap of the whole item]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="allWrap" type="wrap /stdWrap">
-			<description><![CDATA[Wraps the whole item]]></description>
+		<property name="allWrap" type="stdWrap">
+			<description><![CDATA[wrap /stdWrap
+			Wraps the whole item]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="altTarget" type="target">
-			<description><![CDATA[Alternative target overriding the target property of the TMENU if set.]]></description>
+		<property name="altTarget" type="string">
+			<description><![CDATA[target
+			Alternative target overriding the target property of the TMENU if set.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="before" type="HTML /stdWrap">
-			<description><![CDATA[
+		<property name="before" type="stdWrap">
+			<description><![CDATA[HTML /stdWrap
 ]]></description>
 			<default><![CDATA[
 ]]></default>
@@ -4026,8 +4496,8 @@ For details, see typolink->additionalParams]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="beforeImgTagParams" type="&lt;img&gt;-params">
-			<description><![CDATA[
+		<property name="beforeImgTagParams" type="string">
+			<description><![CDATA[&lt;img&gt;-params
 ]]></description>
 			<default><![CDATA[
 ]]></default>
@@ -4063,7 +4533,7 @@ For details, see typolink->additionalParams]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="stdWrap2" type="wrap /stdWrap">
+		<property name="stdWrap2" type="stdWrap">
 			<description><![CDATA[stdWrap to the total link-text and ATag.  (Notice that the plain default value passed to stdWrap function is “|“.)]]></description>
 			<default><![CDATA[ | ]]></default>
 		</property>
@@ -4077,116 +4547,6 @@ This is useful if you want to insert an identification code in the HTML in order
 			<description><![CDATA[Wraps the whole item and any submenu concatenated to it.]]></description>
 			<default><![CDATA[
 ]]></default>
-		</property>
-	</type>
-	<type id="mObj_itemState">
-		<property name="ACT" type="boolean">
-			<description><![CDATA[Boolean / (config) 
-			Enable/Configuration for menu items which are found in the rootLine]]></description>
-			<default><![CDATA[0]]></default>
-		</property>
-		<property name="ACTRO" type="boolean">
-			<description><![CDATA[Boolean / (config) 
-			Enable/Configuration for menu items which are found in the rootLine]]></description>
-			<default><![CDATA[0]]></default>
-		</property>
-		<property name="ACTIFSUB" type="boolean">
-			<description><![CDATA[Boolean / (config)
-			Enable/Configuration for menu items which are found in the rootLine and has subpages]]></description>
-			<default><![CDATA[0]]></default>
-		</property>
-		<property name="ACTIFSUBRO" type="boolean">
-			<description><![CDATA[Boolean / (config)
-			Enable/Configuration for menu items which are found in the rootLine and has subpages]]></description>
-			<default><![CDATA[0]]></default>
-		</property>
-		<property name="CUR" type="boolean">
-			<description><![CDATA[Boolean / (config)
-			Enable/Configuration for a menu item if the item is the current page.]]></description>
-			<default><![CDATA[0]]></default>
-		</property>
-		<property name="CURRO" type="boolean">
-			<description><![CDATA[Boolean / (config)
-			Enable/Configuration for a menu item if the item is the current page.]]></description>
-			<default><![CDATA[0]]></default>
-		</property>
-		<property name="CURIFSUB" type="boolean">
-			<description><![CDATA[Boolean / (config)
-			Enable/Configuration for a menu item if the item is the current page and has subpages.]]></description>
-			<default><![CDATA[0]]></default>
-		</property>
-		<property name="CURIFSUBRO" type="boolean">
-			<description><![CDATA[Boolean / (config)
-			Enable/Configuration for a menu item if the item is the current page and has subpages.]]></description>
-			<default><![CDATA[0]]></default>
-		</property>
-		<property name="IFSUB" type="boolean">
-			<description><![CDATA[Boolean / (config)
-			Enable/Configuration for menu items which has subpages]]></description>
-			<default><![CDATA[0]]></default>
-		</property>
-		<property name="IFSUBRO" type="boolean">
-			<description><![CDATA[Boolean / (config)
-			Enable/Configuration for menu items which has subpages]]></description>
-			<default><![CDATA[0]]></default>
-		</property>
-		<property name="NO" type="boolean">
-			<description><![CDATA[Boolean / (config)
-			The default “Normal” state rendering of Item. This is required for all menus.
-If you specify properties for the “NO” property you do not have to set it “1”. Otherwise with no properties setting “NO=1” will render the menu anyways (for TMENU this may make sense).
-
-The simplest menu TYPO3 can generate is then:
-
-page.20 = HMENU
-page.20.1 = TMENU
-page.20.1.NO = 1
-
-That will be pure <a> tags wrapped around page titles.]]></description>
-			<default><![CDATA[1]]></default>
-		</property>
-		<property name="SPC" type="boolean">
-			<description><![CDATA[Boolean / (config)
-			Enable/Configuration for 'Spacer' pages.
-Spacers are pages of the doktype "Spacer". These are not viewable pages but "placeholders" which can be used to divide menuitems.
-
-Note: Rollovers doesn't work with spacers, if you use GMENU!]]></description>
-			<default><![CDATA[0]]></default>
-		</property>
-		<property name="USERDEF1" type="boolean">
-			<description><![CDATA[Boolean / (config)
-			Userdefined, see .itemArrayProcFunc for details on how to use this.
-You can set the ITEM_STATE values USERDEF1 and USERDEF2 (+...RO) from a script/userfunction processing the menu item array. See HMENU/special=userdefined or the property .itemArrayProcFunc of the menu objects.]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="USERDEF1RO" type="boolean">
-			<description><![CDATA[Boolean / (config)
-			Userdefined, see .itemArrayProcFunc for details on how to use this.
-You can set the ITEM_STATE values USERDEF1 and USERDEF2 (+...RO) from a script/userfunction processing the menu item array. See HMENU/special=userdefined or the property .itemArrayProcFunc of the menu objects.]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="USERDEF2" type="boolean">
-			<description><![CDATA[Boolean / (config)
-			(See above)]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="USERDEF2RO" type="boolean">
-			<description><![CDATA[Boolean / (config)
-			(See above)]]></description>
-			<default><![CDATA[
-]]></default>
-		</property>
-		<property name="USR" type="boolean">
-			<description><![CDATA[Boolean / (config)
-			Enable/Configuration for menu items which are access restricted pages that a user has access to.]]></description>
-			<default><![CDATA[0]]></default>
-		</property>
-		<property name="USRRO" type="boolean">
-			<description><![CDATA[Boolean / (config)
-			Enable/Configuration for menu items which are access restricted pages that a user has access to.]]></description>
-			<default><![CDATA[0]]></default>
 		</property>
 	</type>
 </tsRef>
