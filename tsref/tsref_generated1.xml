@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- edited with XMLSpy v2006 rel. 3 sp2 (http://www.altova.com) by Christian (schinkistan) -->
 <tsRef>
 	<type id="CARRAY" extends="stdWrap" name="CARRAY">
 		<property name="1" type="cObj">
