@@ -1,5 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tsRef>
+	<type id="cObj"/>
+	<type id="array"/>
+	<type id="int"/>
+	<type id="intList"/>
+	<type id="double"/>
+	<type id="boolean"/>
+	<type id="string"/>
+	<type id="ADMPANEL"/>
+	<type id="ARR_languages_strings" name="ARR_languages_strings">
+		<property name="default" type="string"/>
+		<property name="en" type="string"/>
+		<property name="dk" type="string"/>
+		<property name="de" type="string"/>
+		<property name="no" type="string"/>
+		<property name="it" type="string"/>
+		<property name="fr" type="string"/>
+		<property name="nl" type="string"/>
+		<property name="cz" type="string"/>
+		<property name="pl" type="string"/>
+		<property name="si" type="string"/>
+		<property name="fi" type="string"/>
+		<property name="tr" type="string"/>
+		<property name="se" type="string"/>
+		<property name="pt" type="string"/>
+		<property name="ru" type="string"/>
+		<property name="ro" type="string"/>
+		<property name="ch" type="string"/>
+		<property name="sk" type="string"/>
+		<property name="lt" type="string"/>
+		<property name="is" type="string"/>
+		<property name="hr" type="string"/>
+		<property name="hu" type="string"/>
+		<property name="gl" type="string"/>
+		<property name="th" type="string"/>
+		<property name="gr" type="string"/>
+		<property name="hk" type="string"/>
+		<property name="eu" type="string"/>
+		<property name="bg" type="string"/>
+		<property name="br" type="string"/>
+		<property name="et" type="string"/>
+		<property name="ar" type="string"/>
+		<property name="he" type="string"/>
+		<property name="ua" type="string"/>
+		<property name="lv" type="string"/>
+		<property name="jp" type="string"/>
+		<property name="vn" type="string"/>
+		<property name="ca" type="string"/>
+		<property name="ba" type="string"/>
+		<property name="kr" type="string"/>
+		<property name="eo" type="string"/>
+		<property name="my" type="string"/>
+		<property name="hi" type="string"/>
+	</type>
 	<type id="CARRAY" extends="stdWrap" name="CARRAY">
 		<property name="1" type="cObj">
 			<description><![CDATA[This is a numerical "array" of content-objects (cObjects). The order by which you specific the objects is not important as the array will be sorted before it's parsed!
@@ -78,6 +131,24 @@ helloWorld.value = this item will be returned
 			<default><![CDATA[ | <BR>]]></default>
 		</property>
 	</type>
+	<type id="cObjArray">
+		<property name="1" type="cObj">
+			<description><![CDATA[This is a numerical "array" of content-objects (cObjects). 
+]]></description>
+		</property>
+		<property name="2" type="cObj">
+			<description><![CDATA[This is a numerical "array" of content-objects (cObjects). 
+]]></description>
+		</property>
+		<property name="3" type="cObj">
+			<description><![CDATA[This is a numerical "array" of content-objects (cObjects). 
+]]></description>
+		</property>
+		<property name="4" type="cObj">
+			<description><![CDATA[This is a numerical "array" of content-objects (cObjects). 
+]]></description>
+		</property>
+	</type>
 	<type id="COBJ_ARRAY" extends="cObjArray">
 		<property name="if" type="if">
 			<description><![CDATA[if "if" returns false the COA is NOT rendered]]></description>
@@ -100,8 +171,8 @@ helloWorld.value = this item will be returned
 	<type id="COA" extends="COBJ_ARRAY">
   </type>
 	<type id="COA_INT" extends="COBJ_ARRAY">
-		<property name="includeLibs" type="list of resource">
-			<description><![CDATA[(This property is used only if the object is COA_INT!, See introduction.)
+		<property name="includeLibs" type="stringList">
+			<description><![CDATA[list of resources(This property is used only if the object is COA_INT!, See introduction.)
 This is a comma-separated list of resources that are included as PHP-scripts (with include_once() function) if this script is included.
 This is possible to do because any include-files will be known before the scripts are included. That's not the case with the regular PHP_SCRIPT cObject.]]></description>
 			<default><![CDATA[
@@ -169,7 +240,7 @@ background-color for the gap-tablecells]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="rows" type="int (Range: 2-20)">
+		<property name="rows" type="int">
 			<description><![CDATA[int (Range: 2-20)
       The number of rows  in the columns.]]></description>
 			<default><![CDATA[2]]></default>
@@ -220,7 +291,7 @@ This will by default add “&MP=2-207” to all links pointing to pages 36,37 an
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="MP_mapRootPoints" type="list of PIDs/string">
+		<property name="MP_mapRootPoints" type="string">
 			<description><![CDATA[list of PIDs/string
       Defines a list of ID numbers from which the MP-vars are automatically calculated for the branch.
 The result is used just like MP_defaults are used to find MP-vars if none has been specified prior to the call to t3lib_tstemplate::linkData().
@@ -1026,8 +1097,9 @@ Internally, the value is depending on whether a Alternative Page Language record
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="titleTagFunction " type="function-name">
-			<description><![CDATA[Passes the default <title>-tag content to this function. No typoScript parameters are passed though.]]></description>
+		<property name="titleTagFunction " type="string">
+			<description><![CDATA[function-name
+			Passes the default <title>-tag content to this function. No typoScript parameters are passed though.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -1406,6 +1478,46 @@ The maximum filesize of documents to be read is set to 1024 kb internally!]]></d
 ]]></default>
 		</property>
 	</type>
+	<type id="FORM_dataArray">
+		<property name="10" type="FORM_dataArray_element">
+			<description><![CDATA[alternative way to define form Elements]]></description>
+			<default><![CDATA[]]></default>
+		</property>
+		<property name="20" type="FORM_dataArray_element">
+			<description><![CDATA[alternative way to define form Elements]]></description>
+			<default><![CDATA[]]></default>
+		</property>
+		<property name="30" type="FORM_dataArray_element">
+			<description><![CDATA[alternative way to define form Elements]]></description>
+			<default><![CDATA[]]></default>
+		</property>
+		<property name="40" type="FORM_dataArray_element">
+			<description><![CDATA[alternative way to define form Elements]]></description>
+			<default><![CDATA[]]></default>
+		</property>
+	</type>
+	<type id="FORM_dataArray_element">
+		<property name="label" type="string">
+			<description><![CDATA[]]></description>
+			<default><![CDATA[]]></default>
+		</property>
+		<property name="type" type="string">
+			<description><![CDATA[]]></description>
+			<default><![CDATA[]]></default>
+		</property>
+		<property name="name" type="string">
+			<description><![CDATA[]]></description>
+			<default><![CDATA[]]></default>
+		</property>
+		<property name="value" type="string">
+			<description><![CDATA[]]></description>
+			<default><![CDATA[]]></default>
+		</property>
+		<property name="required" type="boolean">
+			<description><![CDATA[]]></description>
+			<default><![CDATA[]]></default>
+		</property>
+	</type>
 	<type id="FORM">
 		<property name="CHECK.layout" type="string">
 			<description><![CDATA[Alternative layout for checkboxes]]></description>
@@ -1466,7 +1578,7 @@ NOTE: May be overridden by the property override feature of the formdata (see ab
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="dataArray" type="[array of form elements]">
+		<property name="dataArray" type="FORM_dataArray">
 			<description><![CDATA[This is an alternative way to define the form-fields. Instead of using the syntax with vertical separator bars suggested by the .data property, you can define the elements in regular TypoScript style arrays.
 .dataArray is added to the input in .data if any.
 Every entry in the dataArray is numeric and has three main properties, label, type, value and required. 'label' and 'value' has stdWrap properties. 
@@ -1606,8 +1718,10 @@ NOTE: May be overridden by the property override feature of the formdata (see ab
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="method" type="form-method">
-			<description><![CDATA[Example: 
+		<property name="method" type="string">
+			<description><![CDATA[form-method
+			
+			Example: 
 GET]]></description>
 			<default><![CDATA[POST]]></default>
 		</property>
@@ -1669,8 +1783,9 @@ NOTE: If this value is set the target of this overriddes the target of the "type
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="target" type="target">
-			<description><![CDATA[Default target of the form. ]]></description>
+		<property name="target" type="string">
+			<description><![CDATA[target
+			Default target of the form. ]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -2354,8 +2469,9 @@ The cObj->data-array is loaded with the page-record, if for example the GIFBUILD
 			<description><![CDATA[The maximum length of the text.  This is just a natural break that prevents incidental rendering of very long texts!]]></description>
 			<default><![CDATA[100]]></default>
 		</property>
-		<property name="wordSpacing" type="posint">
-			<description><![CDATA[Pixel-distance between words.]]></description>
+		<property name="wordSpacing" type="int">
+			<description><![CDATA[posint
+			Pixel-distance between words.]]></description>
 			<default><![CDATA[= ".spacing"*2]]></default>
 		</property>
 	</type>
@@ -3103,13 +3219,15 @@ The ->OptionSplit function is run on the whole GIFBUILDER-configuration before t
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="accessKey" type="Boolean">
+		<property name="accessKey" type="boolean">
 			<description><![CDATA[If set access-keys are set on the menu-links]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="applyTotalH" type="objNumsList (offset)">
-			<description><![CDATA[This adds the total height of the previously generated menuitems to the offset of the GifBuilderObj's mentioned in this list.
+		<property name="applyTotalH" type="int">
+			<description><![CDATA[objNumsList (offset)
+			
+			This adds the total height of the previously generated menuitems to the offset of the GifBuilderObj's mentioned in this list.
 
 Example:
 This is useful it you want to create a menu with individual items but a common background image that extends to the whole area behind the menu. Then you should setup the background image in each GIFBUILDER-object and include the object-number in this list. 
@@ -3117,12 +3235,13 @@ Look at the implementation in static_template "styles.gmenu.bug"]]></description
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="applyTotalW" type="objNumsList (offset)">
-			<description><![CDATA[This adds the total width of the previously generated menuitems to the offset of the GifBuilderObj's mentioned in this list.]]></description>
+		<property name="applyTotalW" type="int">
+			<description><![CDATA[objNumsList (offset)
+			This adds the total width of the previously generated menuitems to the offset of the GifBuilderObj's mentioned in this list.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="collapse" type="Boolean">
+		<property name="collapse" type="boolean">
 			<description><![CDATA[If set, "active" menuitems that has expanded the next level on the menu will now collapse that menu again.]]></description>
 			<default><![CDATA[
 ]]></default>
@@ -3138,14 +3257,16 @@ Applies to GMENU, TMENU, IMGMENU]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="distributeX" type="int+">
-			<description><![CDATA[If set, the total width of all the menuitems will be equal to this number of pixels by adding/subtracting an equal amount of pixels to each menu items width.
+		<property name="distributeX" type="int">
+			<description><![CDATA[int+
+			If set, the total width of all the menuitems will be equal to this number of pixels by adding/subtracting an equal amount of pixels to each menu items width.
 Will overrule any setting for ".useLargestItemX"]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="distributeY" type="int+">
-			<description><![CDATA[If set, the total height of all the menuitems will be equal to this number of pixels by adding/subtracting an equal amount of pixels to each menu items height.
+		<property name="distributeY" type="int">
+			<description><![CDATA[int+
+			If set, the total height of all the menuitems will be equal to this number of pixels by adding/subtracting an equal amount of pixels to each menu items height.
 Will overrule any setting for ".useLargestItemY"]]></description>
 			<default><![CDATA[
 ]]></default>
@@ -3172,8 +3293,10 @@ NOTE: Does not work with JSMENU's]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="max" type="x,y (calcInt)">
-			<description><![CDATA[Forces the menu as a whole to these maximum dimensions]]></description>
+		<property name="max" type="string">
+			<description><![CDATA[x,y (calcInt)"
+			
+			Forces the menu as a whole to these maximum dimensions]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -3182,7 +3305,7 @@ NOTE: Does not work with JSMENU's]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="noBlur" type="Boolean">
+		<property name="noBlur" type="boolean">
 			<description><![CDATA[Normally graphical links are "blurred" if the browser is MSIE. Blurring removes the ugly box around a clicked link. 
 If this property is set, the link is NOT blurred (browser-default) with "onFocus".]]></description>
 			<default><![CDATA[
@@ -3196,8 +3319,10 @@ Applies to GMENU, TMENU, IMGMENU]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="removeObjectsOfDummy" type="objNumsList">
-			<description><![CDATA[If the menu is forced to a certain minimum dimension, this is a list of objects in the gifbuilder-object that is removed for this last item. This is important to do if the menuitems has elements that should only be applied if the item is actually a menuitem!!]]></description>
+		<property name="removeObjectsOfDummy" type="stringList">
+			<description><![CDATA[objNumsList
+			
+			If the menu is forced to a certain minimum dimension, this is a list of objects in the gifbuilder-object that is removed for this last item. This is important to do if the menuitems has elements that should only be applied if the item is actually a menuitem!!]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -3216,8 +3341,10 @@ Example:
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="target" type="target">
-			<description><![CDATA[Target of the menulinks]]></description>
+		<property name="target" type="string">
+			<description><![CDATA[target
+			
+			Target of the menulinks]]></description>
 			<default><![CDATA[self]]></default>
 		</property>
 		<property name="submenuObjSuffixes" type="string">
@@ -3274,13 +3401,17 @@ Applies to GMENU, TMENU, GMENU_LAYERS, TMENU_LAYERS and GMENU_FOLDOUT on >= 2nd 
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="ATagTitle" type="string /stdWrap">
-			<description><![CDATA[which defines the title attribute of the a-tag. (See TMENUITEM also)]]></description>
+		<property name="ATagTitle" type="stdWrap">
+			<description><![CDATA[string /stdWrap
+			
+			which defines the title attribute of the a-tag. (See TMENUITEM also)]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="additionalParams" type="string /stdWrap">
-			<description><![CDATA[Define parameters that are added to the end of the URL. This must be code ready to insert after the last parameter.
+		<property name="additionalParams" type="string">
+			<description><![CDATA[string /stdWrap
+			
+			Define parameters that are added to the end of the URL. This must be code ready to insert after the last parameter.
 
 For details, see typolink->additionalParams]]></description>
 			<default><![CDATA[
@@ -3291,8 +3422,10 @@ For details, see typolink->additionalParams]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="allWrap" type="wrap /stdWrap">
-			<description><![CDATA[Wraps the whole item]]></description>
+		<property name="allWrap" type="stdWrap">
+			<description><![CDATA[wrap /stdWrap
+			
+			Wraps the whole item]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -3306,8 +3439,10 @@ For details, see typolink->additionalParams]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="imgParams" type="params">
-			<description><![CDATA[Parameters for the <img>-tag]]></description>
+		<property name="imgParams" type="string">
+			<description><![CDATA[params
+			
+			Parameters for the <img>-tag]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -3391,6 +3526,7 @@ Note: Using <TBODY> in this tables seems to break Netscape 4+]]></description>
 		</property>
 		<property name="foldSpeed" type="int">
 			<description><![CDATA[int, range 1-100
+			
 			How many steps in an animation? Choose 1 for no animation.]]></description>
 			<default><![CDATA[1]]></default>
 		</property>
@@ -3412,6 +3548,7 @@ NOTE: Does not work with JSMENU's]]></description>
 		</property>
 		<property name="menuBackColor" type="string">
 			<description><![CDATA[HTML-color
+			
 			Background color behind menu. If not set, transparent (which will not work very well in case .foldSpeed is set to something else than 1. But see for yourself)]]></description>
 			<default><![CDATA[
 ]]></default>
@@ -3422,6 +3559,7 @@ NOTE: Does not work with JSMENU's]]></description>
 		</property>
 		<property name="menuOffset" type="string">
 			<description><![CDATA[x,y
+			
 			Offset of the menu main layer on the page. From upperleft corner]]></description>
 			<default><![CDATA[
 ]]></default>
@@ -3532,13 +3670,17 @@ If set, the freezed element will always stay, even if the submenu is hidden.]]><
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="hideMenuTimer" type="int+">
-			<description><![CDATA[This is the number of milliseconds to wait before the submenu will disappear if hideMenuWhenNotOver  is set]]></description>
+		<property name="hideMenuTimer" type="int">
+			<description><![CDATA[int+ 
+			
+			This is the number of milliseconds to wait before the submenu will disappear if hideMenuWhenNotOver  is set]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="hideMenuWhenNotOver" type="int+">
-			<description><![CDATA[If set (> 1) then the menu will hide it self whenever a user moves the cursor away from the menu. The value of this parameter determines the width (pixels) of the zone around the element until the mousepointer is considered to be far enough away to hide the layer.]]></description>
+		<property name="hideMenuWhenNotOver" type="int">
+			<description><![CDATA[int+
+			
+			If set (> 1) then the menu will hide it self whenever a user moves the cursor away from the menu. The value of this parameter determines the width (pixels) of the zone around the element until the mousepointer is considered to be far enough away to hide the layer.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
@@ -3573,8 +3715,10 @@ Used with either lockPosition=y or yPosOffset defined.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="lockPosition" type="&quot;x&quot; / &quot;y&quot; / &quot;&quot;">
-			<description><![CDATA[If this is set to "x" or "y" the menu on the layers is locked and does not follow the mouse-cursor (which it does if this is not set).
+		<property name="lockPosition" type="string">
+			<description><![CDATA["x" / "y" / ""
+			
+			If this is set to "x" or "y" the menu on the layers is locked and does not follow the mouse-cursor (which it does if this is not set).
 "x" or "y" defines respectively that the summed width (x) or height (y) is added to the x or y offset of the menu. That means that you should set this value to "x" if you have a horizontal GMENU_LAYERS and to "y" if you have a verical menu.]]></description>
 			<default><![CDATA[
 ]]></default>
@@ -4460,7 +4604,7 @@ For details, see typolink->additionalParams]]></description>
 			The series of “before...” properties are duplicated to “after...” properties as well. The only difference is that the output generated by the .after.... properties are placed after the link and not before.]]></description>
 			<default><![CDATA[
 ]]></default>
-		</property>		
+		</property>
 		<property name="allStdWrap" type="stdWrap">
 			<description><![CDATA[stdWrap of the whole item]]></description>
 			<default><![CDATA[
@@ -7718,5 +7862,5 @@ The userfunction must return an <A>-tag.]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-	</type>	
+	</type>
 </tsRef>
