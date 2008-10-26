@@ -3224,7 +3224,7 @@ The ->OptionSplit function is run on the whole GIFBUILDER-configuration before t
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="applyTotalH" type="int">
+		<property name="applyTotalH" type="string">
 			<description><![CDATA[objNumsList (offset)
 			
 			This adds the total height of the previously generated menuitems to the offset of the GifBuilderObj's mentioned in this list.
@@ -3235,7 +3235,7 @@ Look at the implementation in static_template "styles.gmenu.bug"]]></description
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="applyTotalW" type="int">
+		<property name="applyTotalW" type="string">
 			<description><![CDATA[objNumsList (offset)
 			This adds the total width of the previously generated menuitems to the offset of the GifBuilderObj's mentioned in this list.]]></description>
 			<default><![CDATA[
@@ -3319,7 +3319,7 @@ Applies to GMENU, TMENU, IMGMENU]]></description>
 			<default><![CDATA[
 ]]></default>
 		</property>
-		<property name="removeObjectsOfDummy" type="stringList">
+		<property name="removeObjectsOfDummy" type="string">
 			<description><![CDATA[objNumsList
 			
 			If the menu is forced to a certain minimum dimension, this is a list of objects in the gifbuilder-object that is removed for this last item. This is important to do if the menuitems has elements that should only be applied if the item is actually a menuitem!!]]></description>
