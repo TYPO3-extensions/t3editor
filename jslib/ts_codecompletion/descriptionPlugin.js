@@ -65,15 +65,16 @@ var DescriptionPlugin = function(){
     var type = compResult.getType();
     
     if(type && type.properties[proposalObj.word]){
-      // first a container has to be built
-      descriptionBox.innerHTML = '<div class="TSREF_type_label">TSREF-type: </div><div class="TSREF_type">'+type.typeId+'->'+proposalObj.type+'</div><br/>';
-      descriptionBox.innerHTML += '<div class="TSREF_description_label">TSREF-description:</div><div id="TSREF_description"><img src="../../../gfx/spinner.gif" border="0" alt="one moment please..."/></div>';
-      // then the desciption can be loaded and inserted into the container
-      type.properties[proposalObj.word].getDescription(descriptionLoaded);
+        // first a container has to be built
+        descriptionBox.innerHTML = '<div class="TSREF_type_label">TSREF-type: </div><div class="TSREF_type">'+type.typeId+'->'+proposalObj.type+'</div><br/>';
+        descriptionBox.innerHTML += '<div class="TSREF_description_label">TSREF-description:</div><div id="TSREF_description"><img src="../../../gfx/spinner.gif" border="0" alt="one moment please..."/></div>';
+        //window.clearTimeout(this.lastTimeoutId);
+        // then the desciption can be loaded and inserted into the container
+        this.lastTimeoutId = type.properties[proposalObj.word].getDescription(descriptionLoaded);
     }else if(proposalObj.type){
-      descriptionBox.innerHTML = '<div class="TSREF_type_label">TSREF-type: </div><div class="TSREF_type">'+proposalObj.type+'</div><br/>';
+        descriptionBox.innerHTML = '<div class="TSREF_type_label">TSREF-type: </div><div class="TSREF_type">'+proposalObj.type+'</div><br/>';
     }else{
-      descriptionBox.innerHTML = '';
+        descriptionBox.innerHTML = '';
     }
     
     descriptionBox.show();
