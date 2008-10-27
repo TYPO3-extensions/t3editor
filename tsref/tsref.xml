@@ -2502,8 +2502,7 @@ temp.sidemenu.1 = GMENU  ]]></description>
 			<default><![CDATA[ (no menu)]]></default>
 		</property>
 		<property name="2" type="mObj">
-			<description><![CDATA[Required!
-Defines which menuObj that should render the menuitems on the various levels. 
+			<description><![CDATA[Defines which menuObj that should render the menuitems on the various levels. 
 1 is the first level, 2 is the second level, 3 is the third level, 4 is ....
 
 Example:
@@ -2512,8 +2511,7 @@ temp.sidemenu.1 = GMENU  ]]></description>
 			<default><![CDATA[ (no menu)]]></default>
 		</property>
 		<property name="3" type="mObj">
-			<description><![CDATA[Required!
-Defines which menuObj that should render the menuitems on the various levels. 
+			<description><![CDATA[Defines which menuObj that should render the menuitems on the various levels. 
 1 is the first level, 2 is the second level, 3 is the third level, 4 is ....
 
 Example:
@@ -2522,8 +2520,7 @@ temp.sidemenu.1 = GMENU  ]]></description>
 			<default><![CDATA[ (no menu)]]></default>
 		</property>
 		<property name="4" type="mObj">
-			<description><![CDATA[Required!
-Defines which menuObj that should render the menuitems on the various levels. 
+			<description><![CDATA[Defines which menuObj that should render the menuitems on the various levels. 
 1 is the first level, 2 is the second level, 3 is the third level, 4 is ....
 
 Example:
