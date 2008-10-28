@@ -146,7 +146,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
       var localname = "plugins[" + i + "].obj";
       eval(localname+' = new '+plugin.classname+'();');
       var obj = eval(localname);
-      console.log("initialized a new "+plugin.classname+" in "+localname);
+      //console.log("initialized a new "+plugin.classname+" in "+localname);
     }catch(e){
       throw("error occured while trying to make new instance of \""+plugin.classname+"\"! maybe syntax error or wrong filepath?");
       return;

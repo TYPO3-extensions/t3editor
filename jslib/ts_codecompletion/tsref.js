@@ -133,7 +133,7 @@ var TsRef = function(){
         for(i=0;i<exts.length;i++){
             //"Type 'array' which is used to extend 'undefined', was not found in the TSREF!"
             if(typeTree[exts[i]]==null){
-                console.log("Error: Type '"+exts[i]+"' which is used to extend '"+addToType.typeId+"', was not found in the TSREF!");
+                //console.log("Error: Type '"+exts[i]+"' which is used to extend '"+addToType.typeId+"', was not found in the TSREF!");
             }else{
                 if(typeTree[exts[i]].extends != null){   
                     addPropertiesToType(typeTree[exts[i]],typeTree[exts[i]].extends,maxRecDepth-1);
