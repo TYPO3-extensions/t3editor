@@ -139,9 +139,7 @@ function T3editor(textarea) {
 
 		// get the editor
 	this.mirror = new CodeMirror(this.mirror_wrap, options);
-        //stoefln
         this.tsCodeCompletion = new TsCodeCompletion(this.mirror,this.outerdiv);
-        //stoefln end
 }
 
 T3editor.prototype = {
@@ -162,11 +160,9 @@ T3editor.prototype = {
 			this.saveButtons.each(function(button) {
 				Event.observe(button,'click',this.saveFunctionEvent);
 			}.bind(this));
-                        // stoefln 
                         Event.observe(this.mirror.win.document, 'keyup', this.tsCodeCompletion.keyUp);
                         Event.observe(this.mirror.win.document, 'keydown', this.tsCodeCompletion.keyDown);
                         Event.observe(this.mirror.win.document, 'click', this.tsCodeCompletion.click);
-                        // stoefln end
 			this.resize(textareaDim.width, textareaDim.height );
 		},
 	

@@ -1,4 +1,3 @@
-/* stoefln */
 .TSREF_type_label, .TSREF_description_label{
   font-weight: bold;
 }
@@ -56,7 +55,6 @@
 	font-weight:bold;
 	background-color: #cfcfcf;
 }
-/* stoefln end */
 /* around the editor */
 .t3e_wrap {
 	border: 1px solid gray;

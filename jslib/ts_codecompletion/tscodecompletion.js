@@ -75,6 +75,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
   plugin.classname = 'DescriptionPlugin';
   
   plugins.push(plugin);
+
   
   
   // to roll back linebreaks inserted by hitting enter, the current node has to be stored before the codecompletion outside of the eventlistener
