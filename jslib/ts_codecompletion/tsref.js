@@ -106,8 +106,8 @@ var TsRef = function(){
             typeTree[typeId] = new TsRefType(typeId);
           
             
-            if(arr.extends != null){
-                typeTree[typeId].extends = arr.extends;
+            if(arr['extends'] != null){
+                typeTree[typeId]['extends'] = arr['extends'];
             }
             for(propName in arr.properties){
                     var propType = arr.properties[propName].type;
@@ -115,9 +115,9 @@ var TsRef = function(){
             }
         }
         for(var typeId in typeTree){
-            if(typeTree[typeId].extends != null){
-                //console.log(typeId+" | "+typeTree[typeId].extends+" |");
-                addPropertiesToType(typeTree[typeId],typeTree[typeId].extends,100);
+            if(typeTree[typeId]['extends'] != null){
+                //console.log(typeId+" | "+typeTree[typeId]['extends']+" |");
+                addPropertiesToType(typeTree[typeId],typeTree[typeId]['extends'],100);
             }
         }
     }
@@ -135,8 +135,8 @@ var TsRef = function(){
             if(typeTree[exts[i]]==null){
                 //console.log("Error: Type '"+exts[i]+"' which is used to extend '"+addToType.typeId+"', was not found in the TSREF!");
             }else{
-                if(typeTree[exts[i]].extends != null){   
-                    addPropertiesToType(typeTree[exts[i]],typeTree[exts[i]].extends,maxRecDepth-1);
+                if(typeTree[exts[i]]['extends'] != null){   
+                    addPropertiesToType(typeTree[exts[i]],typeTree[exts[i]]['extends'],maxRecDepth-1);
                 }
                 var properties = typeTree[exts[i]].properties;
                 for(propName in properties){

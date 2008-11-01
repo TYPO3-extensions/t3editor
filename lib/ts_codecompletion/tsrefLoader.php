@@ -1,4 +1,4 @@
-<?
+<?php
 require_once("class.tsrefloader.php");
 
 $action = $_GET['action'];

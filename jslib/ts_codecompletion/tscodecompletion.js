@@ -351,7 +351,6 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
         // clear the last completion wordposition
         currWord = -1;
         mirror.editor.highlightAtCursor();
-        
         // retrieves the node right to the cursor
         var cursorNode = mirror.editor.win.select.selectionTopNode(mirror.editor.win.document.body, false);
         // cursorNode is null if the cursor is positioned at the beginning of the first line
@@ -405,11 +404,9 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 						}
   					
   					
-  					   
-  					codeCompleteBox.setStyle({
-  						left: (Position.cumulativeOffset($$('.t3e_iframe_wrap')[index])[0] + Position.cumulativeOffset(cursorNode)[0] + cursorNode.offsetWidth) + 'px',
-  						top:  (Position.cumulativeOffset(cursorNode)[1] + cursorNode.offsetHeight - mirror.win.scrollY) + 'px'
-  					});
+  					var leftpos = (Position.cumulativeOffset($$('.t3e_iframe_wrap')[index])[0] + Position.cumulativeOffset(cursorNode)[0] + cursorNode.offsetWidth) + 'px';
+                                        var toppos = (Position.cumulativeOffset(cursorNode)[1] + cursorNode.offsetHeight - Element.cumulativeScrollOffset(cursorNode)[1]) + 'px';
+                                        codeCompleteBox.setStyle({left: leftpos,top:  toppos});
             // set flag to 1 - needed for continue typing word. 
             cc = 1;    
             // highlight first word in list
