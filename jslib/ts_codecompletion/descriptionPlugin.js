@@ -71,13 +71,16 @@ var DescriptionPlugin = function(){
         //window.clearTimeout(this.lastTimeoutId);
         // then the desciption can be loaded and inserted into the container
         this.lastTimeoutId = type.properties[proposalObj.word].getDescription(descriptionLoaded);
+        descriptionBox.show();
     }else if(proposalObj.type){
         descriptionBox.innerHTML = '<div class="TSREF_type_label">TSREF-type: </div><div class="TSREF_type">'+proposalObj.type+'</div><br/>';
+        descriptionBox.show();
     }else{
         descriptionBox.innerHTML = '';
+        descriptionBox.hide();
     }
     
-    descriptionBox.show();
+    
     descriptionBox.scrollTop = 0;
     descriptionBox.style.overflowY = 'scroll';
     descriptionBox.style.height = completionBox.getStyle('height');
