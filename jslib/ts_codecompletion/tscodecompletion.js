@@ -57,6 +57,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
   var cc = 0;
   var filter = "";
   var linefeedsPrepared = false;
+  var currentCursorPosition = null;
   
   // load the external templates ts-setup into extTsObjTree
   var extTsObjTree = new Object();
@@ -353,12 +354,15 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
         mirror.editor.highlightAtCursor();
         // retrieves the node right to the cursor
         var cursorNode = mirror.editor.win.select.selectionTopNode(mirror.editor.win.document.body, false);
+        
         // cursorNode is null if the cursor is positioned at the beginning of the first line
         if(cursorNode == null)
           cursorNode = mirror.editor.container.firstChild;
         else if(cursorNode.tagName=='BR') // at the beginning of the line
           cursorNode = cursorNode.nextSibling;
   			
+  		currentCursorPosition = mirror.editor.win.select.markSelection(mirror.editor.win);
+  		
         // the cursornode has to be stored cause inserted breaks have to be deleted after pressing enter if the codecompletion is active
         //nodeBeforeInsert = cursorNode;
         filter = getFilter(cursorNode);
@@ -515,8 +519,10 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 	  
     var word = proposals[currWord].word;
 	  word = word.substring(filter.length);
-  	mirror.editor.win.select.insertTextAtCursor(mirror.editor.win, word);
   	mirror.win.focus();
+  	mirror.editor.win.select.selectMarked(currentCursorPosition);
+  	mirror.editor.win.select.insertTextAtCursor(mirror.editor.win, word);
+	
 	}
 	
   /**

@@ -116,7 +116,7 @@ var TsRef = function(){
         }
         for(var typeId in typeTree){
             if(typeTree[typeId]['extends'] != null){
-                //console.log(typeId+" | "+typeTree[typeId]['extends']+" |");
+                //console.log(typeId+" | "+typeTree[typeId].extends+" |");
                 addPropertiesToType(typeTree[typeId],typeTree[typeId]['extends'],100);
             }
         }
