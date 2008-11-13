@@ -77,16 +77,17 @@ var TsParser = function(tsRef,extTsObjTree){
     }
     
     this.getValue = function(){
-      if(this.value != "")
+			if(this.value != "") {
         return this.value;
-      else{
+			} else {
         var node = this.getExtNode();
-        if(node)
+				if(node) {
           return node.v;
-        else 
+				} else {
           return "";
       }
     }
+		}
     
     this.getExtNode = function(){
       var extTree = extTsObjTree;
@@ -96,8 +97,9 @@ var TsParser = function(tsRef,extTsObjTree){
       var i;
       for(i=0;i<path.length;i++){
         pathSeg = path[i];
-        if(extTree.c == null || extTree.c[pathSeg] == null) 
+				if(extTree.c == null || extTree.c[pathSeg] == null) {
           return null;
+				}
         extTree = extTree.c[pathSeg];
       }
       return extTree;
@@ -195,7 +197,9 @@ var TsParser = function(tsRef,extTsObjTree){
         
                        
 
-        if (node    == ')')stack.popIfLastElementEquals('(');
+				if (node == ')') {
+					stack.popIfLastElementEquals('(');
+				}
         if (node[0] == '*' && node[1]=='/') {
           stack.popIfLastElementEquals('/*');
           ignoreLine = true;
@@ -316,9 +320,10 @@ var TsParser = function(tsRef,extTsObjTree){
    * along the path, if necessary
    */    
   function getTreeNode(path){
-
       var aPath = path.replace(/\s/g,"").split(".");
-      if(aPath == "") return tsTree; 
+		if (aPath == "") {
+			return tsTree;
+		}
       var subTree = tsTree.childNodes;
       var pathSeg;
       var parent;
@@ -332,10 +337,11 @@ var TsParser = function(tsRef,extTsObjTree){
           subTree[pathSeg].parent = parent;
           //subTree[pathSeg].extTsObjTree = extTsObjTree;
           // the extPath has to be set, so the TreeNode can retrieve the respecting node in the external templates
-          if(parent == null)
+				if(parent == null) {
             subTree[pathSeg].extPath = pathSeg;
-          else
+				} else {
             subTree[pathSeg].extPath = parent.extPath+'.'+pathSeg;
+				}
           // if its no root element && search in the TSREF found a matching property 
           if(parent != null && tsRef.typeHasProperty(parent.getValue(),pathSeg)){ // if there is a matching property in the tsref
             // get type of the current treeNode
@@ -370,9 +376,10 @@ var TsParser = function(tsRef,extTsObjTree){
       value = "IMGTEXT";
     }
     // just override if it is a real objecttype
-    if(tsRef.isType(value))
+		if (tsRef.isType(value)) {
       treeNode.value = value; 
   }
+	}
   
   
   /**
@@ -410,22 +417,22 @@ var TsParser = function(tsRef,extTsObjTree){
    * to the location specified by path1
    */ 
   function setCopy(path1,path2){
-    this.clone = function(myObj)
-    {
-    	if(typeof(myObj) != 'object') return myObj;
-    	if(myObj == null) return myObj;
+		this.clone = function(myObj) {
+			if (myObj == null || typeof(myObj) != 'object') {
+				return myObj;
+			}
     
     	var myNewObj = new Object();
     
     	for(var i in myObj){
     	  if(i != "parent"){
-      	  if (typeof myObj[i] == 'object') 
+					if (typeof myObj[i] == 'object') {
       		   myNewObj[i] = clone(myObj[i]);
-      		else
+					} else {
       		   myNewObj[i] = myObj[i];
     		}
     	}
-      
+			}
     	return myNewObj;
     } 
     var path1arr = path1.split('.');
@@ -442,7 +449,4 @@ var TsParser = function(tsRef,extTsObjTree){
     }
     
   }
-  
-  
-  
 }

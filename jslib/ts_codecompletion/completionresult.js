@@ -36,7 +36,6 @@
  * @return a new CompletionResult instance      
  */
 var CompletionResult = function(tsRef,tsTreeNode){
-  
   var currentTsTreeNode = tsTreeNode;
   var tsRef = tsRef;
   
@@ -45,8 +44,11 @@ var CompletionResult = function(tsRef,tsTreeNode){
    */     
   this.getType = function(){
     var val = currentTsTreeNode.getValue();
-    if(tsRef.isType(val))return tsRef.getType(val);
-    else return null;
+		if (tsRef.isType(val)) {
+			return tsRef.getType(val);
+		} else {
+			return null;
+		}
   }
   
   /**
@@ -73,11 +75,12 @@ var CompletionResult = function(tsRef,tsTreeNode){
             propObj.type = childNodes[key].value;
           }else{
             propObj.cssClass = 'userProperty';
-            if(tsRef.isType(childNodes[key].value))
+						if (tsRef.isType(childNodes[key].value)) {
               propObj.type = childNodes[key].value;
-            else
+						} else {
               propObj.type = ''; 
           }
+					}
           propArr.push(propObj);
           defined[key] = true;  
         }
@@ -96,7 +99,6 @@ var CompletionResult = function(tsRef,tsTreeNode){
         }
       }
       
-      
       var result = [];
       var wordBeginning = "";
       for (var i=0; i< propArr.length;i++) {
@@ -107,5 +109,4 @@ var CompletionResult = function(tsRef,tsTreeNode){
       }
       return result;
   }
-  
 }

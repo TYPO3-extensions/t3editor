@@ -40,7 +40,6 @@
  * @return A new TsCodeCompletion instance
  */
 var TsCodeCompletion = function(codeMirror,outerdiv) {
-
   // private Vars
   var tsRef  = new TsRef();
   var mirror = codeMirror;
@@ -48,7 +47,6 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
   // t3editor index (=0 if there is just one editor on the page, should be set from outside)
   var index = 0;
   
- 
   var currWord = 0;
   var cc_up;
   var cc_down;
@@ -119,8 +117,11 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
                                                               'classname'=> 'MyPlugin');
    */
   function loadPluginArray(){
-    var url = PATH_t3e+'lib/ts_codecompletion/pluginLoader.php?action=getPlugins';
-    new Ajax.Request(url, {
+		var urlParameters = '&ajaxID=tx_t3editor::getPlugins';
+		new Ajax.Request(
+			URL_typo3 + 'ajax.php',
+			{
+				parameters: urlParameters,
       method: 'get',
       onSuccess: function(transport) {
         var loadedPlugins = eval('('+ transport.responseText +')');
@@ -128,7 +129,8 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
         // register an internal plugin       
         loadPlugins();
       }
-    });
+			}
+		);
   }
   /* instantiates all plugins and adds the instances to the plugin array
   */
@@ -160,14 +162,18 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
    * this function retrieves the JSON code by comitting a AJAX request
    */    
   function loadExtTemplatesAsync(){
-    var url = PATH_t3e+'lib/ts_codecompletion/ext_ts_templatesloader.php?id='+getGetVar('id');
-    new Ajax.Request(url, {
+		var urlParameters = '&ajaxID=tx_t3editor_codecompletion::loadTemplates&pageId=' + getGetVar('id');
+		new Ajax.Request(
+			URL_typo3 + 'ajax.php',
+			{
       method: 'get',
+				parameters: urlParameters,
       onSuccess: function(transport) {
         extTsObjTree.c = eval('('+ transport.responseText +')');
         resolveExtReferencesRec(extTsObjTree.c);
       }
-    });
+			}
+		);
   }
   
   /**
@@ -418,8 +424,9 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
             for(var i=0;i<plugins.length;i++){
               if(plugins[i].obj && plugins[i].obj.afterCCRefresh)plugins[i].obj.afterCCRefresh(proposals[currWord],compResult);
             }
-        } else { endAutoCompletion();}
-        
+		} else {
+			endAutoCompletion();
+		}
   }
   
 
@@ -516,13 +523,11 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
   }
     // insert selected word into text from codecompletebox
 	function insertCurrWordAtCursor() {
-	  
     var word = proposals[currWord].word;
 	  word = word.substring(filter.length);
   	mirror.win.focus();
   	mirror.editor.win.select.selectMarked(currentCursorPosition);
   	mirror.editor.win.select.insertTextAtCursor(mirror.editor.win, word);
-	
 	}
 	
   /**
@@ -571,26 +576,26 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
     var value;
     do { //This loop is made to catch all instances of any get variable.
         var name_index = get_string.indexOf(name + '=');
-        if(name_index != -1)
-          {
+			if(name_index != -1) {
           get_string = get_string.substr(name_index + name.length + 1, get_string.length - name_index);
           end_of_value = get_string.indexOf('&');
-          if(end_of_value != -1)                
+				if(end_of_value != -1) {
             value = get_string.substr(0, end_of_value);                
-          else                
+				} else {
             value = get_string;                
+				}
             
-          if(return_value == '' || value == '')
+				if(return_value == '' || value == '') {
              return_value += value;
-          else
+				} else {
              return_value += ', ' + value;
           }
-    } while(name_index != -1)
+			}
+		} while(name_index != -1);
         
      //Restores all the blank spaces.
      var space = return_value.indexOf('+');
-     while(space != -1)
-     { 
+		while(space != -1) {
        return_value = return_value.substr(0, space) + ' ' + 
        return_value.substr(space + 1, return_value.length);	 
        space = return_value.indexOf('+');
@@ -598,8 +603,4 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
       
      return(return_value);        
   }
-  
-
-
 }
-

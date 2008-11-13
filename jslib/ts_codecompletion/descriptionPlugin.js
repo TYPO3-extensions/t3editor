@@ -32,7 +32,6 @@
  **/
   
 var DescriptionPlugin = function(){
-
   var outerdiv;
   var descriptionBox;
   var completionBox;
@@ -89,12 +88,11 @@ var DescriptionPlugin = function(){
     leftOffset += 'px';
     descriptionBox.setStyle({
                   top: completionBox.getStyle('top'),
-                  left: leftOffset});
+			left: leftOffset
+		});
   }
-  
   
   this.endCodeCompletion = function(){
     descriptionBox.hide();  
   }
-
 }

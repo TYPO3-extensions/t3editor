@@ -40,15 +40,21 @@ var TsRefProperty = function(parentType,name,value){
     var descriptionCache = null;
     this.getDescription = function(callBack){
         if(descriptionCache == null){
-            var url = PATH_t3e+'lib/ts_codecompletion/tsrefLoader.php?action=getDescription&typeId='+this.parentType+'&parameterName='+this.name;
-            
-            new Ajax.Request(url, {
+			var urlParameters = '&ajaxID=tx_t3editor_TSrefLoader::getDescription' +
+				'&typeId=' + this.parentType +
+				'&parameterName=' + this.name;
+
+			new Ajax.Request(
+				URL_typo3 + 'ajax.php',
+				{
                 method: 'get',
+					parameters: urlParameters,
                 onSuccess: function(transport) {
                   descriptionCache = transport.responseText;
                   callBack(transport.responseText);
                 }
-            });
+				}
+			);
         }else{
             callBack(descriptionCache);
         }
@@ -66,7 +72,6 @@ var TsRefType = function(typeId){
     
     // todo: types can have descriptions too!
     this.getDescription = function(){
-      
     }
 }
 
@@ -79,20 +84,23 @@ var TsRefType = function(typeId){
  * @return A new TsRef instance
  */
 var TsRef = function(){
-      
     var typeTree = new Array();    
     
     var doc;
     
     this.loadTsrefAsync = function(){
-        var url = PATH_t3e+'lib/ts_codecompletion/tsrefLoader.php?action=getTypes';
-        new Ajax.Request(url, {
+		var urlParameters = '&ajaxID=tx_t3editor_TSrefLoader::getTypes';
+		new Ajax.Request(
+			URL_typo3 + 'ajax.php',
+			{
           method: 'get',
+				parameters: urlParameters,
           onSuccess: function(transport) {
             doc = eval('('+ transport.responseText +')');
             buildTree();
           }
-        });
+			}
+		);
     }
     
     
@@ -161,8 +169,9 @@ var TsRef = function(){
                 return result;
             }     
             return typeTree[tId].properties;
+		} else {
+			return new Array();
         }
-        else return new Array(); 
     }
     
     this.typeHasProperty = function(typeId,propertyName){

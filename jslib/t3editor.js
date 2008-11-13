@@ -247,7 +247,7 @@ T3editor.prototype = {
 			params = Object.extend( { ajaxID: 'tx_t3editor::saveCode' }, params);
 			
 			new Ajax.Request(
-				(top && top.TS ? top.TS.PATH_typo3 : PATH_t3e + '../../' ) + 'ajax.php', { 
+				URL_typo3 + 'ajax.php', {
 					parameters: params,
 					onComplete: this.saveFunctionComplete.bind(this)
 				}
