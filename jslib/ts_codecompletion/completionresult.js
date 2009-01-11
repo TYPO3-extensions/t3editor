@@ -103,7 +103,7 @@ var CompletionResult = function(tsRef,tsTreeNode){
       var wordBeginning = "";
       for (var i=0; i< propArr.length;i++) {
         wordBeginning = propArr[i].word.substring(0, filter.length);
-        if (filter == "" || filter == null || wordBeginning == filter) {
+        if (filter == "" || filter == null || wordBeginning.toLowerCase() == filter.toLowerCase()) {
           result.push(propArr[i]);
         }
       }

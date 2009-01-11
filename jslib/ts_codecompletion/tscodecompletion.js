@@ -54,7 +54,6 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
   var proposals;
   var compResult;
   var cc = 0;
-  var filter = "";
   var linefeedsPrepared = false;
   var currentCursorPosition = null;
   
@@ -374,7 +373,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
   		  cursorNode = getCursorNode();
         // the cursornode has to be stored cause inserted breaks have to be deleted after pressing enter if the codecompletion is active
         //nodeBeforeInsert = cursorNode;
-        filter = getFilter(cursorNode);
+        var filter = getFilter(cursorNode);
         
         if(compResult == null || cursorNode.innerHTML == '.'){
  
@@ -543,9 +542,13 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
     // insert selected word into text from codecompletebox
 	function insertCurrWordAtCursor() {
     var word = proposals[currWord].word;
-	  word = word.substring(filter.length);
+	  //word = word.substring(filter.length);
+	  var cursorNode = getCursorNode();
+	  if(cursorNode.textContent != '.')
+	     cursorNode.innerHTML = '';
   	mirror.win.focus();
-  	mirror.editor.win.select.selectMarked(currentCursorPosition);
+  	var cursorPos = mirror.editor.win.select.markSelection(mirror.editor.win);
+  	mirror.editor.win.select.selectMarked(cursorPos);
   	mirror.editor.win.select.insertTextAtCursor(mirror.editor.win, word);
 	}
 	
