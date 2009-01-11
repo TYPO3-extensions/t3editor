@@ -70,7 +70,7 @@ var CompletionResult = function(tsRef,tsTreeNode){
         if(typeof(childNodes[key].value) == "string"){
           propObj = new Object();
           propObj.word = key;
-          if(childNodes[key].tsrefProperty){
+          if(tsRef.typeHasProperty(currentTsTreeNode.getValue(),childNodes[key].name)){
             propObj.cssClass = 'definedTSREFProperty'; 
             propObj.type = childNodes[key].value;
           }else{

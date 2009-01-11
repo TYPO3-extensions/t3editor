@@ -47,12 +47,12 @@ var TsRefProperty = function(parentType,name,value){
 			new Ajax.Request(
 				URL_typo3 + 'ajax.php',
 				{
-                method: 'get',
-					parameters: urlParameters,
-                onSuccess: function(transport) {
-                  descriptionCache = transport.responseText;
-                  callBack(transport.responseText);
-                }
+            method: 'get',
+    	      parameters: urlParameters,
+            onSuccess: function(transport) {
+              descriptionCache = transport.responseText;
+              callBack(transport.responseText);
+            }
 				}
 			);
         }else{

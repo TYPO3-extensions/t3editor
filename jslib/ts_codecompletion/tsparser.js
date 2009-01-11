@@ -54,7 +54,6 @@ var TsParser = function(tsRef,extTsObjTree){
     // the TS-objecttype ID (TSREF) 
     this.value = "";
     //this.extTsObjTree = null;
-    this.tsrefProperty = false;
     // current template or external template
     this.isExternal = false;
     
@@ -320,49 +319,48 @@ var TsParser = function(tsRef,extTsObjTree){
    * along the path, if necessary
    */    
   function getTreeNode(path){
-      var aPath = path.replace(/\s/g,"").split(".");
+    var aPath = path.replace(/\s/g,"").split(".");
 		if (aPath == "") {
 			return tsTree;
 		}
-      var subTree = tsTree.childNodes;
-      var pathSeg;
-      var parent;
-      // step through the path from left to right
-      for(i=0;i<aPath.length;i++){
-        pathSeg = aPath[i];
-        // if there isn't already a treenode
-        if(subTree[pathSeg]==null || subTree[pathSeg].childNodes == null){ // if this subpath is not defined in the code
-          // create a new treenode
-          subTree[pathSeg] = new TreeNode(pathSeg);
-          subTree[pathSeg].parent = parent;
-          //subTree[pathSeg].extTsObjTree = extTsObjTree;
-          // the extPath has to be set, so the TreeNode can retrieve the respecting node in the external templates
+    var subTree = tsTree.childNodes;
+    var pathSeg;
+    var parent;
+    // step through the path from left to right
+    for(i=0;i<aPath.length;i++){
+      pathSeg = aPath[i];
+      // if there isn't already a treenode
+      if(subTree[pathSeg]==null || subTree[pathSeg].childNodes == null){ // if this subpath is not defined in the code
+        // create a new treenode
+        subTree[pathSeg] = new TreeNode(pathSeg);
+        subTree[pathSeg].parent = parent;
+        //subTree[pathSeg].extTsObjTree = extTsObjTree;
+        // the extPath has to be set, so the TreeNode can retrieve the respecting node in the external templates
 				if(parent == null) {
             subTree[pathSeg].extPath = pathSeg;
 				} else {
             subTree[pathSeg].extPath = parent.extPath+'.'+pathSeg;
 				}
-          // if its no root element && search in the TSREF found a matching property 
-          if(parent != null && tsRef.typeHasProperty(parent.getValue(),pathSeg)){ // if there is a matching property in the tsref
+        // if its no root element && search in the TSREF found a matching property 
+        if(parent != null && tsRef.typeHasProperty(parent.getValue(),pathSeg)){ 
             // get type of the current treeNode
             var type = tsRef.getType(parent.getValue());
             // get the type of the subNode
             var propertyTypeId = type.properties[pathSeg].value;
             // set type in the tree
             subTree[pathSeg].value = propertyTypeId;
-            subTree[pathSeg].tsrefProperty = true;
             // set subproperties of property-type as childNodes
             //subTree[pathSeg].childNodes = tsRef.getPropertiesFromTypeId(propertyTypeId).clone(); 
             subTree[pathSeg].parent = parent;
-          }
-        } 
-        if(i==aPath.length-1){
-          return subTree[pathSeg];
         }
-        parent = subTree[pathSeg];
-        subTree = subTree[pathSeg].childNodes;
+      } 
+      if(i==aPath.length-1){
+        return subTree[pathSeg];
       }
+      parent = subTree[pathSeg];
+      subTree = subTree[pathSeg].childNodes;
     }
+  }
   
   
   /**

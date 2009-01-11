@@ -50,6 +50,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
   var currWord = 0;
   var cc_up;
   var cc_down;
+  var mousePos = {x:0,y:0};
   var proposals;
   var compResult;
   var cc = 0;
@@ -57,11 +58,14 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
   var linefeedsPrepared = false;
   var currentCursorPosition = null;
   
+  Event.observe(document,'mousemove',saveMousePos, false);
+  
   // load the external templates ts-setup into extTsObjTree
   var extTsObjTree = new Object();
   var parser = new TsParser(tsRef,extTsObjTree);
   loadExtTemplatesAsync();
     
+  //Event.observe(document, 'mousemove', setMousePos);
   // plugin-array will be retrieved through AJAX from the conf array
   // plugins can be attached by regular TYPO3-extensions
   var plugins = [];
@@ -246,17 +250,25 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
   this.click=function(event) {
     endAutoCompletion();
   }
-  function getFilter(cursorPosNode){
+  function getFilter(cursorNode){
     //var cursorPosNode = cursor.start.node.parentNode;
    // var filter = cursorPosNode.innerHTML.replace('.','');
-    if(cursorPosNode.currentText) {
-      var filter = cursorPosNode.currentText.replace('.','');
+    if(cursorNode.currentText) {
+      var filter = cursorNode.currentText.replace('.','');
       return filter.replace(/\s/g,"");
     } else {
       return "";
     }
   }
-
+  function getCursorNode(){
+    var cursorNode = mirror.editor.win.select.selectionTopNode(mirror.editor.win.document.body, false);
+    // cursorNode is null if the cursor is positioned at the beginning of the first line
+    if(cursorNode == null)
+      cursorNode = mirror.editor.container.firstChild;
+    else if(cursorNode.tagName=='BR') // if cursor is at the end of the line -> jump to beginning of the next line
+      cursorNode = cursorNode.nextSibling;
+		return cursorNode;
+  }
   function getCurrentLine(cursor) {
     var line = "";
     var currentNode = cursor.start.node.parentNode;
@@ -297,6 +309,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
    * @type void
    */     
   this.keyDown = function(event){
+    
     // prepareLinefeeds() gets called the first time keyDown is executed.
     // we have to put this here, cause in the constructor mirror.editor is not yet loaded 
     if (!linefeedsPrepared) {
@@ -324,13 +337,10 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 
   		} else if (keycode == Event.KEY_RETURN) {
   		  event.stop();
-  		  if (currWord == -1) {
-          endAutoCompletion();
-        } else {
+  		  if (currWord != -1) {
           insertCurrWordAtCursor();
-          event.stop();
-          endAutoCompletion();
         }
+        endAutoCompletion();
   		} else if(keycode == 32 && !event.ctrlKey) {
   		  endAutoCompletion();
       } else if(keycode == 32 && event.ctrlKey) {
@@ -359,16 +369,9 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
         currWord = -1;
         mirror.editor.highlightAtCursor();
         // retrieves the node right to the cursor
-        var cursorNode = mirror.editor.win.select.selectionTopNode(mirror.editor.win.document.body, false);
         
-        // cursorNode is null if the cursor is positioned at the beginning of the first line
-        if(cursorNode == null)
-          cursorNode = mirror.editor.container.firstChild;
-        else if(cursorNode.tagName=='BR') // at the beginning of the line
-          cursorNode = cursorNode.nextSibling;
-  			
-  		currentCursorPosition = mirror.editor.win.select.markSelection(mirror.editor.win);
-  		
+  		  currentCursorPosition = mirror.editor.win.select.markSelection(mirror.editor.win);
+  		  cursorNode = getCursorNode();
         // the cursornode has to be stored cause inserted breaks have to be deleted after pressing enter if the codecompletion is active
         //nodeBeforeInsert = cursorNode;
         filter = getFilter(cursorNode);
@@ -391,7 +394,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
   						html += '<li style="height:16px;vertical-align:middle;" ' +
   						        'id="cc_word_' + i + '" ' +
   						        'onclick="t3e_instances[' + index + '].tsCodeCompletion.insertCurrWordAtCursor(' + i + ');t3e_instances[' + index + '].tsCodeCompletion.endAutoCompletion();" ' +
-  						        'onmouseover="t3e_instances[' + index + '].tsCodeCompletion.highlightCurrWord(' + i + ');">' +
+  						        'onmouseover="t3e_instances[' + index + '].tsCodeCompletion.onMouseOver(' + i + ',event);">' +
   						        '<span class="word_' + proposals[i].cssClass + '">' +
   						        proposals[i].word +
   						        '</span></li>';
@@ -475,7 +478,8 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 
 	//move cursor in codecomplete box down
 	function codeCompleteBoxMoveDownCursor() {
-		// if previous position was last word in list - then move cursor to first word if not than  position ++
+		
+    // if previous position was last word in list - then move cursor to first word if not than  position ++
 		if (currWord == proposals.length - 1) {
 			var id = 0;
 		} else {
@@ -496,15 +500,30 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 		}
 	}
 	
+  function saveMousePos(event){
+    mousePos.x = event.clientX;
+    mousePos.y = event.clientY;
+  } 
 	/**
 	 * highlights entry in codecomplete box by id
 	 * @param {int} id
 	 * @type void           
 	 */     	 
-  this.highlightCurrWord = function(id){
-    highlightCurrWord(id);
+  this.onMouseOver = function(id,event){
+    highlightCurrWord(id,event);
+    for(var i=0;i<plugins.length;i++){
+      if(plugins[i].obj && plugins[i].obj.afterMouseOver) plugins[i].obj.afterMouseOver(proposals[currWord],compResult);
+    }
   }
-  function highlightCurrWord(id) {
+  function highlightCurrWord(id,event) {
+    // if it is a mouseover event
+    if(event){
+      // if mousecoordinates haven't changed -> mouseover was triggered by scrolling of the result list -> don't highlight another word (return) 
+      if(mousePos.x == event.clientX && mousePos.y == event.clientY)
+        return;
+      mousePos.x = event.clientX;
+      mousePos.y = event.clientY;
+    }
 		if (currWord != -1) {
 			$('cc_word_' + currWord).className = '';
 		}
