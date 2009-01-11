@@ -67,7 +67,7 @@ var CompletionResult = function(tsRef,tsTreeNode){
       
       // first get the childNodes of the Node (=properties defined by the user)
       for(key in childNodes) {
-        if(typeof(childNodes[key].value) == "string"){
+        if(typeof(childNodes[key].value) != "undefined"){
           propObj = new Object();
           propObj.word = key;
           if(tsRef.typeHasProperty(currentTsTreeNode.getValue(),childNodes[key].name)){
@@ -79,7 +79,7 @@ var CompletionResult = function(tsRef,tsTreeNode){
               propObj.type = childNodes[key].value;
 						} else {
               propObj.type = ''; 
-          }
+            }
 					}
           propArr.push(propObj);
           defined[key] = true;  

@@ -84,8 +84,8 @@ var TsParser = function(tsRef,extTsObjTree){
           return node.v;
 				} else {
           return "";
+        }
       }
-    }
 		}
     
     this.getExtNode = function(){
@@ -106,7 +106,7 @@ var TsParser = function(tsRef,extTsObjTree){
     
   }
   
-  var tsTree = new TreeNode("");
+  var tsTree; // = new TreeNode("_L_");
   var currentLine = "";
   
      
@@ -126,6 +126,7 @@ var TsParser = function(tsRef,extTsObjTree){
     var currentNode = startNode;
     var line = "";
     tsTree = new TreeNode("");
+    tsTree.value = "TLO";  
     function Stack() {
     }
     
