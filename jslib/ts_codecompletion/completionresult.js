@@ -64,13 +64,13 @@ var CompletionResult = function(tsRef,tsTreeNode){
       var defined = new Array();
       var propArr = new Array();
       var childNodes = currentTsTreeNode.getChildNodes();
-      
+      var value = currentTsTreeNode.getValue();
       // first get the childNodes of the Node (=properties defined by the user)
       for(key in childNodes) {
         if(typeof(childNodes[key].value) != "undefined"){
           propObj = new Object();
           propObj.word = key;
-          if(tsRef.typeHasProperty(currentTsTreeNode.getValue(),childNodes[key].name)){
+          if(tsRef.typeHasProperty(value,childNodes[key].name)){
             propObj.cssClass = 'definedTSREFProperty'; 
             propObj.type = childNodes[key].value;
           }else{

@@ -76,18 +76,51 @@ var TsParser = function(tsRef,extTsObjTree){
     }
     
     this.getValue = function(){
-			if(this.value != "") {
-        return this.value;
-			} else {
-        var node = this.getExtNode();
-				if(node) {
-          return node.v;
-				} else {
-          return "";
+        if(this.value) {
+          return this.value;
+        } else {
+          var node = this.getExtNode();
+        	if(node && node.v) {
+            return node.v;
+        	} else {
+        	  var type = this.getNodeTypeFromTsref();
+            if(type)
+              return type;
+            else
+              return '';
+          }
         }
-      }
 		}
     
+    /**
+     * This method will try to resolve the properties recursively from right
+     * to left. If the node's value property is not set, it will look for the
+     * value of its parent node, and if there is a matching childProperty 
+     * (according to the TSREF) it will return the childProperties value. 
+     * If there is no value in the parent node it will go one step further 
+     * and look into the parent node of the parent node,...      
+     **/              
+    this.getNodeTypeFromTsref = function(){
+      var path = this.extPath.split('.');
+      var lastSeg = path.pop();      
+      // attention: there will be recursive calls if necessary
+      var parentValue = this.parent.getValue();
+      if(parentValue){
+        if(tsRef.typeHasProperty(parentValue,lastSeg)){
+          var type = tsRef.getType(parentValue);
+          var propertyTypeId = type.properties[lastSeg].value;
+          return propertyTypeId; 
+        }
+      }
+      return '';
+    }
+    
+    /**
+     * Will look in the external ts-tree (static templates, templates on other pages) 
+     * if there is a value or childproperties assigned to the current node.     
+     * The method uses the extPath of the current node to navigate to the corresponding
+     * node in the external tree
+     **/          
     this.getExtNode = function(){
       var extTree = extTsObjTree;
       var path = this.extPath.split('.');
@@ -326,34 +359,22 @@ var TsParser = function(tsRef,extTsObjTree){
 		}
     var subTree = tsTree.childNodes;
     var pathSeg;
-    var parent;
+    var parent = tsTree;
+    var currentNodePath = '';
     // step through the path from left to right
     for(i=0;i<aPath.length;i++){
       pathSeg = aPath[i];
       // if there isn't already a treenode
-      if(subTree[pathSeg]==null || subTree[pathSeg].childNodes == null){ // if this subpath is not defined in the code
+      if(subTree[pathSeg] == null || subTree[pathSeg].childNodes == null){ // if this subpath is not defined in the code
         // create a new treenode
         subTree[pathSeg] = new TreeNode(pathSeg);
         subTree[pathSeg].parent = parent;
         //subTree[pathSeg].extTsObjTree = extTsObjTree;
         // the extPath has to be set, so the TreeNode can retrieve the respecting node in the external templates
-				if(parent == null) {
-            subTree[pathSeg].extPath = pathSeg;
-				} else {
-            subTree[pathSeg].extPath = parent.extPath+'.'+pathSeg;
-				}
-        // if its no root element && search in the TSREF found a matching property 
-        if(parent != null && tsRef.typeHasProperty(parent.getValue(),pathSeg)){ 
-            // get type of the current treeNode
-            var type = tsRef.getType(parent.getValue());
-            // get the type of the subNode
-            var propertyTypeId = type.properties[pathSeg].value;
-            // set type in the tree
-            subTree[pathSeg].value = propertyTypeId;
-            // set subproperties of property-type as childNodes
-            //subTree[pathSeg].childNodes = tsRef.getPropertiesFromTypeId(propertyTypeId).clone(); 
-            subTree[pathSeg].parent = parent;
-        }
+        if(currentNodePath)		
+          currentNodePath += '.';
+        currentNodePath += pathSeg;				
+        subTree[pathSeg].extPath = currentNodePath;
       } 
       if(i==aPath.length-1){
         return subTree[pathSeg];
