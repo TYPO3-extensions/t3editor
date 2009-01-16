@@ -134,7 +134,8 @@ function T3editor(textarea) {
 		path: PATH_t3e + "jslib/codemirror/",
 		outerEditor: this,
 		saveFunction: this.saveFunction.bind(this),
-		initCallback: this.init.bind(this)
+		initCallback: this.init.bind(this),
+		autoMatchParens: true
 	};
 
 		// get the editor
@@ -347,14 +348,14 @@ T3editor.prototype = {
 		
 		// click event. Refresh cursor object.
 		click: function() {
-			this.refreshCursorObj();
-			this.checkBracketAtCursor();
+			// this.refreshCursorObj();
+			// this.checkBracketAtCursor();
 		},
 		
 		
 		refreshCursorObj: function() {
-			var cursor = this.mirror.editor.win.select.markSelection(this.mirror.editor.win);
-			this.cursorObj = cursor.start;
+			// var cursor = this.mirror.editor.win.select.markSelection(this.mirror.editor.win);
+			// this.cursorObj = cursor.start;
 		},
 		
 		// toggle between the textarea and t3editor
