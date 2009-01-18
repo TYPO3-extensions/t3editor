@@ -421,7 +421,7 @@ var Editor = (function(){
       this.history.reset();
 
       if (this.options.outerEditor && this.options.outerEditor.updateLinenum) {
-          this.options.outerEditor.updateLinenum(code);
+          this.options.outerEditor.updateLinenum();
       }
 
     },

@@ -113,7 +113,8 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
   loadPluginArray();        
             
   
-  /* loads the array of registered codecompletion plugins
+  /**
+   * loads the array of registered codecompletion plugins
    * to register a plugin you have to add an array to the localconf
    * $TYPO3_CONF_VARS['EXTCONF']['t3editor']['plugins'][] = array( 'extpath' => t3lib_div::getIndpEnv('TYPO3_SITE_URL').t3lib_extMgm::siteRelPath($_EXTKEY),
                                                               'classpath' => 'js/my_plugin.js',
@@ -135,8 +136,10 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 			}
 		);
   }
-  /* instantiates all plugins and adds the instances to the plugin array
-  */
+  
+  /**
+   *  instantiates all plugins and adds the instances to the plugin array
+   */
   function loadPlugins(){
     for(var i=0;i<plugins.length;i++){
       var script = document.createElement('script');
@@ -146,8 +149,10 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
       window.setTimeout(makeInstance.bind(this,plugins[i],i),1000);
     } 
   }
-  /* makes a single plugin instance
-  */
+  
+  /**
+   *  makes a single plugin instance
+   */
   function makeInstance(plugin,i){
     try{
       var localname = "plugins[" + i + "].obj";
@@ -160,6 +165,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
     }
     obj.init(pluginContext,plugin);
   }
+  
   /**
    * all external templates along the rootline have to be loaded, 
    * this function retrieves the JSON code by comitting a AJAX request
@@ -169,12 +175,12 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 		new Ajax.Request(
 			URL_typo3 + 'ajax.php',
 			{
-      method: 'get',
-				parameters: urlParameters,
-      onSuccess: function(transport) {
-        extTsObjTree.c = eval('('+ transport.responseText +')');
-        resolveExtReferencesRec(extTsObjTree.c);
-      }
+		      method: 'get',
+						parameters: urlParameters,
+		      onSuccess: function(transport) {
+		        extTsObjTree.c = eval('('+ transport.responseText +')');
+		        resolveExtReferencesRec(extTsObjTree.c);
+		      }
 			}
 		);
   }
@@ -249,6 +255,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
   this.click=function(event) {
     endAutoCompletion();
   }
+  
   function getFilter(cursorNode){
     //var cursorPosNode = cursor.start.node.parentNode;
    // var filter = cursorPosNode.innerHTML.replace('.','');
@@ -259,6 +266,8 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
       return "";
     }
   }
+  
+  // TODO need to be fixed
   function getCursorNode(){
     var cursorNode = mirror.editor.win.select.selectionTopNode(mirror.editor.win.document.body, false);
     // cursorNode is null if the cursor is positioned at the beginning of the first line
@@ -268,6 +277,8 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
       cursorNode = cursorNode.nextSibling;
 		return cursorNode;
   }
+  
+  // TODO check if we can use mirror.lineContent / mirror.currentLine
   function getCurrentLine(cursor) {
     var line = "";
     var currentNode = cursor.start.node.parentNode;
@@ -439,9 +450,10 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
    * afterwards the interceptor method endCodeCompletion gets called
    * @type void      
    */    
-	this.endAutoCompletion = function() {
+  this.endAutoCompletion = function() {
     endAutoCompletion();
   }  
+	
   function endAutoCompletion(){
     cc = 0;
   	codeCompleteBox.hide();
@@ -544,19 +556,24 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
     var word = proposals[currWord].word;
 	  //word = word.substring(filter.length);
 	  var cursorNode = getCursorNode();
-	  if(cursorNode.textContent != '.')
+	  if(cursorNode.currentText != '.') {
 	     cursorNode.innerHTML = '';
-  	mirror.win.focus();
-  	var cursorPos = mirror.editor.win.select.markSelection(mirror.editor.win);
-  	mirror.editor.win.select.selectMarked(cursorPos);
-  	mirror.editor.win.select.insertTextAtCursor(mirror.editor.win, word);
+	     cursorNode.currentText = '';
+	  }
+  	mirror.replaceSelection(word);
+  	// set cursor behind the selection
+  	var select = mirror.editor.win.select;
+    var start = select.cursorPos(mirror.editor.container, true),
+    	end = select.cursorPos(mirror.editor.container, false);
+    if (!start || !end) return;
+    select.setCursorPos(mirror.editor.container, end, end);
 	}
 	
   /**
    * determines what kind of completion is possible and return a array of proposals
    * if we have no suggestions, the list will be empty
    */ 
-   /*       
+   /*
   function getCompletionResult(startNode, cursor) {
     var compResult;
     buildTsObjTree(startNode, cursor);
