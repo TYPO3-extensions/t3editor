@@ -138,14 +138,20 @@ function T3editor(textarea) {
 		autoMatchParens: true
 	};
 
-		// get the editor
+	// TODO check if we can use codemirror.fromTextarea
+	// get the editor
 	this.mirror = new CodeMirror(this.mirror_wrap, options);
-        this.tsCodeCompletion = new TsCodeCompletion(this.mirror,this.outerdiv);
+	
+	// TODO port plugin mechanism from tscompletion to t3editor
+	
+	// TODO make tscompletion a t3editor plugin
+	this.tsCodeCompletion = new TsCodeCompletion(this.mirror,this.outerdiv);
 }
 
 T3editor.prototype = {
 		saveFunctionEvent: null,
 		saveButtons: null,
+		updateTextareaEvent: null,
 	
 		init: function() {
 			var textareaDim = $(this.textarea).getDimensions();
@@ -153,17 +159,21 @@ T3editor.prototype = {
 			this.textarea.hide();
 			
 			// get the form object (needed for Ajax saving)
-			var form = $(this.textarea.form)
+			var form = $(this.textarea.form);
 			this.saveButtons = form.getInputs('image', 'submit');
-
+			
 			// initialize ajax saving events
 			this.saveFunctionEvent = this.saveFunction.bind(this);
 			this.saveButtons.each(function(button) {
 				Event.observe(button,'click',this.saveFunctionEvent);
 			}.bind(this));
-                        Event.observe(this.mirror.win.document, 'keyup', this.tsCodeCompletion.keyUp);
-                        Event.observe(this.mirror.win.document, 'keydown', this.tsCodeCompletion.keyDown);
-                        Event.observe(this.mirror.win.document, 'click', this.tsCodeCompletion.click);
+            
+			this.updateTextareaEvent = this.updateTextarea.bind(this);
+			Event.observe($(this.textarea.form), 'submit', this.updateTextareaEvent);
+			
+			Event.observe(this.mirror.win.document, 'keyup', this.tsCodeCompletion.keyUp);
+            Event.observe(this.mirror.win.document, 'keydown', this.tsCodeCompletion.keyDown);
+            Event.observe(this.mirror.win.document, 'click', this.tsCodeCompletion.click);
 			this.resize(textareaDim.width, textareaDim.height );
 			
 			this.updateLinenum();
@@ -224,16 +234,22 @@ T3editor.prototype = {
 			}
 
 			this.t3e_statusbar_status.update(
-				(this.textModified ? ' <span alt="document has been modified">*</span> ': '') + bodyContentLineCount + ' lines');
+				(this.textModified ? ' <span alt="document has been modified">*</span> ': '') 
+				 + bodyContentLineCount 
+				 + ' lines');
+		},
+		
+		updateTextarea: function(event) {
+			this.textarea.value = this.mirror.getCode();
 		},
 		
 		saveFunction: function(event) {
+			this.modalOverlay.show();
+			this.updateTextarea(event);
+			
 			if (event) {
 				Event.stop(event);
-			}
-			this.modalOverlay.show();
-			this.textarea.value = this.mirror.editor.getCode();
-			
+			}	
 			params = $(this.textarea.form).serialize(true);
 			params = Object.extend( { ajaxID: 'tx_t3editor::saveCode' }, params);
 			
@@ -243,7 +259,6 @@ T3editor.prototype = {
 					onComplete: this.saveFunctionComplete.bind(this)
 				}
 			);
-			
 		},
 
 		// callback if ajax saving was successful
@@ -258,98 +273,7 @@ T3editor.prototype = {
 			};
 			this.modalOverlay.hide();
 		},
-		
-		// find matching bracket
-		checkBracketAtCursor: function() {
-			var cursor = this.mirror.editor.win.select.markSelection(this.mirror.editor.win);
-			
-			if (!cursor || !cursor.start) return;
-			
-			this.cursorObj = cursor.start;
-			
-			// remove current highlights
-			Selector.findChildElements(this.mirror.editor.doc,
-				$A(['.highlight-bracket', '.error-bracket'])
-			).each(function(item) {
-				item.className = item.className.replace(' highlight-bracket', '');
-				item.className = item.className.replace(' error-bracket', '');
-			});
-
-
-			if (!cursor.start || !cursor.start.node || !cursor.start.node.parentNode || !cursor.start.node.parentNode.className) {
-				return;
-			}
-
-			// if cursor is behind an bracket, we search for the matching one
-
-			// we have an opening bracket, search forward for a closing bracket
-			if (cursor.start.node.parentNode.className.indexOf('curly-bracket-open') != -1) {
-				var maybeMatch = cursor.start.node.parentNode.nextSibling;
-				var skip = 0;
-				while (maybeMatch) {
-					if (maybeMatch.className.indexOf('curly-bracket-open') != -1) {
-						skip++;
-					}
-					if (maybeMatch.className.indexOf('curly-bracket-close') != -1) {
-						if (skip > 0) {
-							skip--;
-						} else {
-							maybeMatch.className += ' highlight-bracket';
-							cursor.start.node.parentNode.className += ' highlight-bracket';
-							break;
-						}
-					}
-					maybeMatch = maybeMatch.nextSibling;
-				}
-			}
-
-			// we have a closing bracket, search backward for an opening bracket
-			if (cursor.start.node.parentNode.className.indexOf('curly-bracket-close') != -1) {
-				var maybeMatch = cursor.start.node.parentNode.previousSibling;
-				var skip = 0;
-				while (maybeMatch) {
-					if (maybeMatch.className.indexOf('curly-bracket-close') != -1) {
-						skip++;
-					}
-					if (maybeMatch.className.indexOf('curly-bracket-open') != -1) {
-						if (skip > 0) {
-							skip--;
-						} else {
-							maybeMatch.className += ' highlight-bracket';
-							cursor.start.node.parentNode.className += ' highlight-bracket';
-							break;
-						}
-					}
-					maybeMatch = maybeMatch.previousSibling;
-				}
-			}
-
-			if (cursor.start.node.parentNode.className.indexOf('curly-bracket-') != -1
-			  && maybeMatch == null) {
-				cursor.start.node.parentNode.className += ' error-bracket';
-			}
-		},
-
-		// close an opend bracket
-		autoCloseBracket: function(prevNode) {
-			if (prevNode && prevNode.className.indexOf('curly-bracket-open') != -1) {
-				this.mirror.editor.win.select.insertNewlineAtCursor(this.mirror.editor.win);
-				this.mirror.editor.win.select.insertTextAtCursor(this.mirror.editor.win, "}");
-			}
-		},
-		
-		// click event. Refresh cursor object.
-		click: function() {
-			// this.refreshCursorObj();
-			// this.checkBracketAtCursor();
-		},
-		
-		
-		refreshCursorObj: function() {
-			// var cursor = this.mirror.editor.win.select.markSelection(this.mirror.editor.win);
-			// this.cursorObj = cursor.start;
-		},
-		
+				
 		// toggle between the textarea and t3editor
 		toggleView: function(checkboxEnabled) {
 			if (checkboxEnabled) {
@@ -359,6 +283,7 @@ T3editor.prototype = {
 				this.saveButtons.each(function(button) {
 					Event.stopObserving(button,'click',this.saveFunctionEvent);
 				}.bind(this));
+				Event.stopObserving($(this.textarea.form), 'submit', this.updateTextareaEvent);
 				
 			} else {
 				this.mirror.editor.importCode(this.textarea.value);
@@ -368,6 +293,7 @@ T3editor.prototype = {
 					this.saveFunctionEvent = this.saveFunction.bind(this);
 					Event.observe(button,'click',this.saveFunctionEvent);
 				}.bind(this));
+				Event.observe($(this.textarea.form), 'submit', this.updateTextareaEvent);
 			}
 		},
 		
