@@ -64,7 +64,6 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 	var parser = new TsParser(tsRef,extTsObjTree);
 	loadExtTemplatesAsync();
 
-	//Event.observe(document, 'mousemove', setMousePos);
 
 	// TODO port pugin to t3editor.js
 
@@ -72,8 +71,8 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 	// plugins can be attached by regular TYPO3-extensions
 	var plugins = [];
 
-//	we add the description plugin here because its packed with the codecompletion currently
-//	maybe we will swap it to an external plugin in future
+  //	we add the description plugin here because its packed with the codecompletion currently
+  //	maybe we will swap it to an external plugin in future
 	var plugin = new Object();
 	plugin.extpath = PATH_t3e;
 	plugin.classpath =  'jslib/ts_codecompletion/descriptionPlugin.js';
@@ -82,28 +81,23 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 	plugins.push(plugin);
 
 
-//	TODO cleanup
-//	to roll back linebreaks inserted by hitting enter, the current node has to be stored before the codecompletion outside of the eventlistener
-//	var nodeBeforeInsert;
-
-
 	var codeCompleteBox = new Element("DIV", {
 		"class": "t3e_codeCompleteBox"
 	});
 	codeCompleteBox.hide();
 	outerdiv.appendChild(codeCompleteBox);
 
-//	TODO do we need this toolbar?
+  //	TODO do we need this toolbar?
 	var toolbardiv = new Element("DIV", {
 		"class": "t3e_toolbar"
 	});
 	toolbardiv.show();
 	outerdiv.appendChild(toolbardiv);
 
-//	load the external xml-reference
+  //	load the external xml-reference
 	tsRef.loadTsrefAsync();
 
-//	plugins will be provided with the pluginContext
+  //	plugins will be provided with the pluginContext
 	var pluginContext = new Object();
 	pluginContext.outerdiv = outerdiv;
 	pluginContext.codeCompleteBox = codeCompleteBox;
@@ -235,7 +229,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 	 * replaces editor functions insertNewlineAtCursor and indentAtCursor 
 	 * with modified ones that only execute when codecompletion box is not shown
 	 */
-//	TODO check if this wokrs correctly after updating the codemirror base
+    //	TODO check if this wokrs correctly after updating the codemirror base
 	function prepareLinefeeds() {
 		mirror.editor.win.select.insertNewlineAtCursor_original = mirror.editor.win.select.insertNewlineAtCursor;
 		mirror.editor.win.select.insertNewlineAtCursor = function(window) {
@@ -274,7 +268,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 //	TODO 
 	function getCursorNode(){
 		var cursorNode = mirror.editor.win.select.selectionTopNode(mirror.editor.win.document.body, false);
-//		cursorNode is null if the cursor is positioned at the beginning of the first line
+    //		cursorNode is null if the cursor is positioned at the beginning of the first line
 		if(cursorNode == null)
 			cursorNode = mirror.editor.container.firstChild;
 		else if(cursorNode.tagName=='BR') // if cursor is at the end of the line -> jump to beginning of the next line
@@ -282,24 +276,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 		return cursorNode;
 	}
 
-//	TODO check if we can use mirror.lineContent / mirror.currentLine
-	function getCurrentLine(cursor) {
-		var line = "";
-		var currentNode = cursor.start.node.parentNode;
-		while (currentNode.tagName !='BR') {
-			if (currentNode.hasChildNodes() 
-					&& currentNode.firstChild.nodeType == 3 
-					&& currentNode.currentText.length > 0) {
-				line = currentNode.currentText + line; 
-			}
-			if (currentNode.previousSibling == null) {
-				break;
-			} else {
-				currentNode = currentNode.previousSibling;     
-			}
-		}
-		return line;
-	}
+
 
 	/**
 	 * Eventhandler function executed after keystroke release
@@ -326,8 +303,8 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 	 */     
 	this.keyDown = function(event) {
 
-//		prepareLinefeeds() gets called the first time keyDown is executed.
-//		we have to put this here, cause in the constructor mirror.editor is not yet loaded 
+    //		prepareLinefeeds() gets called the first time keyDown is executed.
+    //		we have to put this here, cause in the constructor mirror.editor is not yet loaded 
 		if (!linefeedsPrepared) {
 			prepareLinefeeds();
 		}
@@ -472,7 +449,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 	function endAutoCompletion(){
 		cc = 0;
 		codeCompleteBox.hide();
-//		force full refresh  
+    // force full refresh  
 		compResult = null;
 		for (var i=0;i<plugins.length;i++) {
 			if (plugins[i].obj && plugins[i].obj.endCodeCompletion)
@@ -481,7 +458,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 	}
 
 
-//	move cursor in autcomplete box up
+  //	move cursor in autcomplete box up
 	function codeCompleteBoxMoveUpCursor() {
 		// if previous position was first or position not initialized - then move cursor to last word, else decrease position
 		if (currWord == 0 || currWord == -1) {
@@ -503,7 +480,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 		}
 	}
 
-//	move cursor in codecomplete box down
+  //	move cursor in codecomplete box down
 	function codeCompleteBoxMoveDownCursor() {
 		// if previous position was last word in list - then move cursor to first word if not than	position ++
 		if (currWord == proposals.length - 1) {
@@ -542,7 +519,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 		}
 	}
 	function highlightCurrWord(id,event) {
-//		if it is a mouseover event
+    // if it is a mouseover event
 		if(event){
 			// if mousecoordinates haven't changed -> mouseover was triggered by scrolling of the result list -> don't highlight another word (return) 
 			if(mousePos.x == event.clientX && mousePos.y == event.clientY)
@@ -566,17 +543,17 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 	this.insertCurrWordAtCursor = function(){
 		insertCurrWordAtCursor();
 	}
-//	insert selected word into text from codecompletebox
+  // insert selected word into text from codecompletebox
 	function insertCurrWordAtCursor() {
 		var word = proposals[currWord].word;
 		//word = word.substring(filter.length);
 		var cursorNode = getCursorNode();
-		if(cursorNode.currentText != '.') {
+		if(cursorNode.currentText != '.' && cursorNode.currentText.strip()!='') {
 			cursorNode.innerHTML = '';
 			cursorNode.currentText = '';
 		}
 		mirror.replaceSelection(word);
-//		set cursor behind the selection
+    // set cursor behind the selection
 		var select = mirror.editor.win.select;
 		var start = select.cursorPos(mirror.editor.container, true),
 		end = select.cursorPos(mirror.editor.container, false);
@@ -584,42 +561,6 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 		select.setCursorPos(mirror.editor.container, end, end);
 	}
 
-//	TODO remove if unneeded
-	/**
-	 * determines what kind of completion is possible and return a array of proposals
-	 * if we have no suggestions, the list will be empty
-	 */ 
-	/*
-function getCompletionResult(startNode, cursor) {
-var compResult;
-buildTsObjTree(startNode, cursor);
-
-// is there an operator left of the current curser Position (= in the currentLine)
-var op = getOperator(currentLine); 
-if (op != -1) {
-  // is it a reference/copy operator?
-  if (op.indexOf("<") != -1) {
-	// show path completion
-	compResult = getPathCompletion(currentTsTreeNode);
-  } else {
-	// show what ?????     
-	// biggest mystery!!
-	// think about!
-  } 
-// no operator in the line
-} else {
-
-  // whitespace after last characters? -> show operators
-  if(currentLine.substr(-1,1) == " ") {
-	compResult = getOperatorCompletion();
-  // no whitespace? we're in a path!
-  } else {
-	compResult = getPathCompletion(currentTsTreeNode);
-  }
-}
-
-return compResult;
-}*/
 
 	/**
 	 * retrieves the get-variable with the specified name
@@ -647,7 +588,7 @@ return compResult;
 			}
 		} while(name_index != -1);
 
-//		Restores all the blank spaces.
+    // Restores all the blank spaces.
 		var space = return_value.indexOf('+');
 		while(space != -1) {
 			return_value = return_value.substr(0, space) + ' ' + 
