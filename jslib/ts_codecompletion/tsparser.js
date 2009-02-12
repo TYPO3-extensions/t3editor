@@ -364,16 +364,16 @@ var TsParser = function(tsRef,extTsObjTree){
     // step through the path from left to right
     for(i=0;i<aPath.length;i++){
       pathSeg = aPath[i];
+      // the extPath has to be set, so the TreeNode can retrieve the respecting node in the external templates
+      if(currentNodePath)		
+        currentNodePath += '.';
+      currentNodePath += pathSeg;	
       // if there isn't already a treenode
       if(subTree[pathSeg] == null || subTree[pathSeg].childNodes == null){ // if this subpath is not defined in the code
         // create a new treenode
         subTree[pathSeg] = new TreeNode(pathSeg);
         subTree[pathSeg].parent = parent;
-        //subTree[pathSeg].extTsObjTree = extTsObjTree;
-        // the extPath has to be set, so the TreeNode can retrieve the respecting node in the external templates
-        if(currentNodePath)		
-          currentNodePath += '.';
-        currentNodePath += pathSeg;				
+        			
         subTree[pathSeg].extPath = currentNodePath;
       } 
       if(i==aPath.length-1){
