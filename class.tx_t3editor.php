@@ -129,10 +129,10 @@ class tx_t3editor {
 			$doc->loadJavascriptLib('contrib/scriptaculous/scriptaculous.js');
 
 				// include editor-css
-			$code.= '<link href="' . 
-				$GLOBALS['BACK_PATH'] .  
-				t3lib_extmgm::extRelPath('t3editor') . 
-				$this->filepathEditorcss . 
+			$code.= '<link href="' .
+				$GLOBALS['BACK_PATH'] .
+				t3lib_extmgm::extRelPath('t3editor') .
+				$this->filepathEditorcss .
 				'" type="text/css" rel="stylesheet" />';
 
 				// include editor-js-lib
@@ -145,7 +145,7 @@ class tx_t3editor {
 			$doc->loadJavascriptLib($path_t3e . 'jslib/ts_codecompletion/tscodecompletion.js');
 			
 			// set correct path to the editor
-
+			
 			$code.= t3lib_div::wrapJS(
 				'var PATH_t3e = "' . $GLOBALS['BACK_PATH'] . t3lib_extmgm::extRelPath('t3editor') . '"; ' .
 				'var URL_typo3 = "' . htmlspecialchars(t3lib_div::getIndpEnv('TYPO3_SITE_URL') . TYPO3_mainDir) . '"; '
@@ -177,11 +177,11 @@ class tx_t3editor {
 			}
 
 			$code .= '<div>' .
-				'<textarea id="t3editor_' . $this->editorCounter . '" ' . 
+				'<textarea id="t3editor_' . $this->editorCounter . '" ' .
 				'name="' . $name . '" ' .
-				'class="' . $class . '" ' . 
-				$additionalParams . ' ' . 
-				$alt . '>' . 
+				'class="' . $class . '" ' .
+				$additionalParams . ' ' .
+				$alt . '>' .
 				$content .
 				'</textarea></div>';
 
@@ -189,6 +189,7 @@ class tx_t3editor {
 
 			$code .= '<br/><br/>' .
 				'<input type="checkbox" ' .
+				'class="checkbox" ' .
 				'onclick="t3editor_toggleEditor(this);" ' .
 				'name="t3editor_disableEditor" ' .
 				'value="true" ' .
@@ -198,12 +199,12 @@ class tx_t3editor {
 				'deactivate t3editor' .
 				'</label>' .
 				'<br/><br/>';
-			
+
 			if (count($hiddenfields)) {
 				foreach ($hiddenfields as $name => $value) {
 					$code.= '<input type="hidden" ' .
 						'name="' . $name . '" ' .
-						'value="' . $value . 
+						'value="' . $value .
 						'" />';
 				}
 			}
@@ -263,8 +264,8 @@ class tx_t3editor {
 
 		// Template Constants
 		if ($parameters['e']['constants']) {
-			$attributes = 'rows="' . $parameters['numberOfRows'] . '" ' . 
-				'wrap="off" ' . 
+			$attributes = 'rows="' . $parameters['numberOfRows'] . '" ' .
+				'wrap="off" ' .
 				$pObj->pObj->doc->formWidthText(48, 'width:98%;height:60%', 'off');
 
 			$title = 'Template: ' . htmlspecialchars($parameters['tplRow']['title']) . ': Constants';
@@ -290,7 +291,7 @@ class tx_t3editor {
 		// Template Setup
 		if ($parameters['e']['config']) {
 			$attributes = 'rows="' . $parameters['numberOfRows'] . '" ' .
-				'wrap="off" ' . 
+				'wrap="off" ' .
 				$pObj->pObj->doc->formWidthText(48, 'width:98%;height:60%', 'off');
 
 			$title = 'Template: ' . htmlspecialchars($parameters['tplRow']['title']) . ': Setup';
@@ -322,8 +323,8 @@ class tx_t3editor {
 	 * 		ajaxID: 'tx_t3editor::saveCode',
 	 *		t3editor_savetype: 'tx_tstemplateinfo'
 	 *	}
-	 * }); 
-	 * 
+	 * });
+	 *
 	 * @param array	params	Parameters (not used yet)
 	 * @param TYPO3AJAX ajaxObj	AjaxObject to handle response
 	 */
@@ -333,21 +334,21 @@ class tx_t3editor {
 			$ajaxObj->setContentFormat('json');
 			$codeType = t3lib_div::_GP('t3editor_savetype');
 			$savingsuccess = false;
-			
+
 			switch ($codeType) {
 				case 'tx_tstemplateinfo':
 					$savingsuccess = $this->saveCodeTsTemplateInfo();
 					break;
-					
+
 				// TODO: fileadmin, extmng, TCEform, ...
-				
+
 				default:
 					$ajaxObj->setError('Unknown content type: ' . $codeType);
 			}
 			$ajaxObj->setContent(array('result' => $savingsuccess));
 		}
 	}
-	
+
 	/**
 	 * Process saving request like in class.tstemplateinfo.php (TCE processing)
 	 *
@@ -355,32 +356,32 @@ class tx_t3editor {
 	 */
 	public function saveCodeTsTemplateInfo() {
 		$savingsuccess = false;
-		
+
 		$pageId = t3lib_div::_GP('pageId');
-		
+
 		if (!is_numeric($pageId) || $pageId < 1) {
 			return false;
 		}
-		
+
 		// if given use the requested template_uid
 		// if not, use the first template-record on the page (in this case there should only be one record!)
 		$set = t3lib_div::_GP('SET');
 		$template_uid = $set['templatesOnPage'] ? $set['templatesOnPage'] : 0;
-		
+
 		$tmpl = t3lib_div::makeInstance('t3lib_tsparser_ext');	// Defined global here!
 		$tmpl->tt_track = 0;	// Do not log time-performance information
 		$tmpl->init();
-		
+
 		// Get the row of the first VISIBLE template of the page. whereclause like the frontend.
-		$tplRow = $tmpl->ext_getFirstTemplate($pageId, $template_uid);	
+		$tplRow = $tmpl->ext_getFirstTemplate($pageId, $template_uid);
 		$existTemplate =  (is_array($tplRow) ? true : false);
-	
+
 		if ($existTemplate)	{
 			$saveId = ($tplRow['_ORIG_uid'] ? $tplRow['_ORIG_uid'] : $tplRow['uid']);
 
 			// Update template ?
 			$POST = t3lib_div::_POST();
-			
+
 			if ($POST['submit']) {
 				require_once(PATH_t3lib . 'class.t3lib_tcemain.php');
 
@@ -411,15 +412,15 @@ class tx_t3editor {
 					// Saved the stuff
 					$tce->process_datamap();
 
-					// Clear the cache (note: currently only admin-users can clear the 
+					// Clear the cache (note: currently only admin-users can clear the
 					// cache in tce_main.php)
 					$tce->clear_cacheCmd('all');
-					
+
 					$savingsuccess = true;
 				}
 			}
 		}
-		return $savingsuccess;	
+		return $savingsuccess;
 	}
 	
 	/**
@@ -441,7 +442,7 @@ class tx_t3editor {
 
  		$ajaxObj->setContent($result);
 		$ajaxObj->setContentFormat('jsonbody');
-}
+	}
 }
 
 

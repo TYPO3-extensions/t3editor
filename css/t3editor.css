@@ -42,7 +42,7 @@
 .t3e_codeCompleteBox {
 	position: absolute;
 	top: 0; left: 0;
-  background-color: #EFEFF4;
+    background-color: #EFEFF4;
 	z-index:190;	
 	border:2px solid silver;
 	padding:0px;

@@ -138,14 +138,9 @@ function T3editor(textarea) {
 		autoMatchParens: true
 	};
 
-	// TODO check if we can use codemirror.fromTextarea
-	// get the editor
+		// get the editor
 	this.mirror = new CodeMirror(this.mirror_wrap, options);
-	
-	// TODO port plugin mechanism from tscompletion to t3editor
-	
-	// TODO make tscompletion a t3editor plugin
-	this.tsCodeCompletion = new TsCodeCompletion(this.mirror,this.outerdiv);
+        this.tsCodeCompletion = new TsCodeCompletion(this.mirror,this.outerdiv);
 }
 
 T3editor.prototype = {
@@ -161,7 +156,7 @@ T3editor.prototype = {
 			// get the form object (needed for Ajax saving)
 			var form = $(this.textarea.form);
 			this.saveButtons = form.getInputs('image', 'submit');
-			
+
 			// initialize ajax saving events
 			this.saveFunctionEvent = this.saveFunction.bind(this);
 			this.saveButtons.each(function(button) {
