@@ -272,9 +272,17 @@ var TsParser = function(tsRef,extTsObjTree){
 								setTreeNodeValue(path, str);
 								break;
 							case '=<': // reference to another object in the tree
+                // resolve relative path
+                if(prefixes.length>0 && str.substr(0, 1)=='.') {
+                  str = prefixes.join('.') + str;
+                }							
 								setReference(path, str);
 								break;
 							case '<': // copy from another object in the tree
+                // resolve relative path
+                if(prefixes.length>0 && str.substr(0, 1)=='.') {
+                  str = prefixes.join('.') + str;
+                }							
 								setCopy(path, str);
 								break;
 							case '>': // delete object value and properties
