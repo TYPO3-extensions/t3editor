@@ -321,8 +321,8 @@ var TsParser = function(tsRef,extTsObjTree){
 			if (i != -1) {
 				var path = line.substring(i+1, line.length);
 				path = path.replace(/\s/g,"");
-	      if (prefixes.length>0 && path.substr(0,1)=='.') {
-
+        if (prefixes.length>0 && path.substr(0,1)=='.') {
+          path = prefixes.join('.') + path;
 				}
 			} else {
 				var path = line;
