@@ -548,7 +548,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 		var word = proposals[currWord].word;
 		//word = word.substring(filter.length);
 		var cursorNode = getCursorNode();
-		if(cursorNode.currentText != '.' && cursorNode.currentText.strip()!='') {
+		if(cursorNode.currentText && cursorNode.currentText != '.' && cursorNode.currentText.strip()!='') {
 			cursorNode.innerHTML = '';
 			cursorNode.currentText = '';
 		}
