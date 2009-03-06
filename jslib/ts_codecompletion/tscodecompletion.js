@@ -546,7 +546,8 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
   // insert selected word into text from codecompletebox
 	function insertCurrWordAtCursor() {
 		var word = proposals[currWord].word;
-		//word = word.substring(filter.length);
+		// tokenize current line
+    mirror.editor.highlightAtCursor();
 		var cursorNode = getCursorNode();
 		if(cursorNode.currentText && cursorNode.currentText != '.' && cursorNode.currentText.strip()!='') {
 			cursorNode.innerHTML = '';
