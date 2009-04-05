@@ -1,28 +1,28 @@
 /***************************************************************
- * Copyright notice
- *
- * (c) 2008 Stephan Petzl <spetzl@gmx.at> and Christian Kartnig <office@hahnepeter.de>
- * All rights reserved
- *
- * This script is part of the TYPO3 project. The TYPO3 project is
- * free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * The GNU General Public License can be found at
- * http://www.gnu.org/copyleft/gpl.html.
- * A copy is found in the textfile GPL.txt and important notices to the license
- * from the author is found in LICENSE.txt distributed with these scripts.
- *
- *
- * This script is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
- * GNU General Public License for more details.
- *
- * This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+* Copyright notice
+*
+* (c) 2008-2009 Stephan Petzl <spetzl@gmx.at> and Christian Kartnig <office@hahnepeter.de>
+* All rights reserved
+*
+* This script is part of the TYPO3 project. The TYPO3 project is
+* free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+*
+* The GNU General Public License can be found at
+* http://www.gnu.org/copyleft/gpl.html.
+* A copy is found in the textfile GPL.txt and important notices to the license
+* from the author is found in LICENSE.txt distributed with these scripts.
+*
+*
+* This script is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+* GNU General Public License for more details.
+*
+* This copyright notice MUST APPEAR in all copies of the script!
+***************************************************************/
 /**
  * @fileoverview contains the TsParser class and the TreeNode helper class
  */
@@ -357,45 +357,45 @@ var TsParser = function(tsRef,extTsObjTree){
 		if (aPath == "") {
 			return tsTree;
 		}
-    var subTree = tsTree.childNodes;
-    var pathSeg;
-    var parent = tsTree;
-    var currentNodePath = '';
-    // step through the path from left to right
-    for(i=0;i<aPath.length;i++){
-      pathSeg = aPath[i];
-      // the extPath has to be set, so the TreeNode can retrieve the respecting node in the external templates
-      if(currentNodePath)		
-        currentNodePath += '.';
-      currentNodePath += pathSeg;	
-      // if there isn't already a treenode
-      if(subTree[pathSeg] == null || subTree[pathSeg].childNodes == null){ // if this subpath is not defined in the code
-        // create a new treenode
-        subTree[pathSeg] = new TreeNode(pathSeg);
-        subTree[pathSeg].parent = parent;
-        			
-        subTree[pathSeg].extPath = currentNodePath;
-      } 
-      if(i==aPath.length-1){
-        return subTree[pathSeg];
-      }
-      parent = subTree[pathSeg];
-      subTree = subTree[pathSeg].childNodes;
-    }
-  }
-  
-  
-  /**
-   * navigates to the respecting treenode, 
-   * create nodes in the path, if necessary, and sets the value
-   */        
-  function setTreeNodeValue(path, value) {
-    var treeNode = getTreeNode(path);
-    // if we are inside a GIFBUILDER Object
-    if(treeNode.parent != null && treeNode.parent.value == "GIFBUILDER" && value == "TEXT") {
-      value = "IMGTEXT";
-    }
-    // just override if it is a real objecttype
+		var subTree = tsTree.childNodes;
+		var pathSeg;
+		var parent = tsTree;
+		var currentNodePath = '';
+		// step through the path from left to right
+		for(i=0;i<aPath.length;i++){
+			pathSeg = aPath[i];
+			// if there isn't already a treenode
+			if(subTree[pathSeg] == null || subTree[pathSeg].childNodes == null){ // if this subpath is not defined in the code
+				// create a new treenode
+				subTree[pathSeg] = new TreeNode(pathSeg);
+				subTree[pathSeg].parent = parent;
+				//subTree[pathSeg].extTsObjTree = extTsObjTree;
+				// the extPath has to be set, so the TreeNode can retrieve the respecting node in the external templates
+				if(currentNodePath)		
+					currentNodePath += '.';
+				currentNodePath += pathSeg;				
+				subTree[pathSeg].extPath = currentNodePath;
+			} 
+			if(i==aPath.length-1){
+				return subTree[pathSeg];
+			}
+			parent = subTree[pathSeg];
+			subTree = subTree[pathSeg].childNodes;
+		}
+	}
+
+
+	/**
+	 * navigates to the respecting treenode, 
+	 * create nodes in the path, if necessary, and sets the value
+	 */        
+	function setTreeNodeValue(path, value) {
+		var treeNode = getTreeNode(path);
+		// if we are inside a GIFBUILDER Object
+		if(treeNode.parent != null && treeNode.parent.value == "GIFBUILDER" && value == "TEXT") {
+			value = "IMGTEXT";
+		}
+		// just override if it is a real objecttype
 		if (tsRef.isType(value)) {
 			treeNode.value = value; 
 		}

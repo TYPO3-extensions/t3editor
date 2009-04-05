@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Tobias Liebig <mail_typo3@etobi.de>
+*  (c) 2007-2009 Tobias Liebig <mail_typo3@etobi.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -125,8 +125,8 @@ class tx_t3editor {
 			$path_t3e = t3lib_extmgm::extRelPath('t3editor');
 
 				// include needed javascript-frameworks
-			$doc->loadJavascriptLib('contrib/prototype/prototype.js');
-			$doc->loadJavascriptLib('contrib/scriptaculous/scriptaculous.js');
+			$doc->loadPrototype();
+			$doc->loadScriptaculous();
 
 				// include editor-css
 			$code.= '<link href="' .

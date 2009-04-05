@@ -20,11 +20,11 @@
   height: 160px;
   width: 260px;
   position: absolute;
-	top: 0; left: 0;
+        top: 0; left: 0;
   background-color: #EFEFF4;
-	z-index:190;	
-	border:2px solid silver;
-	padding:0px;
+        z-index:190;
+        border:2px solid silver;
+        padding:0px;
 }
 .t3e_toolbar{
   position:absolute;

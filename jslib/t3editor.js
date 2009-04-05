@@ -1,7 +1,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Tobias Liebig <mail_typo3@etobi.de>
+*  (c) 2007-2009 Tobias Liebig <mail_typo3@etobi.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -152,23 +152,21 @@ T3editor.prototype = {
 			var textareaDim = $(this.textarea).getDimensions();
 			// hide the textarea
 			this.textarea.hide();
-			
-			// get the form object (needed for Ajax saving)
-			var form = $(this.textarea.form);
-			this.saveButtons = form.getInputs('image', 'submit');
+
+			this.saveButtons = $(this.textarea.form).getInputs('image', 'submit');
 
 			// initialize ajax saving events
 			this.saveFunctionEvent = this.saveFunction.bind(this);
 			this.saveButtons.each(function(button) {
 				Event.observe(button,'click',this.saveFunctionEvent);
 			}.bind(this));
-            
+
 			this.updateTextareaEvent = this.updateTextarea.bind(this);
 			Event.observe($(this.textarea.form), 'submit', this.updateTextareaEvent);
-			
+
 			Event.observe(this.mirror.win.document, 'keyup', this.tsCodeCompletion.keyUp);
-            Event.observe(this.mirror.win.document, 'keydown', this.tsCodeCompletion.keyDown);
-            Event.observe(this.mirror.win.document, 'click', this.tsCodeCompletion.click);
+			Event.observe(this.mirror.win.document, 'keydown', this.tsCodeCompletion.keyDown);
+			Event.observe(this.mirror.win.document, 'click', this.tsCodeCompletion.click);
 			this.resize(textareaDim.width, textareaDim.height );
 			
 			this.updateLinenum();
@@ -210,6 +208,7 @@ T3editor.prototype = {
 
 		// update the line numbers
 		updateLinenum: function() {
+			// escape if editor is not yet loaded
 			if (!this.mirror.editor) return;
 			
 			var bodyContentLineCount = this.mirror.lineNumber(this.mirror.lastLine());
@@ -254,6 +253,7 @@ T3editor.prototype = {
 					onComplete: this.saveFunctionComplete.bind(this)
 				}
 			);
+			
 		},
 
 		// callback if ajax saving was successful
