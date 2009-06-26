@@ -79,7 +79,7 @@ var DescriptionPlugin = function() {
 			// (look if user really wants to see the description of this property, if not -> don't load it)
 			this.lastTimeoutId = prop.getDescription.bind(prop).delay(0.5,descriptionLoaded);
 			descriptionBox.show();
-		} else if (proposalObj.type) {
+		} else if (proposalObj.type) { 
 			descriptionBox.innerHTML = '<div class="TSREF_type_label">TSREF-type: </div><div class="TSREF_type">'+proposalObj.type+'</div><br/>';
 			descriptionBox.show();
 		} else {
@@ -100,6 +100,6 @@ var DescriptionPlugin = function() {
 	}
 
 	this.endCodeCompletion = function(){
-		descriptionBox.hide();  
+		descriptionBox.hide();
 	}
 }
