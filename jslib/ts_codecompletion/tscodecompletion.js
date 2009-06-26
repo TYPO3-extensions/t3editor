@@ -105,6 +105,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 	pluginContext.tsRef = tsRef;
 	pluginContext.parser = parser;
 	pluginContext.plugins = plugins;
+	pluginContext.codeMirror = codeMirror;
 
 //	should we use a pluginmanager so no for loops are required on each hook?
 //	e.g. pluginmanager.call('afterKeyUp',....);
