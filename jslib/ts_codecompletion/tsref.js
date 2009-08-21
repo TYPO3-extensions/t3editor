@@ -112,15 +112,20 @@ var TsRef = function() {
 		  
 			var arr = doc[typeId];
 			typeTree[typeId] = new TsRefType(typeId);
-		  
+			
 
 			if (arr['extends'] != null) {
 				typeTree[typeId]['extends'] = arr['extends'];
 			}
 			for (propName in arr.properties) {
+				
 				var propType = arr.properties[propName].type;
+				
 				typeTree[typeId].properties[propName] = new TsRefProperty(typeId,propName,propType);
 			}
+			if(typeId=='CONTENT')
+		  			console.log(typeTree[typeId]);
+			
 		}
 		for (var typeId in typeTree) {
 			if (typeTree[typeId]['extends'] != null) {
