@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Tobias Liebig <mail_typo3@etobi.de>
+*  (c) 2007-2009 Tobias Liebig <mail_typo3@etobi.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -44,6 +44,9 @@
  *
  * @author	Tobias Liebig <mail_typo3@etobi.de>
  */
+
+$GLOBALS['LANG']->includeLLFile('EXT:t3editor/locallang.xml');
+
 class tx_t3editor {
 
 	/**
@@ -125,8 +128,10 @@ class tx_t3editor {
 			$path_t3e = t3lib_extmgm::extRelPath('t3editor');
 
 				// include needed javascript-frameworks
-			$doc->loadJavascriptLib('contrib/prototype/prototype.js');
-			$doc->loadJavascriptLib('contrib/scriptaculous/scriptaculous.js');
+			/** @var $pageRenderer t3lib_PageRenderer */
+			$pageRenderer = $doc->getPageRenderer();
+			$pageRenderer->loadPrototype();
+			$pageRenderer->loadScriptaculous();
 
 				// include editor-css
 			$code.= '<link href="' .
@@ -138,14 +143,14 @@ class tx_t3editor {
 				// include editor-js-lib
 			$doc->loadJavascriptLib($path_t3e . 'jslib/codemirror/codemirror.js');
 			$doc->loadJavascriptLib($path_t3e . 'jslib/t3editor.js');
-			
+
 			$doc->loadJavascriptLib($path_t3e . 'jslib/ts_codecompletion/tsref.js');
 			$doc->loadJavascriptLib($path_t3e . 'jslib/ts_codecompletion/completionresult.js');
 			$doc->loadJavascriptLib($path_t3e . 'jslib/ts_codecompletion/tsparser.js');
 			$doc->loadJavascriptLib($path_t3e . 'jslib/ts_codecompletion/tscodecompletion.js');
-			
+
 			// set correct path to the editor
-			
+
 			$code.= t3lib_div::wrapJS(
 				'var PATH_t3e = "' . $GLOBALS['BACK_PATH'] . t3lib_extmgm::extRelPath('t3editor') . '"; ' .
 				'var URL_typo3 = "' . htmlspecialchars(t3lib_div::getIndpEnv('TYPO3_SITE_URL') . TYPO3_mainDir) . '"; '
@@ -187,7 +192,7 @@ class tx_t3editor {
 
 			$checked = $GLOBALS['BE_USER']->uc['disableT3Editor'] ? 'checked="checked"' : '';
 
-			$code .= '<br/><br/>' .
+			$code .= '<br /><br />' .
 				'<input type="checkbox" ' .
 				'class="checkbox" ' .
 				'onclick="t3editor_toggleEditor(this);" ' .
@@ -196,9 +201,9 @@ class tx_t3editor {
 				'id="t3editor_disableEditor_' . $this->editorCounter.'_checkbox" ' .
 				$checked.' />&nbsp;' .
 				'<label for="t3editor_disableEditor_' . $this->editorCounter . '_checkbox">' .
-				'deactivate t3editor' .
+				$GLOBALS['LANG']->getLL('deactivate') .
 				'</label>' .
-				'<br/><br/>';
+				'<br /><br />';
 
 			if (count($hiddenfields)) {
 				foreach ($hiddenfields as $name => $value) {
@@ -268,7 +273,10 @@ class tx_t3editor {
 				'wrap="off" ' .
 				$pObj->pObj->doc->formWidthText(48, 'width:98%;height:60%', 'off');
 
-			$title = 'Template: ' . htmlspecialchars($parameters['tplRow']['title']) . ': Constants';
+			$title = $GLOBALS['LANG']->getLL('template') . ' ' .
+				htmlspecialchars($parameters['tplRow']['title']) .
+				$GLOBALS['LANG']->getLL('delimiter') . ' ' .
+				$GLOBALS['LANG']->getLL('constants');
 
 			$outCode = $GLOBALS['T3_VAR']['t3editorObj']->getCodeEditor(
 						'data[constants]',
@@ -294,7 +302,10 @@ class tx_t3editor {
 				'wrap="off" ' .
 				$pObj->pObj->doc->formWidthText(48, 'width:98%;height:60%', 'off');
 
-			$title = 'Template: ' . htmlspecialchars($parameters['tplRow']['title']) . ': Setup';
+			$title = $GLOBALS['LANG']->getLL('template') . ' ' .
+				htmlspecialchars($parameters['tplRow']['title']) .
+				$GLOBALS['LANG']->getLL('delimiter') . ' ' .
+				$GLOBALS['LANG']->getLL('setup');
 
 			$outCode = $GLOBALS['T3_VAR']['t3editorObj']->getCodeEditor(
 						'data[config]',
@@ -343,7 +354,7 @@ class tx_t3editor {
 				// TODO: fileadmin, extmng, TCEform, ...
 
 				default:
-					$ajaxObj->setError('Unknown content type: ' . $codeType);
+					$ajaxObj->setError($GLOBALS['LANG']->getLL('unknownContentType') . ' ' . $codeType);
 			}
 			$ajaxObj->setContent(array('result' => $savingsuccess));
 		}
@@ -374,7 +385,7 @@ class tx_t3editor {
 
 		// Get the row of the first VISIBLE template of the page. whereclause like the frontend.
 		$tplRow = $tmpl->ext_getFirstTemplate($pageId, $template_uid);
-		$existTemplate =  (is_array($tplRow) ? true : false);
+		$existTemplate = (is_array($tplRow) ? true : false);
 
 		if ($existTemplate)	{
 			$saveId = ($tplRow['_ORIG_uid'] ? $tplRow['_ORIG_uid'] : $tplRow['uid']);
@@ -422,7 +433,7 @@ class tx_t3editor {
 		}
 		return $savingsuccess;
 	}
-	
+
 	/**
 	 * Gets plugins that are defined at $TYPO3_CONF_VARS['EXTCONF']['t3editor']['plugins']
 	 * (called by typo3/ajax.php)

@@ -1,28 +1,28 @@
 /***************************************************************
- * Copyright notice
- *
- * (c) 2008 Stephan Petzl <spetzl@gmx.at> and Christian Kartnig <office@hahnepeter.de> 
- * All rights reserved
- *
- * This script is part of the TYPO3 project. The TYPO3 project is
- * free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * The GNU General Public License can be found at
- * http://www.gnu.org/copyleft/gpl.html.
- * A copy is found in the textfile GPL.txt and important notices to the license
- * from the author is found in LICENSE.txt distributed with these scripts.
- *
- *
- * This script is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+* Copyright notice
+*
+* (c) 2008-2009 Stephan Petzl <spetzl@gmx.at> and Christian Kartnig <office@hahnepeter.de>
+* All rights reserved
+*
+* This script is part of the TYPO3 project. The TYPO3 project is
+* free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+*
+* The GNU General Public License can be found at
+* http://www.gnu.org/copyleft/gpl.html.
+* A copy is found in the textfile GPL.txt and important notices to the license
+* from the author is found in LICENSE.txt distributed with these scripts.
+*
+*
+* This script is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* This copyright notice MUST APPEAR in all copies of the script!
+***************************************************************/
 
 /**
  * @fileoverview contains the TsCodeCompletion class
@@ -39,9 +39,9 @@
  * @param outerdiv div that contains the editor, for DOM manipulation
  * @return A new TsCodeCompletion instance
  */
-var TsCodeCompletion = function(codeMirror,outerdiv) {
+var TsCodeCompletion = function(codeMirror, outerdiv) {
 	// private Vars
-	var tsRef  = new TsRef();
+	var tsRef = new TsRef();
 	var mirror = codeMirror;
 	var options = {ccWords : 10};
 	// t3editor index (=0 if there is just one editor on the page, should be set from outside)
@@ -57,15 +57,15 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 	var linefeedsPrepared = false;
 	var currentCursorPosition = null;
 
-	Event.observe(document,'mousemove',saveMousePos, false);
+	Event.observe(document, 'mousemove', saveMousePos, false);
 
 	// load the external templates ts-setup into extTsObjTree
 	var extTsObjTree = new Object();
-	var parser = new TsParser(tsRef,extTsObjTree);
+	var parser = new TsParser(tsRef, extTsObjTree);
 	loadExtTemplatesAsync();
 
 
-	// TODO port pugin to t3editor.js
+	// TODO port plugin to t3editor.js
 
 	// plugin-array will be retrieved through AJAX from the conf array
 	// plugins can be attached by regular TYPO3-extensions
@@ -75,7 +75,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 	//	maybe we will swap it to an external plugin in future
 	var plugin = new Object();
 	plugin.extpath = PATH_t3e;
-	plugin.classpath =  'jslib/ts_codecompletion/descriptionPlugin.js';
+	plugin.classpath = 'jslib/ts_codecompletion/descriptionPlugin.js';
 	plugin.classname = 'DescriptionPlugin';
 
 	plugins.push(plugin);
@@ -87,7 +87,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 	codeCompleteBox.hide();
 	outerdiv.appendChild(codeCompleteBox);
 
-  //	TODO do we need this toolbar?
+	//	TODO do we need this toolbar?
 	var toolbardiv = new Element("DIV", {
 		"class": "t3e_toolbar"
 	});
@@ -115,10 +115,10 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 	/**
 	 * loads the array of registered codecompletion plugins
 	 * to register a plugin you have to add an array to the localconf
-	 * $TYPO3_CONF_VARS['EXTCONF']['t3editor']['plugins'][] = array( 
+	 * $TYPO3_CONF_VARS['EXTCONF']['t3editor']['plugins'][] = array(
 	 * 	'extpath' => t3lib_div::getIndpEnv('TYPO3_SITE_URL').t3lib_extMgm::siteRelPath($_EXTKEY),
-	 *	'classpath' => 'js/my_plugin.js',
-	 *	'classname'=> 'MyPlugin'
+	 * 	'classpath' => 'js/my_plugin.js',
+	 * 	'classname'=> 'MyPlugin'
 	 * );
 	 */
 	function loadPluginArray() {
@@ -152,22 +152,22 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 	}
 
 	/**
-	 *  makes a single plugin instance
+	 * makes a single plugin instance
 	 */
 	function makeInstance(plugin, i) {
 		try {
 			var localname = "plugins[" + i + "].obj";
-			eval(localname+' = new '+plugin.classname+'();');
+			eval(localname+' = new ' + plugin.classname + '();');
 			var obj = eval(localname);
 		} catch(e) {
-			throw("error occured while trying to make new instance of \""+plugin.classname+"\"! maybe syntax error or wrong filepath?");
+			throw("error occured while trying to make new instance of \"" + plugin.classname + "\"! maybe syntax error or wrong filepath?");
 			return;
 		}
 		obj.init(pluginContext,plugin);
 	}
 
 	/**
-	 * all external templates along the rootline have to be loaded, 
+	 * all external templates along the rootline have to be loaded,
 	 * this function retrieves the JSON code by comitting a AJAX request
 	 */
 	function loadExtTemplatesAsync() {
@@ -187,14 +187,15 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 
 	/**
 	 * since the references are not resolved server side we have to do it client-side
-	 * benefit: less loading time due to less data which has to be transmitted    
+	 * benefit: less loading time due to less data which has to be transmitted
 	 */
 	function resolveExtReferencesRec(childNodes) {
 		for(var key in childNodes) {
 			var childNode;
-			// if the childnode has a value and there is a parto of a reference operator ('<') 
-			// and it does not look like a html tag ('>') 
-			if (childNodes[key].v && childNodes[key].v[0] == '<' && childNodes[key].v.indexOf('>') == -1 ){
+			// if the childnode has a value and there is a parto of a reference operator ('<')
+			// and it does not look like a html tag ('>')
+			if (childNodes[key].v && childNodes[key].v[0] == '<' 
+			 && childNodes[key].v.indexOf('>') == -1 ) {
 				var path = childNodes[key].v.replace(/</,"").strip();
 				// if there are still whitespaces its no path
 				if (path.indexOf(' ') == -1) {
@@ -228,21 +229,21 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 	}
 
 	/**
-	 * replaces editor functions insertNewlineAtCursor and indentAtCursor 
+	 * replaces editor functions insertNewlineAtCursor and indentAtCursor
 	 * with modified ones that only execute when codecompletion box is not shown
 	 */
-    //	TODO check if this wokrs correctly after updating the codemirror base
+//	TODO check if this wokrs correctly after updating the codemirror base
 	function prepareLinefeeds() {
 		mirror.editor.win.select.insertNewlineAtCursor_original = mirror.editor.win.select.insertNewlineAtCursor;
 		mirror.editor.win.select.insertNewlineAtCursor = function(window) {
 			if (cc==0) {
-				mirror.editor.win.select.insertNewlineAtCursor_original(window);   
+				mirror.editor.win.select.insertNewlineAtCursor_original(window);
 			}
 		};
 		mirror.editor.indentAtCursor_original = mirror.editor.indentAtCursor;
 		mirror.editor.indentAtCursor = function() {
 			if (cc==0) {
-				mirror.editor.indentAtCursor_original();   
+				mirror.editor.indentAtCursor_original();
 			}
 		};
 		linefeedsPrepared = true;
@@ -258,7 +259,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 		endAutoCompletion();
 	}
 
-	function getFilter(cursorNode){
+	function getFilter(cursorNode) {
 		if(cursorNode.currentText) {
 			var filter = cursorNode.currentText.replace('.','');
 			return filter.replace(/\s/g,"");
@@ -267,13 +268,12 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 		}
 	}
 
-	// TODO 
-	function getCursorNode(){
+	function getCursorNode() {
 		var cursorNode = mirror.editor.win.select.selectionTopNode(mirror.editor.win.document.body, false);
 		// cursorNode is null if the cursor is positioned at the beginning of the first line
-		if(cursorNode == null) {
+		if (cursorNode == null) {
 			cursorNode = mirror.editor.container.firstChild;
-		} else if(cursorNode.tagName=='BR') {
+		} else if (cursorNode.tagName=='BR') {
 			// if cursor is at the end of the line -> jump to beginning of the next line
 			cursorNode = cursorNode.nextSibling;
 		}
@@ -281,10 +281,27 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 	}
 
 
+	function getCurrentLine(cursor) {
+		var line = "";
+		var currentNode = cursor.start.node.parentNode;
+		while (currentNode.tagName !='BR') {
+			if (currentNode.hasChildNodes()
+					&& currentNode.firstChild.nodeType == 3
+					&& currentNode.currentText.length > 0) {
+				line = currentNode.currentText + line;
+			}
+			if (currentNode.previousSibling == null) {
+				break;
+			} else {
+				currentNode = currentNode.previousSibling;
+			}
+		}
+		return line;
+	}
 
 	/**
 	 * Eventhandler function executed after keystroke release
-	 * triggers CC on pressed dot and typing on   
+	 * triggers CC on pressed dot and typing on
 	 * @param event fired prototype event object
 	 * @type void
 	 */
@@ -301,14 +318,14 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 
 	/**
 	 * Eventhandler function executed after keystroke release
-	 * triggers CC on pressed dot and typing on   
+	 * triggers CC on pressed dot and typing on
 	 * @param event fired prototype event object
 	 * @type void
 	 */
 	this.keyDown = function(event) {
 
-		//		prepareLinefeeds() gets called the first time keyDown is executed.
-		//		we have to put this here, cause in the constructor mirror.editor is not yet loaded 
+//		prepareLinefeeds() gets called the first time keyDown is executed.
+//		we have to put this here, cause in the constructor mirror.editor is not yet loaded
 		if (!linefeedsPrepared) {
 			prepareLinefeeds();
 		}
@@ -334,9 +351,10 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 					}
 				}
 
-			} else if (keycode == Event.KEY_ESC || keycode == Event.KEY_LEFT || keycode== Event.KEY_RIGHT) { 
+			} else if (keycode == Event.KEY_ESC || keycode == Event.KEY_LEFT || keycode== Event.KEY_RIGHT) {
 				// Esc, Arrow Left, Arrow Right: if codecomplete box is showing, hide it
 				endAutoCompletion();
+
 			} else if (keycode == Event.KEY_RETURN) {
 				event.stop();
 				if (currWord != -1) {
@@ -353,8 +371,8 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 			} else if (keycode == Event.KEY_BACKSPACE) {
 				var cursorNode = mirror.editor.win.select.selectionTopNode(mirror.editor.win.document.body, false);
 				if (cursorNode.innerHTML == '.') {
-					// force full refresh at keyUp 
-					compResult = null; 
+					// force full refresh at keyUp
+					compResult = null;
 				}
 			}
 
@@ -423,9 +441,9 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 
 			var leftpos = (Position.cumulativeOffset($$('.t3e_iframe_wrap')[index])[0] + Position.cumulativeOffset(cursorNode)[0] + cursorNode.offsetWidth) + 'px';
 			var toppos = (Position.cumulativeOffset(cursorNode)[1] + cursorNode.offsetHeight - Element.cumulativeScrollOffset(cursorNode)[1]) + 'px';
-			codeCompleteBox.setStyle({left: leftpos,top:  toppos});
+			codeCompleteBox.setStyle({left: leftpos, top: toppos});
 
-			// set flag to 1 - needed for continue typing word. 
+			// set flag to 1 - needed for continue typing word.
 			cc = 1;
 
 			// highlight first word in list
@@ -433,7 +451,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 			for (var i=0;i<plugins.length;i++) {
 				if (plugins[i].obj && plugins[i].obj.afterCCRefresh) {
 					plugins[i].obj.afterCCRefresh(proposals[currWord],compResult);
-				}
+			}
 			}
 		} else {
 			endAutoCompletion();
@@ -446,8 +464,8 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 	/**
 	 * hides codecomplete box and resets completionResult
 	 * afterwards the interceptor method endCodeCompletion gets called
-	 * @type void      
-	 */    
+	 * @type void
+	 */
 	this.endAutoCompletion = function() {
 		endAutoCompletion();
 	}
@@ -455,17 +473,19 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 	function endAutoCompletion(){
 		cc = 0;
 		codeCompleteBox.hide();
-		// force full refresh  
+		// force full refresh
 		compResult = null;
 		for (var i=0;i<plugins.length;i++) {
 			if (plugins[i].obj && plugins[i].obj.endCodeCompletion) {
 				plugins[i].obj.endCodeCompletion();
-			}
 		}
+	}
 	}
 
 
-	//	move cursor in autcomplete box up
+	/**
+	 * move cursor in autcomplete box up
+	 */
 	function codeCompleteBoxMoveUpCursor() {
 		// if previous position was first or position not initialized - then move cursor to last word, else decrease position
 		if (currWord == 0 || currWord == -1) {
@@ -487,7 +507,9 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 		}
 	}
 
-	//	move cursor in codecomplete box down
+	/**
+	 * move cursor in codecomplete box down
+	 */
 	function codeCompleteBoxMoveDownCursor() {
 		// if previous position was last word in list - then move cursor to first word if not than	position ++
 		if (currWord == proposals.length - 1) {
@@ -513,7 +535,8 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 	function saveMousePos(event){
 		mousePos.x = event.clientX;
 		mousePos.y = event.clientY;
-	} 
+	}
+	
 	/**
 	 * highlights entry in codecomplete box by id
 	 * @param {int} id
@@ -527,10 +550,11 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 			}
 		}
 	}
+	
 	function highlightCurrWord(id,event) {
-    // if it is a mouseover event
-		if(event) {
-			// if mousecoordinates haven't changed -> mouseover was triggered by scrolling of the result list -> don't highlight another word (return) 
+		// if it is a mouseover event
+		if(event){
+			// if mousecoordinates haven't changed -> mouseover was triggered by scrolling of the result list -> don't highlight another word (return)
 			if(mousePos.x == event.clientX && mousePos.y == event.clientY) {
 				return;
 			}
@@ -550,16 +574,21 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 	 * @type void
 	 * @see #highlightCurrWord
 	 */
-	this.insertCurrWordAtCursor = function() {
+	this.insertCurrWordAtCursor = function(){
 		insertCurrWordAtCursor();
 	}
-	// insert selected word into text from codecompletebox
+	
+	/**
+	 * insert selected word into text from codecompletebox
+	 */
 	function insertCurrWordAtCursor() {
 		var word = proposals[currWord].word;
 		// tokenize current line
 		mirror.editor.highlightAtCursor();
 		var cursorNode = getCursorNode();
-		if(cursorNode.currentText && cursorNode.currentText != '.' && cursorNode.currentText.strip()!='') {
+		if (cursorNode.currentText
+			&& cursorNode.currentText != '.'
+			&& cursorNode.currentText.strip() != '' ) {
 			cursorNode.innerHTML = '';
 			cursorNode.currentText = '';
 		}
@@ -567,7 +596,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 		// set cursor behind the selection
 		var select = mirror.editor.win.select;
 		var start = select.cursorPos(mirror.editor.container, true),
-		end = select.cursorPos(mirror.editor.container, false);
+			end = select.cursorPos(mirror.editor.container, false);
 		if (!start || !end) {
 			return;
 		}
@@ -604,7 +633,7 @@ var TsCodeCompletion = function(codeMirror,outerdiv) {
 		// Restores all the blank spaces.
 		var space = return_value.indexOf('+');
 		while(space != -1) {
-			return_value = return_value.substr(0, space) + ' ' + 
+			return_value = return_value.substr(0, space) + ' ' +
 			return_value.substr(space + 1, return_value.length);
 			space = return_value.indexOf('+');
 		}

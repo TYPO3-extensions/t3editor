@@ -1,7 +1,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Tobias Liebig <mail_typo3@etobi.de>
+*  (c) 2007-2009 Tobias Liebig <mail_typo3@etobi.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -31,7 +31,7 @@
 var t3e_instances = {};
 
 // path to the editor ext dir
-  // can be overwritten in class.tx_t3editor.php
+// can be overwritten in class.tx_t3editor.php
 var PATH_t3e = "../../../sysext/t3editor/";
 
 
@@ -49,7 +49,7 @@ function T3editor(textarea) {
 	this.textarea = $(textarea);
 	
 		// outer wrap around the whole t3editor
-  	this.outerdiv = new Element("DIV", {
+	this.outerdiv = new Element("DIV", {
 		"class": "t3e_wrap"
 	});
 	
@@ -70,14 +70,6 @@ function T3editor(textarea) {
 	});
 	this.outerdiv.appendChild(this.modalOverlay);
 
-/*
-		// wrapping the Toolbar
-	this.toolbar_wrap = new Element("DIV", {
-		"class": "t3e_toolbar_wrap"
-	});
-	this.outerdiv.appendChild(this.toolbar_wrap);
-*/
-	
 		// wrapping the linenumbers
 	this.linenum_wrap = new Element("DIV", {
 		"class": "t3e_linenum_wrap"
@@ -140,7 +132,7 @@ function T3editor(textarea) {
 
 		// get the editor
 	this.mirror = new CodeMirror(this.mirror_wrap, options);
-        this.tsCodeCompletion = new TsCodeCompletion(this.mirror,this.outerdiv);
+	this.tsCodeCompletion = new TsCodeCompletion(this.mirror,this.outerdiv);
 }
 
 T3editor.prototype = {
@@ -152,7 +144,7 @@ T3editor.prototype = {
 			var textareaDim = $(this.textarea).getDimensions();
 			// hide the textarea
 			this.textarea.hide();
-			
+
 			// get the form object (needed for Ajax saving)
 			var form = $(this.textarea.form);
 			this.saveButtons = form.getInputs('image', 'submit');
@@ -162,13 +154,13 @@ T3editor.prototype = {
 			this.saveButtons.each(function(button) {
 				Event.observe(button,'click',this.saveFunctionEvent);
 			}.bind(this));
-            
+
 			this.updateTextareaEvent = this.updateTextarea.bind(this);
 			Event.observe($(this.textarea.form), 'submit', this.updateTextareaEvent);
-			
+
 			Event.observe(this.mirror.win.document, 'keyup', this.tsCodeCompletion.keyUp);
-            Event.observe(this.mirror.win.document, 'keydown', this.tsCodeCompletion.keyDown);
-            Event.observe(this.mirror.win.document, 'click', this.tsCodeCompletion.click);
+			Event.observe(this.mirror.win.document, 'keydown', this.tsCodeCompletion.keyDown);
+			Event.observe(this.mirror.win.document, 'click', this.tsCodeCompletion.click);
 			this.resize(textareaDim.width, textareaDim.height );
 			
 			this.updateLinenum();
@@ -198,8 +190,8 @@ T3editor.prototype = {
 				scrOfY = this.mirror.editor.doc.body.scrollTop;
 				scrOfX = this.mirror.editor.doc.body.scrollLeft;
 			} else if (this.mirror.editor.doc.documentElement
-			  && (this.mirror.editor.doc.documentElement.scrollLeft
-			  || this.mirror.editor.doc.documentElement.scrollTop)) {
+				&& (this.mirror.editor.doc.documentElement.scrollLeft
+				|| this.mirror.editor.doc.documentElement.scrollTop)) {
 				// IE6 standards compliant mode
 				scrOfY = this.mirror.editor.doc.documentElement.scrollTop;
 				scrOfX = this.mirror.editor.doc.documentElement.scrollLeft;
@@ -210,6 +202,7 @@ T3editor.prototype = {
 
 		// update the line numbers
 		updateLinenum: function() {
+			// escape if editor is not yet loaded
 			if (!this.mirror.editor) return;
 			
 			var bodyContentLineCount = this.mirror.lineNumber(this.mirror.lastLine());
@@ -229,8 +222,8 @@ T3editor.prototype = {
 			}
 
 			this.t3e_statusbar_status.update(
-				(this.textModified ? ' <span alt="document has been modified">*</span> ': '') 
-				 + bodyContentLineCount 
+				(this.textModified ? ' <span alt="document has been modified">*</span> ': '')
+				 + bodyContentLineCount
 				 + ' lines');
 		},
 		
@@ -254,13 +247,14 @@ T3editor.prototype = {
 					onComplete: this.saveFunctionComplete.bind(this)
 				}
 			);
+			
 		},
 
 		// callback if ajax saving was successful
 		saveFunctionComplete: function(ajaxrequest) {
 			if (ajaxrequest.status == 200
-			  && ajaxrequest.headerJSON.result == true) {
-				
+				&& ajaxrequest.headerJSON.result == true) {
+
 				this.textModified = false;
 				this.updateLinenum();
 			} else {
@@ -390,15 +384,14 @@ function t3editor_toggleEditor(checkbox, index) {
 // ------------------------------------------------------------------------
 
 
-if (!Prototype.Browser.MobileSafari
-	&& !Prototype.Browser.WebKit) {
+if (!Prototype.Browser.MobileSafari) {
 	
 	// everything ready: turn textarea's into fancy editors	
 	Event.observe(window, 'load',
 		function() {
 			$$('textarea.t3editor').each(
 				function(textarea, i) {
-					if ($('t3editor_disableEditor_' + (i + 1) + '_checkbox') 
+					if ($('t3editor_disableEditor_' + (i + 1) + '_checkbox')
 					&& !$('t3editor_disableEditor_' + (i + 1) + '_checkbox').checked) {
 						var t3e = new T3editor(textarea);
 						t3e_instances[i] = t3e;

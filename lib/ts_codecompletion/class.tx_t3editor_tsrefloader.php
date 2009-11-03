@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008 Stephan Petzl <spetzl@gmx.at> and Christian Kartnig <office@hahnepeter.de>
+*  (c) 2008-2009 Stephan Petzl <spetzl@gmx.at> and Christian Kartnig <office@hahnepeter.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -33,13 +33,16 @@
  * @author Stephan Petzl <spetzl@gmx.at>
  * @author Christian Kartnig <office@hahnepeter.de>
  */
+
+$GLOBALS['LANG']->includeLLFile('EXT:t3editor/locallang.xml');
+
 class tx_t3editor_TSrefLoader {
 	/** @var DOMDocument */
 	protected $xmlDoc;
-	
+
 	/** @var TYPO3AJAX */
 	protected $ajaxObj;
-	
+
 	/**
 	 * General processor for AJAX requests.
 	 * (called by typo3/ajax.php)
@@ -130,7 +133,7 @@ class tx_t3editor_TSrefLoader {
 	 */
 	protected function getDescription($typeId, $parameterName = '') {
 		if (!$typeId) {
-			$this->ajaxObj->setError('Syntax error: At least parameter typeId has to be supplied.');
+			$this->ajaxObj->setError($GLOBALS['LANG']->getLL('typeIDMissing'));
 			return '';
 		}
 

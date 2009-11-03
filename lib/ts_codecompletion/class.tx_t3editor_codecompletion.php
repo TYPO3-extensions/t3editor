@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008 Stephan Petzl <spetzl@gmx.at> and Christian Kartnig <office@hahnepeter.de>
+*  (c) 2008-2009 Stephan Petzl <spetzl@gmx.at> and Christian Kartnig <office@hahnepeter.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,6 +26,7 @@
 ***************************************************************/
 
 require_once(PATH_t3lib.'class.t3lib_page.php');
+$GLOBALS['LANG']->includeLLFile('EXT:t3editor/locallang.xml');
 
 class tx_t3editor_codecompletion {
 	/** @var TYPO3AJAX */
@@ -60,7 +61,7 @@ class tx_t3editor_codecompletion {
 	 * Loads all templates up to a given page id (walking the rootline) and
 	 * cleans parts that are not required for the t3editor codecompletion.
 	 *
-	 * @param	integer		$pageId: id of the page 
+	 * @param	integer		$pageId: id of the page
 	 * @param	integer		$templateId: currently unused (default: 0)
 	 * @return	array		Cleaned array of TypoScript information
 	 * @author	Oliver Hader <oliver@typo3.org>
@@ -73,13 +74,13 @@ class tx_t3editor_codecompletion {
 				// Check whether there is a pageId given:
 			if ($pageId) {
 				$templates = $this->getMergedTemplates($pageId);
-				// Otherwise, set an error: 
+				// Otherwise, set an error:
 			} else {
-				$this->ajaxObj->setError('Syntax error: Parameter pageId must be a valid integer.');
+				$this->ajaxObj->setError($GLOBALS['LANG']->getLL('pageIDInteger'));
 			}
 			// Set an error if user has no access to sys_template records:
 		} else {
-			$this->ajaxObj->setError('Access denied: No permission to template records.');
+			$this->ajaxObj->setError($GLOBALS['LANG']->getLL('noPermission'));
 		}
 
 		return $templates;
