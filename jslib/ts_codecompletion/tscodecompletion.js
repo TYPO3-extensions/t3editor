@@ -74,7 +74,7 @@ var TsCodeCompletion = function(codeMirror, outerdiv) {
 	//	we add the description plugin here because its packed with the codecompletion currently
 	//	maybe we will swap it to an external plugin in future
 	var plugin = new Object();
-	plugin.extpath = PATH_t3e;
+	plugin.extpath = T3editor.PATH_t3e;
 	plugin.classpath = 'jslib/ts_codecompletion/descriptionPlugin.js';
 	plugin.classname = 'DescriptionPlugin';
 
@@ -87,13 +87,6 @@ var TsCodeCompletion = function(codeMirror, outerdiv) {
 	codeCompleteBox.hide();
 	outerdiv.appendChild(codeCompleteBox);
 
-	//	TODO do we need this toolbar?
-	var toolbardiv = new Element("DIV", {
-		"class": "t3e_toolbar"
-	});
-	toolbardiv.show();
-	outerdiv.appendChild(toolbardiv);
-
 	//	load the external xml-reference
 	tsRef.loadTsrefAsync();
 
@@ -101,7 +94,6 @@ var TsCodeCompletion = function(codeMirror, outerdiv) {
 	var pluginContext = new Object();
 	pluginContext.outerdiv = outerdiv;
 	pluginContext.codeCompleteBox = codeCompleteBox;
-	pluginContext.toolbardiv = toolbardiv;
 	pluginContext.tsRef = tsRef;
 	pluginContext.parser = parser;
 	pluginContext.plugins = plugins;
@@ -124,7 +116,7 @@ var TsCodeCompletion = function(codeMirror, outerdiv) {
 	function loadPluginArray() {
 		var urlParameters = '&ajaxID=tx_t3editor::getPlugins';
 		new Ajax.Request(
-			URL_typo3 + 'ajax.php',
+			T3editor.URL_typo3 + 'ajax.php',
 				{
 				parameters: urlParameters,
 				method: 'get',
@@ -173,7 +165,7 @@ var TsCodeCompletion = function(codeMirror, outerdiv) {
 	function loadExtTemplatesAsync() {
 		var urlParameters = '&ajaxID=tx_t3editor_codecompletion::loadTemplates&pageId=' + getGetVar('id');
 		new Ajax.Request(
-			URL_typo3 + 'ajax.php',
+			T3editor.URL_typo3 + 'ajax.php',
 			{
 				method: 'get',
 				parameters: urlParameters,
@@ -416,8 +408,8 @@ var TsCodeCompletion = function(codeMirror, outerdiv) {
 			for (i = 0; i < proposals.length; i++) {
 				html += '<li style="height:16px;vertical-align:middle;" ' +
 				'id="cc_word_' + i + '" ' +
-				'onclick="t3e_instances[' + index + '].tsCodeCompletion.insertCurrWordAtCursor(' + i + ');t3e_instances[' + index + '].tsCodeCompletion.endAutoCompletion();" ' +
-				'onmouseover="t3e_instances[' + index + '].tsCodeCompletion.onMouseOver(' + i + ',event);">' +
+				'onclick="T3editor.instances[' + index + '].tsCodeCompletion.insertCurrWordAtCursor(' + i + ');T3editor.instances[' + index + '].tsCodeCompletion.endAutoCompletion();" ' +
+				'onmouseover="T3editor.instances[' + index + '].tsCodeCompletion.onMouseOver(' + i + ',event);">' +
 				'<span class="word_' + proposals[i].cssClass + '">' +
 				proposals[i].word +
 				'</span></li>';
@@ -641,3 +633,25 @@ var TsCodeCompletion = function(codeMirror, outerdiv) {
 		return(return_value);
 	}
 }
+
+document.observe('t3editor:init', function(event) {
+	that = event.memo.t3editor;
+	that.tsCodeCompletion = new TsCodeCompletion(that.mirror, that.outerdiv);
+});
+
+
+document.observe('t3editor:keyup', function(event) {
+	that = event.memo.t3editor;
+	if (that.tsCodeCompletion) that.tsCodeCompletion.keyUp(event.memo.actualEvent);
+});
+
+document.observe('t3editor:keydown', function(event) {
+	that = event.memo.t3editor;
+	if (that.tsCodeCompletion) that.tsCodeCompletion.keyDown(event.memo.actualEvent);
+});
+
+document.observe('t3editor:click', function(event) {
+	that = event.memo.t3editor;
+	if (that.tsCodeCompletion) that.tsCodeCompletion.click(event.memo.actualEvent);
+});
+

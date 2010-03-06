@@ -45,7 +45,7 @@ var TsRefProperty = function(parentType,name,value) {
 				'&parameterName=' + this.name;
 
 			new Ajax.Request(
-				URL_typo3 + 'ajax.php',
+				T3editor.URL_typo3 + 'ajax.php',
 				{
 					method: 'get',
 					parameters: urlParameters,
@@ -91,7 +91,7 @@ var TsRef = function() {
 	this.loadTsrefAsync = function() {
 		var urlParameters = '&ajaxID=tx_t3editor_TSrefLoader::getTypes';
 		new Ajax.Request(
-			URL_typo3 + 'ajax.php',
+			T3editor.URL_typo3 + 'ajax.php',
 			{
 				method: 'get',
 				parameters: urlParameters,

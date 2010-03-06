@@ -56,7 +56,7 @@ class tx_t3editor_TSrefLoader {
 		$this->ajaxObj = $ajaxObj;
 
 		// Load the TSref XML information:
-		$this->loadFile(t3lib_extMgm::extPath('t3editor') . 'tsref/tsref.xml');
+		$this->loadFile(t3lib_extMgm::extPath('t3editor') . 'res/tsref/tsref.xml');
 
 		$ajaxIdParts = explode('::', $ajaxObj->getAjaxID(), 2);
 		$ajaxMethod = $ajaxIdParts[1];

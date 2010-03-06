@@ -26,86 +26,48 @@
 /* t3editor.js uses the Codemirror editor.
  */
 
+T3editor = T3editor || {};
 
 // collection of all t3editor instances on the current page
-var t3e_instances = {};
+T3editor.instances = {};
 
 // path to the editor ext dir
 // can be overwritten in class.tx_t3editor.php
-var PATH_t3e = "../../../sysext/t3editor/";
-
-
-
-
-/* Demonstration of embedding CodeMirror in a bigger application. The
- * interface defined here is a mess of prompts and confirms, and
- * should probably not be used in a real project.
- */
+T3editor.PATH_t3e = "../../../sysext/t3editor/";
 
 function T3editor(textarea) {
 	var self = this;
 
 		// memorize the textarea
 	this.textarea = $(textarea);
-	
+	var textareaDim = $(this.textarea).getDimensions();
+	this.textarea.hide();
+
 		// outer wrap around the whole t3editor
 	this.outerdiv = new Element("DIV", {
 		"class": "t3e_wrap"
 	});
-	
+
 		// place the div before the textarea
 	this.textarea.parentNode.insertBefore(this.outerdiv, $(this.textarea));
 
+	this.outerdiv.update(T3editor.template);
 
-	// an overlay that covers the whole editor
-	this.modalOverlay = new Element("DIV", {
-		"class": "t3e_modalOverlay",
-		"id": "t3e_modalOverlay_wait"
-	});
-
-	this.modalOverlay.hide();
+	this.modalOverlay = this.outerdiv.down('.t3e_modalOverlay');
 	this.modalOverlay.setStyle(this.outerdiv.getDimensions());
 	this.modalOverlay.setStyle({
 		opacity: 0.8
 	});
-	this.outerdiv.appendChild(this.modalOverlay);
 
-		// wrapping the linenumbers
-	this.linenum_wrap = new Element("DIV", {
-		"class": "t3e_linenum_wrap"
-	});
-		// the "linenumber" list itself
-	this.linenum = new Element("DL", {
-		"class": "t3e_linenum"
-	});
-	this.linenum_wrap.appendChild(this.linenum);
-	this.outerdiv.appendChild(this.linenum_wrap);
-
-		// wrapping the iframe
-	this.mirror_wrap = new Element("DIV", {
-		"class": "t3e_iframe_wrap"
-	});
-	this.outerdiv.appendChild(this.mirror_wrap);
+	this.linenum_wrap = this.outerdiv.down('.t3e_linenum_wrap');
+	this.linenum = this.outerdiv.down('.t3e_linenum');
+	this.mirror_wrap = this.outerdiv.down('.t3e_iframe_wrap');
+	this.statusbar_wrap = this.outerdiv.down('.t3e_statusbar_wrap');
+	this.statusbar_title = this.outerdiv.down('.t3e_statusbar_title');
+	this.statusbar_status = this.outerdiv.down('.t3e_statusbar_status');
 	
-		// wrapping the statusbar
-	this.statusbar_wrap = new Element("DIV", {
-		"class": "t3e_statusbar_wrap"
-	});
-	this.outerdiv.appendChild(this.statusbar_wrap);
-	
-	this.statusbar_title = new Element("SPAN", {
-		"class": "t3e_statusbar_title"
-	});
-	this.statusbar_wrap.appendChild(this.statusbar_title);
 	this.statusbar_title.update( this.textarea.readAttribute('alt') );
-	
-	this.t3e_statusbar_status = new Element("SPAN", {
-		"class": "t3e_statusbar_status"
-	});
-	this.statusbar_wrap.appendChild(this.t3e_statusbar_status);
-	this.t3e_statusbar_status.update( '' );
-
-	var textareaDim = $(this.textarea).getDimensions();
+	this.statusbar_status.update( '' );
 
 	this.linenum_wrap.setStyle({
 		height: (textareaDim.height) + 'px'
@@ -113,17 +75,12 @@ function T3editor(textarea) {
 
 		// setting options
 	var options = {
-		height: (
-				textareaDim.height
-				) + 'px',
-		width: (
-				textareaDim.width
-				- 40	// line numbers
-				) + 'px',
+		height: ( textareaDim.height ) + 'px',
+		width: ( textareaDim.width - 40 ) + 'px',
 		content: $(this.textarea).value,
-		parserfile: ["tokenizetyposcript.js", "parsetyposcript.js"],
-		stylesheet: PATH_t3e + "css/t3editor_inner.css",
-		path: PATH_t3e + "jslib/codemirror/",
+		parserfile: T3editor.parserfile,
+		stylesheet: T3editor.stylesheet,
+		path: T3editor.PATH_t3e + "jslib/codemirror/",
 		outerEditor: this,
 		saveFunction: this.saveFunction.bind(this),
 		initCallback: this.init.bind(this),
@@ -132,7 +89,7 @@ function T3editor(textarea) {
 
 		// get the editor
 	this.mirror = new CodeMirror(this.mirror_wrap, options);
-	this.tsCodeCompletion = new TsCodeCompletion(this.mirror,this.outerdiv);
+	$(this.outerdiv).fire('t3editor:init', {t3editor: this});
 }
 
 T3editor.prototype = {
@@ -145,7 +102,19 @@ T3editor.prototype = {
 			// hide the textarea
 			this.textarea.hide();
 
-			// get the form object (needed for Ajax saving)
+			this.attachEvents();
+			this.resize(textareaDim.width, textareaDim.height );
+			
+			this.updateLinenum();
+			
+			this.modalOverlay.hide();
+			$(this.outerdiv).fire('t3editor:initFinished', {t3editor: this});
+		},
+
+		attachEvents: function() {
+			var that = this;
+			
+			// get the form object
 			var form = $(this.textarea.form);
 			this.saveButtons = form.getInputs('image', 'submit');
 
@@ -156,14 +125,18 @@ T3editor.prototype = {
 			}.bind(this));
 
 			this.updateTextareaEvent = this.updateTextarea.bind(this);
+			
 			Event.observe($(this.textarea.form), 'submit', this.updateTextareaEvent);
 
-			Event.observe(this.mirror.win.document, 'keyup', this.tsCodeCompletion.keyUp);
-			Event.observe(this.mirror.win.document, 'keydown', this.tsCodeCompletion.keyDown);
-			Event.observe(this.mirror.win.document, 'click', this.tsCodeCompletion.click);
-			this.resize(textareaDim.width, textareaDim.height );
-			
-			this.updateLinenum();
+			Event.observe(this.mirror.win.document, 'keyup', function(event) {
+				$(that.outerdiv).fire('t3editor:keyup', {t3editor: that, actualEvent: event});
+			});
+			Event.observe(this.mirror.win.document, 'keydown', function(event) {
+				$(that.outerdiv).fire('t3editor:keydown', {t3editor: that, actualEvent: event});
+			});
+			Event.observe(this.mirror.win.document, 'click', function(event) {
+				$(that.outerdiv).fire('t3editor:click', {t3editor: that, actualEvent: event});
+			});
 		},
 	
 		// indicates is content is modified and not safed yet
@@ -221,7 +194,7 @@ T3editor.prototype = {
 				}
 			}
 
-			this.t3e_statusbar_status.update(
+			this.statusbar_status.update(
 				(this.textModified ? ' <span title="' + T3editor.lang.documentModified + '" alt="' + T3editor.lang.documentModified + '">*</span> ': '')
 				 + bodyContentLineCount
 				 + ' '
@@ -238,24 +211,18 @@ T3editor.prototype = {
 			
 			if (event) {
 				Event.stop(event);
-			}	
-			params = $(this.textarea.form).serialize(true);
-			params = Object.extend( { ajaxID: 'tx_t3editor::saveCode' }, params);
+			}
+
+			var params = $(this.textarea.form).serialize(true);
+			params = Object.extend( { t3editor_disableEditor: 'false' }, params);
 			
-			new Ajax.Request(
-				URL_typo3 + 'ajax.php', {
-					parameters: params,
-					onComplete: this.saveFunctionComplete.bind(this)
-				}
-			);
-			
+			$(this.outerdiv).fire('t3editor:save', {parameters: params, t3editor: this});
+
 		},
 
-		// callback if ajax saving was successful
-		saveFunctionComplete: function(ajaxrequest) {
-			if (ajaxrequest.status == 200
-				&& ajaxrequest.headerJSON.result == true) {
-
+		// callback if saving was successful
+		saveFunctionComplete: function(wasSuccessful) {
+			if (wasSuccessful) {
 				this.textModified = false;
 				this.updateLinenum();
 			} else {
@@ -265,8 +232,9 @@ T3editor.prototype = {
 		},
 				
 		// toggle between the textarea and t3editor
-		toggleView: function(checkboxEnabled) {
-			if (checkboxEnabled) {
+		toggleView: function(disable) {
+			$(this.outerdiv).fire('t3editor:toggleView', {t3editor: this, disable: disable});
+			if (disable) {
 				this.textarea.value = this.mirror.editor.getCode();
 				this.outerdiv.hide();
 				this.textarea.show();
@@ -360,23 +328,23 @@ T3editor.prototype = {
 /**
  * toggle between enhanced editor (t3editor) and simple textarea
  */
-function t3editor_toggleEditor(checkbox, index) {
+T3editor.toggleEditor = function(checkbox, index) {
 	if (!Prototype.Browser.MobileSafari
 		&& !Prototype.Browser.WebKit) {
 		
 		if (index == undefined) {
 			$$('textarea.t3editor').each(
 				function(textarea, i) {
-					t3editor_toggleEditor(checkbox, i);
+					T3editor.toggleEditor(checkbox, i);
 				}
 			);
 		} else {
-			if (t3e_instances[index] != undefined) {
-				var t3e = t3e_instances[index];
+			if (T3editor.instances[index] != undefined) {
+				var t3e = T3editor.instances[index];
 				t3e.toggleView(checkbox.checked);
 			} else if (!checkbox.checked) {
 				var t3e = new T3editor($$('textarea.t3editor')[index], index);
-				t3e_instances[index] = t3e;
+				T3editor.instances[index] = t3e;
 			}
 		}
 	}
@@ -384,9 +352,7 @@ function t3editor_toggleEditor(checkbox, index) {
 
 // ------------------------------------------------------------------------
 
-
 if (!Prototype.Browser.MobileSafari) {
-	
 	// everything ready: turn textarea's into fancy editors	
 	Event.observe(window, 'load',
 		function() {
@@ -395,7 +361,7 @@ if (!Prototype.Browser.MobileSafari) {
 					if ($('t3editor_disableEditor_' + (i + 1) + '_checkbox')
 					&& !$('t3editor_disableEditor_' + (i + 1) + '_checkbox').checked) {
 						var t3e = new T3editor(textarea);
-						t3e_instances[i] = t3e;
+						T3editor.instances[i] = t3e;
 					}
 				}
 			);
