@@ -53,22 +53,6 @@ class tx_t3editor implements t3lib_Singleton {
 	}
 
 	/**
-	 * path to the main javascript-file
-	 *
-	 * @var string
-	 */
-	protected $filepathEditorlib = 'jslib/t3editor.js';
-
-	/**
-	 * path to the main stylesheet
-	 *
-	 * @TODO: make it configurable
-	 *
-	 * @var string
-	 */
-	protected $filepathEditorcss = 'css/t3editor.css';
-
-	/**
 	 * counts the editors on the current page
 	 *
 	 * @var int
@@ -132,18 +116,18 @@ class tx_t3editor implements t3lib_Singleton {
 			$code.= '<link href="' .
 				$GLOBALS['BACK_PATH'] .
 				t3lib_extmgm::extRelPath('t3editor') .
-				$this->filepathEditorcss .
+				'res/css/t3editor.css' .
 				'" type="text/css" rel="stylesheet" />';
 
 				// include editor-js-lib
-			$doc->loadJavascriptLib($path_t3e . 'jslib/codemirror/codemirror.js');
-			$doc->loadJavascriptLib($path_t3e . 'jslib/t3editor.js');
+			$doc->loadJavascriptLib($path_t3e . 'res/jslib/codemirror/codemirror.js');
+			$doc->loadJavascriptLib($path_t3e . 'res/jslib/t3editor.js');
 
 			if ($this->mode == self::MODE_TYPOSCRIPT) {
-				$doc->loadJavascriptLib($path_t3e . 'jslib/ts_codecompletion/tsref.js');
-				$doc->loadJavascriptLib($path_t3e . 'jslib/ts_codecompletion/completionresult.js');
-				$doc->loadJavascriptLib($path_t3e . 'jslib/ts_codecompletion/tsparser.js');
-				$doc->loadJavascriptLib($path_t3e . 'jslib/ts_codecompletion/tscodecompletion.js');
+				$doc->loadJavascriptLib($path_t3e . 'res/jslib/ts_codecompletion/tsref.js');
+				$doc->loadJavascriptLib($path_t3e . 'res/jslib/ts_codecompletion/completionresult.js');
+				$doc->loadJavascriptLib($path_t3e . 'res/jslib/ts_codecompletion/tsparser.js');
+				$doc->loadJavascriptLib($path_t3e . 'res/jslib/ts_codecompletion/tscodecompletion.js');
 			}
 
 			// set correct path to the editor
@@ -198,22 +182,22 @@ class tx_t3editor implements t3lib_Singleton {
 	protected function getStylesheetByMode($mode) {
 		switch ($mode) {
 			case tx_t3editor::MODE_TYPOSCRIPT:
-				$stylesheet = '"css/typoscriptcolors.css"';
+				$stylesheet = '"res/css/typoscriptcolors.css"';
 			break;
 
 			case tx_t3editor::MODE_JAVASCRIPT:
-				$stylesheet = '"css/jscolors.css"';
+				$stylesheet = '"res/css/jscolors.css"';
 			break;
 
 			case tx_t3editor::MODE_CSS:
-				$stylesheet = '"css/csscolors.css"';
+				$stylesheet = '"res/css/csscolors.css"';
 			break;
 
 			case tx_t3editor::MODE_XML:
-				$stylesheet = '"css/xmlcolors.css"';
+				$stylesheet = '"res/css/xmlcolors.css"';
 			break;
 		}
-		return '[T3editor.PATH_t3e + "css/t3editor_inner.css", T3editor.PATH_t3e + ' . $stylesheet . ']';
+		return '[T3editor.PATH_t3e + "res/css/t3editor_inner.css", T3editor.PATH_t3e + ' . $stylesheet . ']';
 	}
 
 	/**

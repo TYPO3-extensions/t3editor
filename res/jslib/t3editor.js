@@ -80,7 +80,7 @@ function T3editor(textarea) {
 		content: $(this.textarea).value,
 		parserfile: T3editor.parserfile,
 		stylesheet: T3editor.stylesheet,
-		path: T3editor.PATH_t3e + "jslib/codemirror/",
+		path: T3editor.PATH_t3e + "res/jslib/codemirror/",
 		outerEditor: this,
 		saveFunction: this.saveFunction.bind(this),
 		initCallback: this.init.bind(this),

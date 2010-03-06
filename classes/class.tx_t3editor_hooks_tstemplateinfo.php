@@ -57,7 +57,7 @@ class tx_t3editor_hooks_tstemplateinfo {
 
 			// insert javascript code in document header
 			$pObj->JScode .= $t3editor->getJavascriptCode($pObj);
-			$pObj->loadJavascriptLib(t3lib_extmgm::extRelPath('t3editor') . 'jslib/tx_tstemplateinfo/tx_tstemplateinfo.js');
+			$pObj->loadJavascriptLib(t3lib_extmgm::extRelPath('t3editor') . 'res/jslib/tx_tstemplateinfo/tx_tstemplateinfo.js');
 		}
 	}
 
