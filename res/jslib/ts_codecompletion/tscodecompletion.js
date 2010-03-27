@@ -75,7 +75,7 @@ var TsCodeCompletion = function(codeMirror, outerdiv) {
 	//	maybe we will swap it to an external plugin in future
 	var plugin = new Object();
 	plugin.extpath = T3editor.PATH_t3e;
-	plugin.classpath = 'jslib/ts_codecompletion/descriptionPlugin.js';
+	plugin.classpath = 'res/jslib/ts_codecompletion/descriptionPlugin.js';
 	plugin.classname = 'DescriptionPlugin';
 
 	plugins.push(plugin);
