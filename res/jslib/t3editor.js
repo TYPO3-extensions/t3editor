@@ -59,8 +59,6 @@ function T3editor(textarea) {
 		opacity: 0.8
 	});
 
-	this.linenum_wrap = this.outerdiv.down('.t3e_linenum_wrap');
-	this.linenum = this.outerdiv.down('.t3e_linenum');
 	this.mirror_wrap = this.outerdiv.down('.t3e_iframe_wrap');
 	this.statusbar_wrap = this.outerdiv.down('.t3e_statusbar_wrap');
 	this.statusbar_title = this.outerdiv.down('.t3e_statusbar_title');
@@ -68,10 +66,6 @@ function T3editor(textarea) {
 	
 	this.statusbar_title.update( this.textarea.readAttribute('alt') );
 	this.statusbar_status.update( '' );
-
-	this.linenum_wrap.setStyle({
-		height: (textareaDim.height) + 'px'
-	});
 
 		// setting options
 	var options = {
@@ -84,7 +78,9 @@ function T3editor(textarea) {
 		outerEditor: this,
 		saveFunction: this.saveFunction.bind(this),
 		initCallback: this.init.bind(this),
-		autoMatchParens: true
+		autoMatchParens: true,
+		lineNumbers: true,
+		onChange: this.onChange.bind(this)
 	};
 
 		// get the editor
@@ -104,8 +100,6 @@ T3editor.prototype = {
 
 			this.attachEvents();
 			this.resize(textareaDim.width, textareaDim.height );
-			
-			this.updateLinenum();
 			
 			this.modalOverlay.hide();
 			$(this.outerdiv).fire('t3editor:initFinished', {t3editor: this});
@@ -133,6 +127,11 @@ T3editor.prototype = {
 			});
 			Event.observe(this.mirror.win.document, 'keydown', function(event) {
 				$(that.outerdiv).fire('t3editor:keydown', {t3editor: that, actualEvent: event});
+				
+				if ((event.ctrlKey || event.metaKey) && event.keyCode == 122) {
+					that.toggleFullscreen();
+					event.stop();
+				}
 			});
 			Event.observe(this.mirror.win.document, 'click', function(event) {
 				$(that.outerdiv).fire('t3editor:click', {t3editor: that, actualEvent: event});
@@ -146,63 +145,17 @@ T3editor.prototype = {
 		checkTextModified: function() {
 			if (!this.textModified) {
 				this.textModified = true;
-				this.updateLinenum();
 			}
-		},
-		
-		// scroll the line numbers
-		scroll: function() {
-			var scrOfX = 0,
-			scrOfY = 0;
-			if (typeof(this.mirror.editor.win.pageYOffset) == 'number') {
-				// Netscape compliant
-				scrOfY = this.mirror.editor.win.pageYOffset;
-				scrOfX = this.mirror.editor.win.pageXOffset;
-			} else if (this.mirror.editor.doc.body && (this.mirror.editor.doc.body.scrollLeft || this.mirror.editor.doc.body.scrollTop)) {
-				// DOM compliant
-				scrOfY = this.mirror.editor.doc.body.scrollTop;
-				scrOfX = this.mirror.editor.doc.body.scrollLeft;
-			} else if (this.mirror.editor.doc.documentElement
-				&& (this.mirror.editor.doc.documentElement.scrollLeft
-				|| this.mirror.editor.doc.documentElement.scrollTop)) {
-				// IE6 standards compliant mode
-				scrOfY = this.mirror.editor.doc.documentElement.scrollTop;
-				scrOfX = this.mirror.editor.doc.documentElement.scrollLeft;
-			}
-			this.linenum_wrap.scrollTop = scrOfY;
-		},
-		
-
-		// update the line numbers
-		updateLinenum: function() {
-			// escape if editor is not yet loaded
-			if (!this.mirror.editor) return;
-			
-			var bodyContentLineCount = this.mirror.lineNumber(this.mirror.lastLine());
-			disLineCount = this.linenum.childNodes.length;
-			while (disLineCount != bodyContentLineCount) {
-				if (disLineCount > bodyContentLineCount) {
-					this.linenum.removeChild(this.linenum.lastChild);
-					disLineCount--;
-				} else if (disLineCount < bodyContentLineCount) {
-					ln = $(document.createElement('dt'));
-					ln.update(disLineCount + 1 + '.');
-					ln.addClassName(disLineCount % 2 == 1 ? 'even': 'odd');
-					ln.setAttribute('id', 'ln' + (disLineCount + 1));
-					this.linenum.appendChild(ln);
-					disLineCount++;
-				}
-			}
-
-			this.statusbar_status.update(
-				(this.textModified ? ' <span title="' + T3editor.lang.documentModified + '" alt="' + T3editor.lang.documentModified + '">*</span> ': '')
-				 + bodyContentLineCount
-				 + ' '
-				 + T3editor.lang.lines );
 		},
 		
 		updateTextarea: function(event) {
 			this.textarea.value = this.mirror.getCode();
+		},
+
+		onChange: function() {
+			var that = this;
+			this.checkTextModified();
+			$(that.outerdiv).fire('t3editor:change', {t3editor: that});
 		},
 		
 		saveFunction: function(event) {
@@ -214,7 +167,7 @@ T3editor.prototype = {
 			}
 
 			var params = $(this.textarea.form).serialize(true);
-			params = Object.extend( { t3editor_disableEditor: 'false' }, params);
+			params = Object.extend( {t3editor_disableEditor: 'false'}, params);
 			
 			$(this.outerdiv).fire('t3editor:save', {parameters: params, t3editor: this});
 
@@ -224,10 +177,9 @@ T3editor.prototype = {
 		saveFunctionComplete: function(wasSuccessful) {
 			if (wasSuccessful) {
 				this.textModified = false;
-				this.updateLinenum();
 			} else {
 				alert(T3editor.lang.errorWhileSaving);
-			};
+			}
 			this.modalOverlay.hide();
 		},
 				
@@ -267,18 +219,9 @@ T3editor.prototype = {
 					width: newwidth + 'px'
 				});
 
-				this.linenum_wrap.setStyle({
-					height: (height - 22) + 'px'	// less footer height
-				});
-
-				numwwidth = this.linenum_wrap.getWidth();
-				
-				if (Prototype.Browser.IE) numwwidth = numwwidth - 17;
-				if (!Prototype.Browser.IE) numwwidth = numwwidth - 11;
-
 				$(this.mirror_wrap.firstChild).setStyle({
 					'height': ((height - 22) + 'px'),
-					'width': ((width - numwwidth) + 'px')
+					'width': ((width - 13) + 'px')
 				});
 
 				$(this.modalOverlay).setStyle(this.outerdiv.getDimensions());

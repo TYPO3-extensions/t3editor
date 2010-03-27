@@ -1,3 +1,19 @@
+.CodeMirror-wrapping {
+	position: relative;
+	margin-left: 21px;
+}
+.CodeMirror-wrapping div {
+	line-height: 13px !important;
+}
+div.CodeMirror-line-numbers {
+	line-height: 13px !important;
+	font-size: 10px;
+	padding-right: 3px;
+	padding-left: 3px;
+	margin-right: 2px;
+	text-align: right;
+}
+
 .TSREF_type_label, .TSREF_description_label{
 	font-weight: bold;
 }
@@ -117,34 +133,9 @@
 	top: 0;
 	left: 0;
 }
-.t3e_linenum_wrap {
-	width: 4em;
-	position: absolute; top: 0pt; left: 0pt;
-	overflow: hidden;
-}
-.t3e_linenum {
-	font-size: 12px;
-	font-family: monospace;
-	padding: 0 3px 0 0;
-	margin: 0;
-	background-color: #EFEFF4;
-	color: #000;
-	width: 3em;
-	float: left;
-	text-align: right;
-	list-style-type: none;
-}
-.t3e_linenum dt {
-	height: 13px;
-}
-
-.t3e_linenum li {
-	padding: 0 3px 0 0;
-	margin: 0;
-}
 
 .t3e_iframe_wrap {
-	margin: 0 0 0 4em;
+	margin: 0 0 0 5px;
 }
 
 .t3e_iframe {
