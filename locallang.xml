@@ -6,11 +6,11 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="deactivate">simple textarea (deactivate advanced t3editor)</label>
+			<label index="deactivate">Deactivate t3editor</label>
 			<label index="template">Template</label>
 			<label index="delimiter">:</label>
 			<label index="constants">Constants</label>
-			<label index="config">Setup</label>
+			<label index="setup">Setup</label>
 			<label index="unknownContentType">Unknown content type:</label>
 			<label index="pageIDInteger">Syntax error: Parameter pageID must be a valid integer.</label>
 			<label index="noPermission">Access denied: No permission to template records.</label>

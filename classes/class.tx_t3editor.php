@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2009 Tobias Liebig <mail_typo3@etobi.de>
+*  (c) 2007-2010 Tobias Liebig <mail_typo3@etobi.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -43,28 +43,37 @@ class tx_t3editor implements t3lib_Singleton {
 
 	protected $mode = '';
 	
-	public function setMode($mode) {
-		$this->mode = $mode;
-		return $this;
-	}
-
-	public function isEnabled() {
-		return $this->_isEnabled;
-	}
-
 	/**
 	 * counts the editors on the current page
 	 *
-	 * @var int
+	 * @var		int
 	 */
 	protected $editorCounter = 0;
 
 	/**
 	 * flag to enable the t3editor
 	 *
-	 * @var bool
+	 * @var		bool
 	 */
 	protected $_isEnabled = true;
+
+	/**
+	 * sets the type of code to edit (::MODE_TYPOSCRIPT, ::MODE_JAVASCRIPT)
+	 *
+	 * @param	$mode	string expects one of the predefined constants
+	 * @return	tx_t3editor
+	 */
+	public function setMode($mode) {
+		$this->mode = $mode;
+		return $this;
+	}
+
+	/**
+	 * @return	boolean		true if the t3editor is enabled
+	 */
+	public function isEnabled() {
+		return $this->_isEnabled;
+	}
 
 	/**
 	 * Creates a new instance of the class
@@ -78,6 +87,9 @@ class tx_t3editor implements t3lib_Singleton {
 		$GLOBALS["BE_USER"]->uc['disablePMKTextarea'] = 1;
 	}
 
+	/**
+	 * check if the t3editor should be disabled (by a POST value)
+	 */
 	protected function checkEditorIsDisabled() {
 		$editorIsDisabled = t3lib_div::_POST('t3editor_disableEditor');
 
@@ -94,13 +106,13 @@ class tx_t3editor implements t3lib_Singleton {
 	}
 
 	/**
-	 * Retrieves JavaScript code for editor
+	 * Retrieves JavaScript code (header part) for editor
 	 *
 	 * @param 	template	$doc
 	 * @return	string		JavaScript code
 	 */
 	public function getJavascriptCode($doc) {
-		$code = ''; // TODO find a more descriptive name (low prio)
+		$content = '';
 
 		if ($this->isEnabled()) {
 
@@ -113,7 +125,7 @@ class tx_t3editor implements t3lib_Singleton {
 			$pageRenderer->loadScriptaculous();
 
 				// include editor-css
-			$code.= '<link href="' .
+			$content .= '<link href="' .
 				$GLOBALS['BACK_PATH'] .
 				t3lib_extmgm::extRelPath('t3editor') .
 				'res/css/t3editor.css' .
@@ -130,23 +142,26 @@ class tx_t3editor implements t3lib_Singleton {
 				$doc->loadJavascriptLib($path_t3e . 'res/jslib/ts_codecompletion/tscodecompletion.js');
 			}
 
-			// set correct path to the editor
-
-			$code.= t3lib_div::wrapJS(
+			$content .= t3lib_div::wrapJS(
 				'T3editor = T3editor || {};' .
 				'T3editor.lang = ' . json_encode($this->getJavaScriptLabels()) .';' . chr(10).
 				'T3editor.PATH_t3e = "' . $GLOBALS['BACK_PATH'] . t3lib_extmgm::extRelPath('t3editor') . '"; ' . chr(10).
 				'T3editor.URL_typo3 = "' . htmlspecialchars(t3lib_div::getIndpEnv('TYPO3_SITE_URL') . TYPO3_mainDir) . '"; ' .chr(10).
-				'T3editor.template = '. $this->getTemplate() .';' .chr(10).
+				'T3editor.template = '. $this->getPreparedTemplate() .';' .chr(10).
 				'T3editor.parserfile = ' . $this->getParserfileByMode($this->mode) . ';' .chr(10). 
 				'T3editor.stylesheet = ' . $this->getStylesheetByMode($this->mode) . ';'
 			);
 		}
 
-		return $code;
+		return $content;
 	}
 
-	protected function getTemplate() {
+	/**
+	 * get the template code, prepared for javascript (no line breaks, quoted in slinge quotes)
+	 *
+	 * @return	string	the template code, prepared to use in javascript
+	 */
+	protected function getPreparedTemplate() {
 		$T3Editor_template = t3lib_div::getURL(
 			t3lib_div::getFileAbsFileName(
 				'EXT:t3editor/res/templates/t3editor.html'
@@ -158,6 +173,12 @@ class tx_t3editor implements t3lib_Singleton {
 		return '\'' . $T3Editor_template . '\'';
 	}
 
+	/**
+	 * determine the correct parser js file for given mode
+	 *
+	 * @param	string	$mode
+	 * @return	string	parser file name
+	 */
 	protected function getParserfileByMode($mode) {
 		switch ($mode) {
 			case tx_t3editor::MODE_TYPOSCRIPT:
@@ -178,7 +199,13 @@ class tx_t3editor implements t3lib_Singleton {
 		}
 		return $parserfile;
 	}
-	
+
+	/**
+	 * determine the correct css file for given mode
+	 *
+	 * @param	string	$mode
+	 * @return	string	css file name
+	 */
 	protected function getStylesheetByMode($mode) {
 		switch ($mode) {
 			case tx_t3editor::MODE_TYPOSCRIPT:
@@ -367,8 +394,8 @@ class tx_t3editor implements t3lib_Singleton {
 
 
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/t3editor/class.tx_t3editor.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/t3editor/class.tx_t3editor.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/t3editor/classes/class.tx_t3editor.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/t3editor/classes/class.tx_t3editor.php']);
 }
 
 ?>

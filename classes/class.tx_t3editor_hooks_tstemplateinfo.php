@@ -34,6 +34,11 @@ class tx_t3editor_hooks_tstemplateinfo {
 	 * @var tx_t3editor
 	 */
 	protected $t3editor = NULL;
+
+	/**
+	 *
+	 * @return tx_t3editor
+	 */
 	protected function getT3editor() {
 		if ($this->t3editor == NULL) {
 			$this->t3editor = t3lib_div::makeInstance('tx_t3editor')
@@ -181,6 +186,11 @@ class tx_t3editor_hooks_tstemplateinfo {
 		}
 		return $savingsuccess;
 	}
+}
+
+
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/t3editor/classes/class.tx_t3editor_hooks_tstemplateinfo.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/t3editor/classes/class.tx_t3editor_hooks_tstemplateinfo.php']);
 }
 
 ?>
