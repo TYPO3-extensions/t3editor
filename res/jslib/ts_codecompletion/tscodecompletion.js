@@ -1,7 +1,7 @@
 /***************************************************************
 * Copyright notice
 *
-* (c) 2008-2009 Stephan Petzl <spetzl@gmx.at> and Christian Kartnig <office@hahnepeter.de>
+* (c) 2008-2010 Stephan Petzl <spetzl@gmx.at> and Christian Kartnig <office@hahnepeter.de>
 * All rights reserved
 *
 * This script is part of the TYPO3 project. The TYPO3 project is
@@ -587,7 +587,7 @@ var TsCodeCompletion = function(codeMirror, outerdiv) {
 			cursorNode.innerHTML = word;
 			cursorNode.currentText = word;
 			select.setCursorPos(mirror.editor.container, {node: cursorNode, offset: 0});
-		}else{ // if there is no text there, insert the word at the cursor position
+		} else { // if there is no text there, insert the word at the cursor position
 			mirror.replaceSelection(word);
 		}
 	}

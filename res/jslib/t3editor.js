@@ -1,7 +1,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2009 Tobias Liebig <mail_typo3@etobi.de>
+*  (c) 2007-2010 Tobias Liebig <mail_typo3@etobi.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -310,6 +310,28 @@ if (!Prototype.Browser.MobileSafari) {
 					}
 				}
 			);
+			
+			if (T3editor.ajaxSavetype != "") {
+				Event.observe(document, 't3editor:save',
+					function(event) {
+						var params = Object.extend({
+							ajaxID: "tx_t3editor::saveCode",
+							t3editor_savetype: T3editor.ajaxSavetype
+						}, event.memo.parameters);
+
+						new Ajax.Request(
+							T3editor.URL_typo3 + "ajax.php", {
+								parameters: params,
+								onComplete: function(ajaxrequest) {
+									var wasSuccessful = ajaxrequest.status == 200
+									&& ajaxrequest.headerJSON.result == true
+									event.memo.t3editor.saveFunctionComplete(wasSuccessful);
+								}
+							}
+						);
+					}
+				);
+			}
 		}
 	);
 }
